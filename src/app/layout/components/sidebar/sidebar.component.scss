@@ -1,0 +1,122 @@
+@import "../../../../_variables";
+
+mz-sidenav-link a {
+  color: #0d47a1;
+}
+.icono{
+  margin-left: 15px;
+  color: #0d47a1;
+}
+
+.item {
+  color: #0d47a1
+}
+
+.subitem{
+  margin-left: 20px;
+}
+
+i.icono {
+  color: #009EE3;
+}
+
+i.caret {
+  float: right;
+  margin-right: 0;
+  -ms-transition: 0.2s;
+  -webkit-transition: 0.2s;
+  -o-transition:  0.2s;
+  transition: 0.2s ease-in-out;
+}
+
+
+
+header {
+  #{'/deep/'} {
+    .side-nav {
+      padding-bottom: 0;
+      height: 100%;
+    }
+
+    .sidenav-background{
+      background: #fafafa !important;
+    }
+    .sidenav-button {
+      background: #009EE3 !important;
+    }
+
+    .sidenav-button {
+      position: fixed;
+      left: .5rem;
+      top: .5rem;
+      //top: 16px;
+      //right: 16px;
+      z-index: 24;
+    }
+  }
+
+  .sidenav-header {
+    background: rgba(0,0,0,0.14);
+    display: block;
+    padding-top: 10px;
+
+    a {
+      height: auto;
+    }
+  }
+
+  .angular-logo {
+    display: block;
+    margin: 0 auto;
+    width: 150px;
+  }
+
+  .materialize-logo {
+    display: block;
+    margin: -62px auto 0;
+  }
+
+  .materialize-name {
+    background: rgba(0,0,0,0.14);
+    font-weight: 200;
+    padding: 14px;
+  }
+}
+
+/* mCustomScrollbar override */
+
+.user-view {
+  text-align: right;
+  background: url('../../../../assets/images/apps/FondoIntranet.jpg');
+  /*background: #2196F3;*/
+  background-position: -90px;
+  background-size: 400px;
+  padding: 32px 32px 16px;
+
+  .name {
+    font-size: 1.25em;
+  }
+
+  .name,
+  .email {
+    height: auto;
+    line-height: 24px;
+    padding: 0;
+  }
+}
+
+#{'/deep/'} {
+  .mCSB_dragger_bar {
+    width: 8px !important;
+    border-radius: 0px !important;
+  }
+
+  .mCSB_scrollTools_vertical {
+    margin-top: 4px !important;
+    margin-bottom: 4px !important;
+  }
+
+  .mCustomScrollBox {
+    padding-bottom: 30px;
+  }
+}

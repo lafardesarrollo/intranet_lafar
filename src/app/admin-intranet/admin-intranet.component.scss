@@ -1,0 +1,106 @@
+@import "../../_variables";
+
+header {
+#{'/deep/'} {
+    .side-nav {
+    padding-bottom: 0;
+    height: 100%;
+    }
+
+    .sidenav-background{
+    background: #f2f7fa !important;
+    }
+    .sidenav-button {
+    background: #009FDF !important;
+    }
+
+    .sidenav-button {
+    position: fixed;
+    top: 16px;
+    right: 16px;
+    z-index: 24;
+    }
+}
+  
+    .sidenav-header {
+      background: rgba(0,0,0,0.14);
+      display: block;
+      padding-top: 10px;
+  
+      a {
+        height: auto;
+      }
+    }
+  
+    .angular-logo {
+      display: block;
+      margin: 0 auto;
+      width: 150px;
+    }
+  
+    .materialize-logo {
+      display: block;
+      margin: -62px auto 0;
+    }
+  
+    .materialize-name {
+      background: rgba(0,0,0,0.14);
+      font-weight: 200;
+      padding: 14px;
+    }
+  }
+  
+  main {
+    margin-bottom: 0;
+    margin-top: 0;
+    //margin-bottom: 2rem;
+    //margin-top: 2rem;
+  
+    @media #{$large-and-up} {
+      padding-left: 300px;
+    }
+  
+    .container {
+      width: 90% !important;
+  
+      @media #{$large-and-up} {
+        margin: 0 3%;
+      }
+    }
+  }
+  
+  /* mCustomScrollbar override */
+  
+  .user-view {
+    background: url('../../assets/images/bg-sidebar-header.jpg');
+    background-position: -90px;
+    background-size: 400px;
+    padding: 32px 32px 16px;
+  
+    .name {
+      font-size: 1.25em;
+    }
+  
+    .name,
+    .email {
+      height: auto;
+      line-height: 24px;
+      padding: 0;
+    }
+  }
+  
+  #{'/deep/'} {
+    .mCSB_dragger_bar {
+      width: 8px !important;
+      border-radius: 0px !important;
+    }
+  
+    .mCSB_scrollTools_vertical {
+      margin-top: 4px !important;
+      margin-bottom: 4px !important;
+    }
+  
+    .mCustomScrollBox {
+      padding-bottom: 30px;
+    }
+  }

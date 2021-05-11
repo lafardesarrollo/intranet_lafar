@@ -1,0 +1,101 @@
+<header>
+  
+
+    <mz-sidenav #sidenav
+      [id]="'sidenav'"
+      [backgroundClass]="'sidenav-background'"
+      [closeOnClick]="true"
+      [collapseButtonId]="'btn-sidenav'"
+      [fixed]="true">
+  
+      <mz-sidenav-header>
+        <div class="user-view">
+          <!--<img class="circle avatar" src="assets/images/doctor.png" style="margin-left:180px;">
+          <div class="lafar-dark name">Franz Aruni</div>
+          <div class="lafar-dark email">DESARROLLO DE SOFTWARE</div>-->
+          <img class="circle avatar" src="{{global.urlImagenesPersonal + user.foto}}" style="margin-left:180px;">
+          <div class="lafar-dark name">{{user.first_name}} {{user.last_name}}</div>
+          <div class="lafar-dark email">{{user.cargo}}</div>
+        </div>
+      </mz-sidenav-header>
+
+      <mz-sidenav-link>
+        <a [routerLink]="['/home']"><i mz-icon-mdi [icon]="'home'" class="blue-text"></i>Inicio</a>
+      </mz-sidenav-link>
+
+      <!--
+      <mz-sidenav-link *ngFor="let item of items">
+        <a [routerLink]="[item.url]"><i mz-icon-mdi [icon]="item.icon" class="blue-text"></i>{{item.itemName}}</a>  
+      </mz-sidenav-link>
+      -->
+
+      <mz-sidenav-collapsible *ngFor="let item of items">
+        <mz-sidenav-collapsible-header>
+          <i mz-icon-mdi [icon]="item.icon" class="blue-text icono"></i><span class="item">{{item.itemName}}<i mz-icon-mdi [icon]="'chevron-down'" class="caret"></i></span>
+        </mz-sidenav-collapsible-header>
+        <mz-sidenav-collapsible-content>
+            <mz-sidenav-link *ngFor="let subitem of item.items">
+              <a [routerLink]="[subitem.url]"><i mz-icon-mdi [icon]="subitem.icon" class="blue-text subitem"></i>{{subitem.itemName}}</a>  
+            </mz-sidenav-link>
+        </mz-sidenav-collapsible-content>
+      </mz-sidenav-collapsible>
+      
+      <!--
+      <mz-sidenav-link>
+        <a [routerLink]="['/home']"><i mz-icon-mdi [icon]="'home'" class="blue-text"></i>Inicio</a>
+      </mz-sidenav-link>
+  
+      <mz-sidenav-link>
+        <a><i mz-icon-mdi [icon]="'book-open'" class="blue-text"></i>Mis Tareas</a>
+      </mz-sidenav-link>
+  
+      <mz-sidenav-link>
+        <a [routerLink]="['/calendario']"><i mz-icon-mdi [icon]="'calendar'" class="blue-text"></i>Calendario Lafar</a>
+      </mz-sidenav-link>
+      -->
+      <mz-sidenav-divider></mz-sidenav-divider>
+
+      <mz-sidenav-subheader>Help Desk</mz-sidenav-subheader>
+      <mz-sidenav-link>
+        <a href="{{global.urlIntranet}}sisform" target="_blank"><i mz-icon-mdi [icon]="'laptop'" class="blue-text"></i>Soporte de Sistemas</a>
+      </mz-sidenav-link>
+      
+      <mz-sidenav-subheader>Mi Perfil</mz-sidenav-subheader>
+      <mz-sidenav-link>
+        <a [routerLink]="['/micuenta']"><i mz-icon-mdi [icon]="'account-circle'" class="blue-text"></i>Mi Cuenta</a>
+      </mz-sidenav-link>
+
+      <!-- {{ user | json }} -->
+      <!--<mz-sidenav-link>
+        <a><i mz-icon-mdi [icon]="'settings'" class="blue-text"></i>Ajustes</a>
+      </mz-sidenav-link>
+      <mz-sidenav-link>
+        <a><i mz-icon-mdi [icon]="'help-circle'" class="blue-text"></i>Ayuda</a>
+      </mz-sidenav-link>-->
+      <mz-sidenav-link>
+        <a [routerLink]="['/login']" (click)="onLoggedout()">
+          <i mz-icon-mdi [icon]="'logout'" class="blue-text"></i>Cerrar Sesión
+        </a>
+      </mz-sidenav-link>
+  
+      <ng-template ngFor let-groupedRoute [ngForOf]="groupedRoutes">
+        <mz-sidenav-subheader>
+          <span class="grey-text lighten-4">{{ groupedRoute.section }}</span>
+        </mz-sidenav-subheader>
+  
+        <mz-sidenav-link *ngFor="let route of groupedRoute.routes">
+          <a class="waves-effect white-text" [routerLink]="route.path" *ngIf="route.data">
+            <i mz-icon-mdi [icon]="route.data.icon" class="{{ route.data.class }} grey-text lighten-5"></i>{{ route.data.text }}
+          </a>
+        </mz-sidenav-link>
+      </ng-template>
+    </mz-sidenav>
+  
+    <button mz-button
+      class="sidenav-button hide-on-large-only"
+      id="btn-sidenav"
+      [float]="true"
+      [large]="false">
+      <i mz-icon-mdi [icon]="'menu'"></i>
+    </button>
+</header>

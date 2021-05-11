@@ -1,0 +1,448 @@
+<nav class="lafar-bg-blue">
+    <div class="nav-wrapper">
+        <div class="left col s12 m5 l5">
+            <ul>
+                <li><a href="javascript:void(0);" [routerLink]="['/sc/main']" class="email-menu"><i class="modal-action modal-close  mdi-hardware-keyboard-backspace"></i></a>
+                </li>
+                <li><a href="javascript:void(0);" class="email-type">MI LISTADO DE SOLICITUDES</a>
+                </li>
+            </ul>
+        </div>
+        <div class="col s12 m7 l7 hide-on-med-and-down">
+            <ul class="right">
+                <!--<li><a href="javascript:void(0);"><i class="mdi-editor-attach-file"></i></a></li>-->
+                <!--<li><a href="javascript:void(0);"><i class="modal-action modal-close  mdi-content-send"></i></a></li>-->
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<mz-card style="margin-bottom:0px;" class="color-hoverable white-text">
+    <mz-card-content>
+        <div class="row">
+            <div class="col s12 m6">
+                <mz-input-container>
+                    <i mz-icon-mdi mz-input-prefix
+                        [icon]="'magnify'">
+                    </i>
+                    <input mz-input
+                        id="buscar-solicitud"
+                        [(ngModel)]="term"
+                        placeholder="Buscar"
+                        type="search"
+                        value="">
+                </mz-input-container>
+            </div>
+        </div>
+    </mz-card-content>
+</mz-card>
+<mz-card>
+    <mz-card-content>
+        <table class="highlight responsive-table">
+            <tr>
+                <th>Codigo</th>
+                <th class="center">
+                    <i mz-icon-mdi mz-input-prefix class="green-text"
+                        [icon]="'wechat'">
+                    </i>
+                </th>
+                <th>Fecha de Solicitud</th>
+                <th>Solicitante</th>
+                <th>Tipo de Solicitud</th>
+                <th>Motivo</th>
+                <th>Estado</th>
+                <th width = 100>Opciones</th>
+            </tr>
+    
+            <tr class="border_bottom" *ngFor="let solicitud of lsolicitud | filter:term | paginate: { itemsPerPage: 50, currentPage: p }">
+                <td>{{solicitud.codigo}}</td>
+                <td class="center">
+                    <mz-badge
+                        (click)="irAConversaciones(solicitud.codigo)"
+                        [value]="solicitud.conversacion"
+                        [caption]="'Sms'"
+                        [badgeClass]="'red'"
+                        [new]="true">
+                    </mz-badge>
+                </td>
+                <td class="center">{{ solicitud.fecha | date:'yyyy-MM-dd' }}</td>
+                <td>{{solicitud.nombre_solicitante}}</td>
+                <td class="center">{{solicitud.tipo}}</td>
+                <td>{{solicitud.motivo}}</td>
+                <td>
+                    <i *ngIf="solicitud.estado_autorizacion_superior ==='A'"  mz-icon-mdi mz-input-prefix class="green-text"
+                        [icon]="'thumb-up-outline'">
+                    </i>
+                    <i *ngIf="solicitud.estado_autorizacion_superior ==='R'"  mz-icon-mdi mz-input-prefix class="red-text"
+                        [icon]="'thumb-down-outline'">
+                    </i>
+                    <i *ngIf="solicitud.estado_autorizacion_superior ==='P'"  mz-icon-mdi mz-input-prefix class="orange-text"
+                        [icon]="'clock'">
+                    </i>
+                    <i *ngIf="solicitud.estado_autorizacion_superior ==='X'"  mz-icon-mdi mz-input-prefix class="red-text"
+                        [icon]="'null'">
+                    </i>
+                </td>
+                <td>
+                    <button mz-button mz-tooltip
+                        [tooltip]="'Ver Solicitud'"
+                        (click)="onOpenSolicitud(solicitud.codigo)"
+                        [float]="true" class="blue">
+                        <i mz-icon-mdi [icon]="'file-find'"></i>
+                    </button>
+
+                    <button mz-button mz-tooltip
+                            [tooltip]="'Imprimir Solicitud'"
+                            (click)="imprimirSolicitud(solicitud.codigo)"
+                            [float]="true" class="blue">
+                            <i mz-icon-mdi [icon]="'printer'"></i>
+                        </button>
+                        
+                    <button mz-button mz-tooltip
+                        [tooltip]="'Anular la Solicitud'"
+                        (click)="AnularSolicitudModal.openModal()"
+                        (click)="onLoadAnularSolicitud(solicitud.codigo)"
+                        *ngIf="solicitud.estado_autorizacion_superior !== 'X'"
+                        [float]="true" class="red">
+                        <i mz-icon-mdi [icon]="'cancel'"></i>
+                    </button>
+                </td>
+            </tr>
+        </table>
+        <pagination-controls (pageChange)="p = $event"></pagination-controls>
+    </mz-card-content>
+</mz-card>
+
+
+<mz-modal #SolicitudCompraModal [fixedFooter]="true" [fullscreen]="true" [bottomSheet]="true">
+    <mz-modal-header>
+        <nav class="lafar-bg-blue">
+            <div class="nav-wrapper">
+                <div class="left col s12 m5 l5">
+                <ul>
+                    <li><a href="javascript:void(0);" (click)="SolicitudCompraModal.closeModal()" class="email-menu"><i class="modal-action modal-close  mdi-hardware-keyboard-backspace"></i></a></li>
+                    <li><a href="javascript:void(0);" class="email-type">Solicitud de Compra</a></li>
+                </ul>
+                </div>
+                <div class="col s12 m7 l7 hide-on-med-and-down">
+                <ul class="right">
+                    <!--<li><a href="javascript:void(0);"><i class="mdi-editor-attach-file"></i></a></li>-->
+                    <li><a href="javascript:void(0);"><i class="modal-action modal-close  mdi-notification-sms"></i></a></li>
+                </ul>
+                </div>
+            </div>
+        </nav>
+    </mz-modal-header>
+    <mz-modal-content>
+        
+
+        <mz-card>
+            <mz-card-content>
+                <div class="row">
+                    <div class="col s12 m4">
+                        Codigo de Solicitud:
+                        <mz-input-container [inline]="true">
+                            <input mz-input
+                            [label]="'Codigo Solicitud'"
+                            id="inline-input"
+                            type="text"
+                            value="SCS001"
+                            readonly>
+                        </mz-input-container>
+                    </div>
+        
+                    <mz-select-container class="col s12 m4">
+                        <select mz-select
+                            id="basic-select"
+                            [label]="'Tipo de Solicitud'"
+                            [placeholder]="'Seleccione un Tipo'">
+                            <option>Articulo</option>
+                            <option>Servicio</option>
+                        </select>
+                    </mz-select-container>
+        
+                    <mz-datepicker-container (click)="$event.stopPropagation()" class="col s12 m4">
+                        <i mz-icon-mdi mz-input-prefix
+                            [icon]="'calendar'">
+                        </i>
+                        <input mz-datepicker
+                            [label]="'Fecha de Solicitud'"
+                            id="prefix-datepicker"
+                            type="tel" />
+                    </mz-datepicker-container>
+                </div>
+                <div class="row">
+                    <mz-input-container class="col s12 m3">
+                        <input mz-input
+                            [label]="'Codigo Proveedor'"
+                            id="basic-input-placeholder"
+                            placeholder="Ingrese el Codigo del Proveedor"
+                            type="text">
+                    </mz-input-container>
+        
+                    <mz-input-container class="col s12 m5">
+                        <input mz-input
+                            [label]="'Nombre del Proveedor'"
+                            id="basic-input-placeholder"
+                            placeholder="Ingrese el Nombre del Proveedor"
+                            type="text">
+                    </mz-input-container>
+        
+                    <mz-datepicker-container (click)="$event.stopPropagation()" class="col s12 m4">
+                        <i mz-icon-mdi mz-input-prefix
+                            [icon]="'calendar'">
+                        </i>
+                        <input mz-datepicker
+                            [label]="'Fecha Necesaria'"
+                            id="prefix-datepicker"
+                            type="tel" />
+                    </mz-datepicker-container>
+                </div>
+                <div class="row">
+                    <mz-input-container class="col s12 m9">
+                        <input mz-input
+                            [label]="'Motivo de la Solicitud'"
+                            id="basic-input-placeholder"
+                            placeholder="Ingrese el Motivo de la Solicitud"
+                            type="text">
+                    </mz-input-container>
+                    <div class="col s12 m3">
+                        <br>
+                        <button mz-button (click)="AddItemModal.openModal()">
+                            <i mz-icon-mdi [icon]="'cart-plus'" [align]="'left'"></i>
+                            Agregar Items
+                        </button>
+                    </div>
+                </div>
+            </mz-card-content>
+        </mz-card>
+        
+        <mz-card>
+            <mz-card-content>
+                <table id="table-items" class="highlight responsive-table">
+                    <tr>
+                        <th>Codigo</th>
+                        <th>Descripción</th>
+                        <th>Unidad</th>
+                        <th>Cantidad</th>
+                        <th>Fec. Requerida</th>
+                        <th>Opciones</th>
+                    </tr>
+                    <tr class="border_bottom">
+                        <td>CC030135</td>
+                        <td>EMBUDO FILTRACIÓN AL VACIO  250mL (HPLC)</td>
+                        <td>Pieza</td>
+                        <td>5</td>
+                        <td>22/11/2018</td>
+                        <td>
+                            <button mz-button
+                                    [float]="true" class="orange">
+                                    <i mz-icon-mdi [icon]="'pencil'"></i>
+                            </button>
+                            <button mz-button
+                                    [float]="true" class="red">
+                                    <i mz-icon-mdi [icon]="'minus'"></i>
+                            </button>
+                        </td>
+                    </tr>
+                    <tr class="border_bottom">
+                        <td>MN010833</td>
+                        <td>Correa sincrónica dentada de 38 mm de ancho</td>
+                        <td>Kilo</td>
+                        <td>15</td>
+                        <td>30/11/2018</td>
+                        <td>
+                            <button mz-button mz-tooltip
+                                [tooltip]="'Ver Solicitud'"
+                                [float]="true" class="orange">
+                                <i mz-icon-mdi [icon]="'pencil'"></i>
+                            </button>
+                            <button mz-button mz-tooltip
+                                [tooltip]="'Anular la Solicitud'"
+                                [float]="true" class="orange">
+                                <i mz-icon-mdi [icon]="'cancel'"></i>
+                            </button>
+                        </td>
+                    </tr>
+                </table>
+            </mz-card-content>
+        </mz-card>
+        
+        <mz-modal #AddItemModal [fixedFooter]="true" [fullscreen]="true" [bottomSheet]="true">
+            <mz-modal-header>
+                <nav class="lafar-bg-blue">
+                    <div class="nav-wrapper">
+                        <div class="left col s12 m5 l5">
+                        <ul>
+                            <!--<li><a href="javascript:void(0);" (click)="AddItemModal.close()" class="email-menu"><i class="modal-action modal-close  mdi-hardware-keyboard-backspace"></i></a></li>-->
+                            <li><a href="javascript:void(0);" class="email-type">Agregar Nuevo Item</a></li>
+                        </ul>
+                        </div>
+                        <div class="col s12 m7 l7 hide-on-med-and-down">
+                        <ul class="right">
+                            <!--<li><a href="javascript:void(0);"><i class="mdi-editor-attach-file"></i></a></li>-->
+                            <li><a href="javascript:void(0);"><i class="modal-action modal-close  mdi-notification-sms"></i></a></li>
+                        </ul>
+                        </div>
+                    </div>
+                </nav>
+            </mz-modal-header>
+            <mz-modal-content>
+                <div class="row">
+                    <mz-datepicker-container (click)="$event.stopPropagation()" class="col s12 m4">
+                        <i mz-icon-mdi mz-input-prefix
+                            [icon]="'calendar'">
+                        </i>
+                        <input mz-datepicker
+                            [label]="'Fecha Necesaria'"
+                            id="prefix-datepicker"
+                            type="tel" />
+                    </mz-datepicker-container>
+                    <div class="col s12 m5"></div>
+                    <mz-input-container class="col s12 m3">
+                        <input mz-input
+                            [label]="'Numero de Solicitud'"
+                            id="basic-input-placeholder"
+                            placeholder="SCA0001"
+                            type="text">
+                    </mz-input-container>
+                </div>
+                <div class="row">
+                    <mz-select-container class="col s12 m4">
+                        <select mz-select
+                            id="basic-select"
+                            [label]="'Codigo Item'"
+                            [placeholder]="'Seleccione un Item'">
+                            <option>IT00XXXX</option>
+                            <option>IT01XXXX</option>
+                        </select>
+                    </mz-select-container>
+                    <mz-input-container class="col s12 m8">
+                        <input mz-input
+                            [label]="'Descripción del Item'"
+                            id="basic-input-placeholder"
+                            placeholder="EMBUDO FILTRACIÓN AL VACIO  250mL (HPLC)"
+                            type="text">
+                    </mz-input-container>
+                </div>
+                <div class="row">
+                    <mz-input-container class="col s12 m4">
+                        <input mz-input
+                            id="input-length"
+                            [label]="'Cantidad'"
+                            type="number">
+                    </mz-input-container>
+                    <mz-select-container class="col s12 m4">
+                        <select mz-select
+                            id="basic-select"
+                            [label]="'Unidad'"
+                            [placeholder]="'Seleccione una Unidad'">
+                            <option>Kilos</option>
+                            <option>Libras</option>
+                        </select>
+                    </mz-select-container>
+                    <mz-input-container class="col s12 m4">
+                        <input mz-input
+                            [label]="'Descripción de la Unidad'"
+                            id="basic-input-placeholder"
+                            placeholder="Especifique la unidad ..."
+                            type="text">
+                    </mz-input-container>
+                </div>
+                <div class="row">
+                    <mz-select-container class="col s12 m6">
+                        <select mz-select
+                            id="basic-select"
+                            [label]="'Arte'"
+                            [placeholder]="'Seleccione un Arte'">
+                            <option>Arte 1</option>
+                            <option>Arte 2</option>
+                        </select>
+                    </mz-select-container>
+                    <mz-datepicker-container (click)="$event.stopPropagation()" class="col s12 m6">
+                        <i mz-icon-mdi mz-input-prefix
+                            [icon]="'calendar'">
+                        </i>
+                        <input mz-datepicker
+                            [label]="'Fecha de Arte'"
+                            id="prefix-datepicker"
+                            type="tel" />
+                    </mz-datepicker-container>
+                </div>
+            </mz-modal-content>
+            <mz-modal-footer>
+                <button mz-button [flat]="true" mz-modal-close>Cancelar</button>
+                <button mz-button [flat]="true" mz-modal-close>Agregar</button>
+            </mz-modal-footer>
+            </mz-modal>
+
+
+    </mz-modal-content>
+    <mz-modal-footer>
+        <button mz-button [flat]="true" mz-modal-close>Anular</button>
+        <button mz-button [flat]="true" mz-modal-close>Aceptar</button>
+    </mz-modal-footer>
+</mz-modal>
+
+
+<mz-modal #AnularSolicitudModal [fixedFooter]="true" [fullscreen]="true" [bottomSheet]="false">
+    <mz-modal-header>
+        <nav class="lafar-bg-blue">
+            <div class="nav-wrapper">
+                <div class="left col s12 m5 l5">
+                <ul>
+                    <li><a href="javascript:void(0);" (click)="AnularSolicitudModal.closeModal()" class="email-menu"><i class="modal-action modal-close  mdi-hardware-keyboard-backspace"></i></a></li>
+                    <li><a href="javascript:void(0);" class="email-type">Anular Solicitud</a></li>
+                </ul>
+                </div>
+                <div class="col s12 m7 l7 hide-on-med-and-down">
+                <ul class="right">
+                    <!--<li><a href="javascript:void(0);"><i class="mdi-editor-attach-file"></i></a></li>-->
+                    <!--<li><a href="javascript:void(0);"><i class="modal-action modal-close  mdi-notification-sms"></i></a></li>-->
+                </ul>
+                </div>
+            </div>
+        </nav>
+    </mz-modal-header>
+    <mz-modal-content>
+        <mz-card>
+            <mz-card-content>
+                <mz-textarea-container>
+                    <i mz-icon-mdi mz-textarea-prefix
+                        [icon]="'eraser'">
+                    </i>
+                    <textarea mz-textarea
+                        [label]="'Motivo de Anulación'"
+                        [(ngModel)]="asolicitud.motivo_anulacion"
+                        name="motivo_anulacion"
+                        id="motivo_anulacion"
+                        placeholder="Ingrese el motivo de anulación"
+                        length="300"></textarea>
+                </mz-textarea-container>
+            </mz-card-content>
+        </mz-card>
+
+        <!--<div class="row">
+            <pre>
+                {{ asolicitud | json }}    
+            </pre>
+        </div>-->
+    </mz-modal-content>
+    <mz-modal-footer>
+        <button mz-button [flat]="true" mz-modal-close>Cancelar</button>
+        <button mz-button [flat]="true" mz-modal-close (click)="onGuardarAnularSolicitud()">Anular</button>
+    </mz-modal-footer>
+</mz-modal>
+
+<div class="fixed-action-btn" style="bottom: 45px; right: 24px;">
+    <a [routerLink]="['/sc/solicitud/add']" href="javascript:void(0)" class="btn-floating btn-large green">
+        <i class="large mdi-content-add"></i>
+    </a>
+</div>
+
+
+<!--<div class="row">
+    <pre>
+        {{ asolicitud | json }}    
+    </pre>
+</div>-->

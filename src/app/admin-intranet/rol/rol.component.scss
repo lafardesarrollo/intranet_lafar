@@ -1,0 +1,30 @@
+
+//Menu
+.item-menu-apps {
+    margin: auto auto;
+    text-align: center;
+}
+
+.contenido-aplicaciones{
+    overflow-y: scroll;
+    max-height: 430px;
+    min-height: 100%;
+}
+
+.imagen-app{
+    margin-top: 0px;
+    margin-bottom: 0px;
+    width:100%;
+    height: auto;
+}
+
+.imagen-app:hover{
+    background-color: rgb(194, 233, 220);
+}
+
+.button-rol {
+    width: 100%;
+}
+.contenido-modal {
+    margin: 10px;
+}

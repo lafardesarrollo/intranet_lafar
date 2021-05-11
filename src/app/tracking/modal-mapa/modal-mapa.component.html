@@ -1,0 +1,20 @@
+<mz-modal [fixedFooter]="true">
+    <mz-modal-header>
+      <h4>{{ seg.descripcion }}</h4>
+    </mz-modal-header>
+    <mz-modal-content>
+        <google-map height="330" width="700px" [center]="center" [zoom]="zoom">
+            <map-marker
+                *ngFor="let marker of markers"
+                [position]="marker.position"
+                [label]="marker.label"
+                [title]="marker.title"
+                [options]="marker.options"
+            >
+            </map-marker>
+        </google-map>
+    </mz-modal-content>
+    <mz-modal-footer>
+      <button mz-button [flat]="true" mz-modal-close>Aceptar</button>
+    </mz-modal-footer>
+</mz-modal>

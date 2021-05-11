@@ -1,0 +1,28 @@
+$logo-resize: "only screen and (max-width: 992px)" !default;
+$logo-full: "only screen and (width: 1366px)" !default;
+
+.contenido {
+    position: relative;
+    width: 100%;
+    height: 0;
+    padding-bottom: 56.25%;
+}
+
+.documento {
+    position: absolute;
+    width: 70%;
+    height: 100%;
+    top: 0;
+    left: 300px;
+    @media #{$logo-resize} {
+        width: 100%;
+        top: 58px;
+        left: 0;    
+    }
+    @media #{$logo-full} {
+        width: 78%;
+        height: 100%;
+        top: 0;
+        left: 300px;
+    }
+}

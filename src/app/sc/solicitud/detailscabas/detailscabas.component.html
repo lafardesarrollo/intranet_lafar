@@ -1,0 +1,826 @@
+<div id="loading">
+    <div id="loadingcontent">
+        <p id="loadingspinner">
+            <mz-spinner
+                class="valign center-align col s4"
+                [size]="'big'">
+            </mz-spinner>
+            <br><br>
+            Cargando Información ... 
+        </p>
+    </div>
+</div>
+
+<nav class="lafar-bg-blue">
+    <div class="nav-wrapper">
+        <div class="left col s12 m5 l5">
+            <ul>
+                <li><a href="javascript:void(0);" [routerLink]="['/sc/solicitud/list_abast']" class="email-menu"><i class="modal-action modal-close  mdi-hardware-keyboard-backspace"></i></a>
+                </li>
+                <li><a href="javascript:void(0);" class="email-type">Ver Solicitud Aprobada</a>
+                </li>
+            </ul>
+        </div>
+        <div class="col s12 m7 l7 hide-on-med-and-down">
+            <ul class="right">
+                <!--<li><a href="javascript:void(0);"><i class="mdi-editor-attach-file" (click)="AddFileModal.open()"></i></a></li>-->
+                <li><a href="javascript:void(0);" (click)="imprimirSolicitud()"><i class="modal-action modal-close  mdi-action-print"></i></a></li>
+                <li><a href="javascript:void(0);" (click)="onDirigirConversacion()"><i class="modal-action modal-close  mdi-communication-textsms"></i></a></li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<mz-modal #AddFileModal [fullscreen]="true" [fixedFooter]="true">
+    <mz-modal-header>
+        <nav class="lafar-bg-blue">
+            <div class="nav-wrapper">
+                <div class="left col s12 m5 l5">
+                <ul>
+                    <li><a href="javascript:void(0);" (click)="AddFileModal.closeModal()" class="email-menu"><i class="modal-action modal-close  mdi-hardware-keyboard-backspace"></i></a>
+                    </li>
+                    <li><a href="javascript:void(0);" class="email-type">Adjuntar Archivos</a>
+                    </li>
+                </ul>
+                </div>
+                <div class="col s12 m7 l7 hide-on-med-and-down">
+                <ul class="right">
+                    <!--<li><a href="javascript:void(0);"><i class="mdi-editor-attach-file"></i></a></li>-->
+                    <!--<li><a href="javascript:void(0);"><i class="modal-action modal-close  mdi-content-send"></i></a></li>-->
+                </ul>
+                </div>
+    
+            </div>
+        </nav>
+    </mz-modal-header>
+    <mz-modal-content>
+        <div class="margen-espacio">   
+            <ng-container>
+            <div class="style_buttom">
+               <input type="file" id="file" multiple (change)="getFileDetails($event)">
+            </div>
+            </ng-container>
+        </div>
+
+        <mz-collection>
+            <mz-collection-header><h6>Lista de Archivos Adjuntos</h6></mz-collection-header>
+            <mz-collection-item ng *ngFor="let file of lfiles"> {{ file.NombreGenerico }}</mz-collection-item>
+        </mz-collection>
+    </mz-modal-content>
+    <mz-modal-footer>
+    <button mz-button [flat]="true" mz-modal-close>Cerrar</button>
+    <button mz-button [flat]="true" mz-modal-close>Eliminar Adjuntos</button>
+    <button mz-button [flat]="true" (click)="uploadFiles()">Enviar Archivos</button>
+    </mz-modal-footer>
+</mz-modal>
+
+<form #form="ngForm" novalidate>
+<mz-card>
+    <mz-card-content>
+        <div class="row">
+            <mz-input-container class="col s12 m2">
+                <input mz-input disabled
+                [label]="'Codigo de Solicitud'"
+                id="codigo"
+                [(ngModel)]="solicitud.codigo"
+                name="codigo"
+                placeholder="Codigo de Solicitud"
+                type="text">
+            </mz-input-container>
+            
+            <mz-select-container class="col s12 m2">
+                <select mz-select mz-validation required
+                    id="tipo"
+                    [errorMessageResource]="errorMessagesSolicitud.tipo"
+                    [(ngModel)]="solicitud.tipo"
+                    name="tipo"
+                    [label]="'Tipo de Solicitud'"
+                    [placeholder]="'Tipo de Solicitud'">
+                    <option value="I">Articulo</option>
+                    <option value="S">Servicio</option>
+                </select>
+            </mz-select-container>
+
+            <mz-datepicker-container (click)="$event.stopPropagation()" class="col s12 m3">
+                <i mz-icon-mdi mz-input-prefix
+                    [icon]="'calendar'">
+                </i>
+                <input mz-datepicker mz-validation required disabled
+                    [errorMessageResource]="errorMessagesSolicitud.fecha"
+                    [label]="'Fecha Solicitud'"
+                    [options]="opcionesDatePicker"
+                    [(ngModel)]="solicitud.fecha"
+                    name="fecha"
+                    id="fecha"
+                    type="tel"/>
+            </mz-datepicker-container>
+
+            <mz-select-container class="col s12 m2">
+                <select mz-select mz-validation required
+                    id="tipo_compra"
+                    [errorMessageResource]="errorMessagesSolicitud.tipo_compra"
+                    [(ngModel)]="solicitud.tipo_compra"
+                    name="tipo_compra"
+                    [label]="'Tipo de Compra'"
+                    [placeholder]="'Tipo de Compra'">
+                    <option value="L">Local</option>
+                    <option value="I">Importación</option>
+                    <option value="G">General</option>
+                </select>
+            </mz-select-container>
+
+            <mz-select-container class="col s12 m3">
+                <select mz-select mz-validation required
+                    id="departamento_compra"
+                    [errorMessageResource]="errorMessagesSolicitud.departamento_compra"
+                    [(ngModel)]="solicitud.departamento_compra"
+                    name="departamento_compra"
+                    [label]="'Departamento Compra'"
+                    [placeholder]="'Seleccione un Departamento'">
+                    <option *ngFor="let item of departamentos" [value]="item.Code">{{ item.Name }}</option>
+                </select>
+            </mz-select-container>
+        </div>
+
+        <div class="row">
+            <div class="col s12 m2">
+                <div *ngIf="solicitud.codigo_proveedor"></div>
+                <span class="title_select">Codigo de Proveedor</span>
+                <ng-select required
+                    #SelectCodigoProveedor
+                    [items]="proveedores"
+                    bindLabel="CardCode"
+                    bindValue="CardCode"
+                    (change) = "OnLoadDatosProveedor($event)"
+                    [(ngModel)]="solicitud.codigo_proveedor"
+                    [disabled]="!modificar"
+                    name="codigo_proveedor">
+                </ng-select>
+                <div *ngIf="!solicitud.codigo_proveedor" class="mensaje-error">Seleccione un Codigo</div>
+            </div> 
+
+            <div class="col s12 m7">
+                <div *ngIf="solicitud.nombre_proveedor"></div>
+                <span class="title_select">Nombre de Proveedor</span>
+                <ng-select required
+                    #SelectNombreProveedor
+                    [items]="proveedores"
+                    bindLabel="CardName"
+                    bindValue="CardName"
+                    (change) = "OnLoadDatosProveedor($event)"
+                    [(ngModel)]="solicitud.nombre_proveedor"
+                    [disabled]="!modificar"
+                    name="nombre_proveedor">
+                </ng-select>
+                <div *ngIf="!solicitud.nombre_proveedor" class="mensaje-error">Seleccione el Nombre del Proveedor</div>
+            </div>
+            <div class="col s12 m3">
+                <br>
+                <button *ngIf="solicitud.tipo === 'I'" mz-button [disabled]="!modificar" (click)="AddItemModal.openModal()">
+                    <i mz-icon-mdi [icon]="'cart-plus'" [align]="'left'"></i>
+                    Agregar Articulo
+                </button>
+                <button *ngIf="solicitud.tipo === 'S'" mz-button [disabled]="!modificar" (click)="AddServicioModal.openModal()">
+                    <i mz-icon-mdi [icon]="'cart-plus'" [align]="'left'"></i>
+                    Agregar Servicio
+                </button>
+            </div>
+        </div>
+    </mz-card-content>
+</mz-card>
+<!--TABLA DETALLE SOLICITUD POR ARTICULO-->
+<mz-card *ngIf="solicitud.tipo==='I'">
+    <mz-card-content>
+        <table id="table-items-articulo" class="highlight responsive-table">
+            <tr>
+                <th>Codigo</th>
+                <th>Descripción</th>
+                <th>Unidad</th>
+                <th width="50">Cantidad</th>
+                <th>Fec. Requerida</th>
+                <th>Opciones</th>
+            </tr>
+            <tr [ngClass]="{'fondoFila': ds.estado === 'X', 'fondoFila2': ds.estado === 'A'}" class="border_bottom" *ngFor="let ds of ldetallesolicitud">
+                <td>{{ ds.codigo_item }}</td>
+                <td>{{ ds.descripcion_item }}</td>
+                <td>{{ ds.unidad }} </td>
+                <td *ngIf="ds.prioridad === EditRowID"><input type="number" [(ngModel)]="ds.cantidad" name="cantidad {{ds.prioridad}}"></td>
+                <td *ngIf="ds.prioridad !== EditRowID" (click) = "Edit(ds.prioridad)">{{ ds.cantidad }}</td>
+                <td>{{ ds.fecha_requerida | date:'yyyy-MM-dd'}}</td>
+                <td>
+                    <!--<button mz-button
+                        (click)="ModificarItemModal.open()"
+                        (click)="onModificarArticulo(ds.prioridad)"
+                        [float]="true" class="orange">
+                        <i mz-icon-mdi [icon]="'pencil'"></i>
+                    </button>-->
+                    <button mz-button [disabled]="!modificar" (click)="onQuitarItemSolicitud(ds)"
+                          [float]="true" class="red">
+                          <i mz-icon-mdi [icon]="'minus'"></i>
+                    </button>
+                </td>
+            </tr>
+        </table>
+    </mz-card-content>
+</mz-card>
+
+<!--TABLA DETALLE SOLICITUD POR SERVICIO-->
+<mz-card *ngIf="solicitud.tipo==='S'">
+    <mz-card-content>
+        <table id="table-items-servicio" class="highlight responsive-table">
+            <tr>
+                <th>Descripción</th>
+                <th>Fec. Requerida</th>
+                <th>Opciones</th>
+            </tr>
+            <tr [ngClass]="{'fondoFila': ds.estado === 'X', 'fondoFila2': ds.estado === 'A'}" class="border_bottom" *ngFor="let ds of ldetallesolicitudservicio">
+                <td>{{ ds.descripcion_item }}</td>
+                <td>{{ ds.fecha_requerida | date:'yyyy-MM-dd' }}</td>
+                <td>
+                    <!--<button mz-button
+                        (click)="ModificarServicioModal.open()"
+                        [float]="true" class="orange">
+                        <i mz-icon-mdi [icon]="'pencil'"></i>
+                    </button>-->
+                    <button mz-button [disabled]="!modificar" (click)="onQuitarItemSolicitud(ds)"
+                          [float]="true" class="red">
+                          <i mz-icon-mdi [icon]="'minus'"></i>
+                    </button>
+                </td>
+            </tr>
+        </table>
+    </mz-card-content>
+</mz-card>
+
+<mz-card>
+    <mz-card-content>
+        <div class="row">
+            <mz-input-container class="col s12 m8">
+                <mz-textarea-container>
+                    <textarea mz-textarea mz-validation required
+                    [label]="'Motivo de la Solicitud'"
+                    [errorMessageResource]="errorMessagesSolicitud.motivo"
+                    id="motivo"
+                    [(ngModel)]="solicitud.motivo"
+                    [disabled]="!modificar"
+                    name="motivo"
+                    length="100"
+                    placeholder="Ingrese el Motivo de la Solicitud"></textarea>
+                </mz-textarea-container>
+            </mz-input-container>
+            
+        </div>
+        <div class="chip" *ngFor="let item of lfiles" (click)="downloadFile(item)">
+            <img *ngIf="item.Extension === 'xlsx' || item.Extension === 'xls'" src="assets/images/sc/excel-round.png" alt="Contact Person">
+            <img *ngIf="item.Extension === 'docx' || item.Extension === 'doc'" src="assets/images/sc/word.png" alt="Contact Person">
+            <img *ngIf="item.Extension === 'pdf'" src="assets/images/sc/pdf.png" alt="Contact Person">
+            {{ item.NombreGenerico }}
+        </div>
+        <div class="adjuntos">
+            {{ lfiles.length }} archivos adjuntos
+        </div>
+    </mz-card-content>
+</mz-card>
+
+<mz-card *ngIf="solicitud.estado_autorizacion_superior === 'X'"> 
+    <mz-card-content>
+        <b>Motivo de Anulación</b>: 
+        {{ solicitud.motivo_anulacion }}
+    </mz-card-content>
+</mz-card>
+<mz-card *ngIf="solicitud.estado_autorizacion_superior === 'R'">
+    <mz-card-content>
+        <b>Motivo de Rechazo</b>: 
+        {{ solicitud.motivo_autorizacion }}
+    </mz-card-content>
+</mz-card>
+<!--
+<div class="row">
+    <pre>
+        {{ ldetallesolicitud | json }}    
+    </pre>
+</div>
+-->
+<!--<div class="fixed-action-btn" style="bottom: 45px; right: 24px;">
+    <a href="javascript:void(0)" class="btn-floating btn-large blue" (click)="onValidaCabeceraSolicitud()">
+        <i class="large mdi-navigation-check"></i>
+    </a>
+</div>-->
+
+<div *ngIf="solicitud.estado_autorizacion_superior !== 'X' && modificar" class="fixed-action-btn" style="bottom: 45px; right: 24px;">
+    <button 
+        [float]="true" mz-button 
+        [disabled]="!form.valid" 
+        [large]="true" 
+        class="blue"
+        (click)="onValidaCabeceraSolicitudModificar()"
+        type="submit"><i class="large mdi-action-done"></i>
+    </button>
+</div>
+</form>
+
+<!-- REGION BEGIN AGREGAR O ADICIONAR ******************************************************************************************************************************-->
+<form  #formDS="ngForm" novalidate>
+    <mz-modal #AddItemModal [fixedFooter]="true" [fullscreen]="true" [bottomSheet]="true">
+        <mz-modal-header>
+            <nav class="lafar-bg-blue">
+                <div class="nav-wrapper">
+                    <div class="left col s12 m5 l5">
+                    <ul>
+                        <li><a href="javascript:void(0);" (click)="AddItemModal.closeModal()" class="email-menu"><i class="modal-action modal-close  mdi-hardware-keyboard-backspace"></i></a></li>
+                        <li><a href="javascript:void(0);" class="email-type">Agregar Nuevo Item</a></li>
+                    </ul>
+                    </div>
+                    <div class="col s12 m7 l7 hide-on-med-and-down">
+                    <ul class="right">
+                        <!--<li><a href="javascript:void(0);"><i class="mdi-editor-attach-file"></i></a></li>-->
+                        <!--<li><a href="javascript:void(0);"><i class="modal-action modal-close  mdi-notification-sms"></i></a></li>-->
+                    </ul>
+                    </div>
+                </div>
+            </nav>
+        </mz-modal-header>
+        <mz-modal-content>
+            <div class="row">
+                <mz-datepicker-container (click)="$event.stopPropagation()" class="col s12 m4">
+                    <i mz-icon-mdi mz-input-prefix
+                        [icon]="'calendar'">
+                    </i>
+                    <input mz-datepicker mz-validation required
+                        [errorMessageResource]="errorMessagesSolicitud.fecha_requerida"
+                        [label]="'Fecha Necesaria'"
+                        id="fecha_requerida"
+                        [(ngModel)]="detallesolicitud.fecha_requerida"
+                        name="fecha_requerida"
+                        [options]= "opcionesDatePicker"
+                        type="tel" />
+                </mz-datepicker-container>
+
+                <div class="col s12 m5"></div>
+                <mz-input-container class="col s12 m3">
+                    <input mz-input disabled
+                        [label]="'Numero de Solicitud'"
+                        id="dc_codigo_solicitud"
+                        placeholder="Codigo de Solicitud"
+                        [(ngModel)]="solicitud.codigo"
+                        name="codigo"
+                        type="text">
+                </mz-input-container>
+            </div>
+    
+            <div class="row">
+                <mz-input-container class="col s12 m4">
+                    <input mz-input
+                        [label]="'Codigo de Item'"
+                        id="codigo_item"
+                        (click)="onOpenDialog($event)"
+                        placeholder="Codigo de Item"
+                        [(ngModel)]="detallesolicitud.codigo_item"
+                        name="codigo_item"
+                        type="text">
+                </mz-input-container>
+                
+                <mz-input-container class="col s12 m8">
+                    <input mz-input 
+                        [label]="'Descripción de Item'"
+                        id="descripcion_item"
+                        (click)="onOpenDialog($event)"
+                        placeholder="Descripción de Item"
+                        [(ngModel)]="detallesolicitud.descripcion_item"
+                        name="descripcion_item"
+                        type="text">
+                </mz-input-container>
+            </div>
+    
+            <div class="row">
+                <mz-input-container class="col s12 m4">
+                    <input mz-input disabled
+                        id="unidad"
+                        [(ngModel)]="detallesolicitud.unidad"
+                        name="unidad"
+                        [label]="'Unidad'"
+                        type="text">
+                </mz-input-container>
+                <mz-input-container class="col s12 m4">
+                    <input mz-input mz-validation
+                    [errorMessageResource]="errorMessagesSolicitud. cantidad"
+                        id="cantidad"
+                        [(ngModel)]="detallesolicitud.cantidad"
+                        name="cantidad"
+                        [label]="'Cantidad'"
+                        type="number">
+
+                </mz-input-container>
+
+
+                <div class="row" *ngIf="view_fecha_arte">
+                    <mz-datepicker-container (click)="$event.stopPropagation()" class="col s12 m4">
+                        <i mz-icon-mdi mz-input-prefix
+                            [icon]="'calendar'">
+                        </i>
+                        <input mz-datepicker
+                            [label]="'Fecha de Arte'"
+                            [disabled] = 'disabled_fecha_arte'
+                            id="fecha_arte"
+                            [(ngModel)]="detallesolicitud.fecha_arte"
+                            name="fecha_arte"
+                            [options]= "opcionesDatePicker"
+                            type="tel" />
+                    </mz-datepicker-container>
+                </div>
+            </div> 
+        </mz-modal-content>
+
+        <mz-modal-footer>
+          <button mz-button [flat]="true" mz-modal-close>Cancelar</button>
+          <button mz-button [flat]="true" mz-modal-close (click)="onAddItemSolicitud()" mz-modal-close [disabled]="!formDS.valid" type="submit">Agregar</button>
+        </mz-modal-footer>
+      </mz-modal>
+</form>
+
+<form  #formDSS="ngForm" novalidate>
+    <mz-modal #AddServicioModal [fixedFooter]="true" [fullscreen]="true" [bottomSheet]="true">
+        <mz-modal-header>
+            <nav class="lafar-bg-blue">
+                <div class="nav-wrapper">
+                    <div class="left col s12 m5 l5">
+                    <ul>
+                        <li><a href="javascript:void(0);" (click)="AddItemModal.closeModal()" class="email-menu"><i class="modal-action modal-close  mdi-hardware-keyboard-backspace"></i></a></li>
+                        <li><a href="javascript:void(0);" class="email-type">Agregar Nuevo Servicio</a></li>
+                    </ul>
+                    </div>
+                    <div class="col s12 m7 l7 hide-on-med-and-down">
+                    <ul class="right">
+                        <!--<li><a href="javascript:void(0);"><i class="mdi-editor-attach-file"></i></a></li>-->
+                        <!--<li><a href="javascript:void(0);"><i class="modal-action modal-close  mdi-notification-sms"></i></a></li>-->
+                    </ul>
+                    </div>
+                </div>
+            </nav>
+        </mz-modal-header>
+        <mz-modal-content>
+            <div class="row">
+                <mz-textarea-container class="col s12">
+                  <textarea mz-textarea mz-validation required
+                    id="s_descripcion"
+                    [errorMessageResource]="errorMessagesSolicitud.s_descripcion"
+                    [label]="'Descripción del Servicio'"
+                    [(ngModel)]="detallesolicitudservicio.descripcion_item"
+                    name="s_descripcion"
+                    [length]="100">
+                  </textarea>
+                </mz-textarea-container>
+                
+            </div>
+            <div class="row">
+                <mz-datepicker-container (click)="$event.stopPropagation()" class="col s12">
+                    <i mz-icon-mdi mz-input-prefix
+                        [icon]="'calendar'">
+                    </i>
+                    <input mz-datepicker mz-validation required
+                        [errorMessageResource]="errorMessagesSolicitud.fecha_requerida_servicio"
+                        [label]="'Fecha Necesaria'"
+                        id="fecha_requerida_servicio"
+                        [(ngModel)]="detallesolicitudservicio.fecha_requerida"
+                        name="fecha_requerida_servicio"
+                        [options]= "opcionesDatePicker"
+                        type="tel" />
+                </mz-datepicker-container>
+            </div>
+
+        </mz-modal-content>
+
+        <mz-modal-footer>
+          <button mz-button [flat]="true" mz-modal-close>Cancelar</button>
+          <button mz-button [flat]="true" mz-modal-close (click)="onAddServicioSolicitud()" mz-modal-close [disabled]="!formDSS.valid" type="submit">Agregar</button>
+        </mz-modal-footer>
+
+      </mz-modal>
+</form>
+<!-- END REGION -->
+
+
+<!-- REGION BEGIN MODIFICAR  ******************************************************************************************************************************-->
+<form  #formDSModify="ngForm" novalidate>
+        <mz-modal #ModificarItemModal [fixedFooter]="true" [fullscreen]="true" [bottomSheet]="true">
+            <mz-modal-header>
+                <nav class="lafar-bg-blue">
+                    <div class="nav-wrapper">
+                        <div class="left col s12 m5 l5">
+                        <ul>
+                            <li><a href="javascript:void(0);" (click)="ModificarItemModal.closeModal()" class="email-menu"><i class="modal-action modal-close  mdi-hardware-keyboard-backspace"></i></a></li>
+                            <li><a href="javascript:void(0);" class="email-type">Modificar Articulo</a></li>
+                        </ul>
+                        </div>
+                        <div class="col s12 m7 l7 hide-on-med-and-down">
+                        <ul class="right">
+                            <!--<li><a href="javascript:void(0);"><i class="mdi-editor-attach-file"></i></a></li>-->
+                            <!--<li><a href="javascript:void(0);"><i class="modal-action modal-close  mdi-notification-sms"></i></a></li>-->
+                        </ul>
+                        </div>
+                    </div>
+                </nav>
+            </mz-modal-header>
+            <mz-modal-content>
+                <div class="row">
+                    <mz-datepicker-container (click)="$event.stopPropagation()" class="col s12 m4">
+                        <i mz-icon-mdi mz-input-prefix
+                            [icon]="'calendar'">
+                        </i>
+                        <input mz-datepicker mz-validation required
+                            [errorMessageResource]="errorMessagesSolicitud.fecha_requerida"
+                            [label]="'Fecha Necesaria'"
+                            id="fecha_requerida"
+                            [(ngModel)]="detallesolicitud.fecha_requerida"
+                            name="fecha_requerida"
+                            [options]= "opcionesDatePicker"
+                            type="tel" />
+                    </mz-datepicker-container>
+    
+                    <div class="col s12 m5"></div>
+                    <mz-input-container class="col s12 m3">
+                        <input mz-input disabled
+                            [label]="'Numero de Solicitud'"
+                            id="dc_codigo_solicitud"
+                            placeholder="Codigo de Solicitud"
+                            [(ngModel)]="solicitud.codigo"
+                            name="codigo"
+                            type="text">
+                    </mz-input-container>
+                </div>
+        
+                <div class="row">
+                    <mz-input-container class="col s12 m4">
+                        <input mz-input
+                            [label]="'Codigo de Item'"
+                            id="codigo_item"
+                            (click)="onOpenDialog($event)"
+                            placeholder="Codigo de Item"
+                            [(ngModel)]="detallesolicitud.codigo_item"
+                            name="codigo_item"
+                            type="text">
+                    </mz-input-container>
+                    
+                    <mz-input-container class="col s12 m8">
+                        <input mz-input 
+                            [label]="'Descripción de Item'"
+                            id="descripcion_item"
+                            (click)="onOpenDialog($event)"
+                            placeholder="Descripción de Item"
+                            [(ngModel)]="detallesolicitud.descripcion_item"
+                            name="descripcion_item"
+                            type="text">
+                    </mz-input-container>
+                </div>
+        
+                <div class="row">
+                    <mz-input-container class="col s12 m4">
+                        <input mz-input disabled
+                            id="unidad"
+                            [(ngModel)]="detallesolicitud.unidad"
+                            name="unidad"
+                            [label]="'Unidad'"
+                            type="text">
+                    </mz-input-container>
+                    <mz-input-container class="col s12 m4">
+                        <input mz-input mz-validation required
+                        [errorMessageResource]="errorMessagesSolicitud. cantidad"
+                            id="cantidad"
+                            [(ngModel)]="detallesolicitud.cantidad"
+                            name="cantidad"
+                            [label]="'Cantidad'"
+                            type="number">
+    
+                    </mz-input-container>
+    
+    
+                    <div class="row">
+                        <mz-datepicker-container (click)="$event.stopPropagation()" class="col s12 m4">
+                            <i mz-icon-mdi mz-input-prefix
+                                [icon]="'calendar'">
+                            </i>
+                            <input mz-datepicker disabled
+                                [label]="'Fecha de Arte'"
+                                id="fecha_arte"
+                                [(ngModel)]="detallesolicitud.fecha_arte"
+                                name="fecha_arte"
+                                [options]= "opcionesDatePicker"
+                                type="tel" />
+                        </mz-datepicker-container>
+                    </div>
+                </div> 
+            </mz-modal-content>
+    
+            <mz-modal-footer>
+              <button mz-button [flat]="true" mz-modal-close>Cancelar</button>
+              <button mz-button [flat]="true" mz-modal-close (click)="onAddItemSolicitud()" mz-modal-close [disabled]="!formDSModify.valid" type="submit">Modificar</button>
+            </mz-modal-footer>
+    
+          </mz-modal>
+    </form>
+    
+    <form  #formDSSModify="ngForm" novalidate>
+        <mz-modal #ModificarServicioModal [fixedFooter]="true" [fullscreen]="true" [bottomSheet]="true">
+            <mz-modal-header>
+                <nav class="lafar-bg-blue">
+                    <div class="nav-wrapper">
+                        <div class="left col s12 m5 l5">
+                        <ul>
+                            <li><a href="javascript:void(0);" (click)="ModificarServicioModal.closeModal()" class="email-menu"><i class="modal-action modal-close  mdi-hardware-keyboard-backspace"></i></a></li>
+                            <li><a href="javascript:void(0);" class="email-type">Modificar Servicio</a></li>
+                        </ul>
+                        </div>
+                        <div class="col s12 m7 l7 hide-on-med-and-down">
+                        <ul class="right">
+                            <!--<li><a href="javascript:void(0);"><i class="mdi-editor-attach-file"></i></a></li>-->
+                            <!--<li><a href="javascript:void(0);"><i class="modal-action modal-close  mdi-notification-sms"></i></a></li>-->
+                        </ul>
+                        </div>
+                    </div>
+                </nav>
+            </mz-modal-header>
+            <mz-modal-content>
+                <div class="row">
+                    <mz-textarea-container class="col s12">
+                      <textarea mz-textarea mz-validation required
+                        id="s_descripcion"
+                        [errorMessageResource]="errorMessagesSolicitud.s_descripcion"
+                        [label]="'Descripción del Servicio'"
+                        [(ngModel)]="detallesolicitudservicio.descripcion_item"
+                        name="s_descripcion"
+                        [length]="100">
+                      </textarea>
+                    </mz-textarea-container>
+                    
+                </div>
+                <div class="row">
+                    <mz-datepicker-container (click)="$event.stopPropagation()" class="col s12">
+                        <i mz-icon-mdi mz-input-prefix
+                            [icon]="'calendar'">
+                        </i>
+                        <input mz-datepicker mz-validation 
+                            [errorMessageResource]="errorMessagesSolicitud.fecha_requerida_servicio"
+                            [label]="'Fecha Necesaria'"
+                            id="fecha_requerida_servicio"
+                            [(ngModel)]="detallesolicitudservicio.fecha_requerida"
+                            name="fecha_requerida_servicio"
+                            [options]= "opcionesDatePicker"
+                            type="tel" />
+                    </mz-datepicker-container>
+                </div>
+    
+            </mz-modal-content>
+    
+            <mz-modal-footer>
+              <button mz-button [flat]="true" mz-modal-close>Cancelar</button>
+              <button mz-button [flat]="true" mz-modal-close (click)="onAddServicioSolicitud()" mz-modal-close [disabled]="!formDSSModify.valid" type="submit">Modificar</button>
+            </mz-modal-footer>
+    
+          </mz-modal>
+    </form>
+<!-- END REGION **************************************************************************************************************** -->
+    
+<!-- REGION ANULAR SOLICITUD -->
+    <mz-modal #AnularSolicitudModal [fixedFooter]="true" [fullscreen]="true" [bottomSheet]="false">
+        <mz-modal-header>
+            <nav class="lafar-bg-blue">
+                <div class="nav-wrapper">
+                    <div class="left col s12 m5 l5">
+                    <ul>
+                        <li><a href="javascript:void(0);" (click)="AnularSolicitudModal.closeModal()" class="email-menu"><i class="modal-action modal-close  mdi-hardware-keyboard-backspace"></i></a></li>
+                        <li><a href="javascript:void(0);" class="email-type">Anular Solicitud</a></li>
+                    </ul>
+                    </div>
+                    <div class="col s12 m7 l7 hide-on-med-and-down">
+                    <ul class="right">
+                        <!--<li><a href="javascript:void(0);"><i class="mdi-editor-attach-file"></i></a></li>-->
+                        <!--<li><a href="javascript:void(0);"><i class="modal-action modal-close  mdi-notification-sms"></i></a></li>-->
+                    </ul>
+                    </div>
+                </div>
+            </nav>
+        </mz-modal-header>
+        <mz-modal-content>
+            <mz-card>
+                <mz-card-content>
+                    <mz-textarea-container>
+                        <i mz-icon-mdi mz-textarea-prefix
+                            [icon]="'eraser'">
+                        </i>
+                        <textarea mz-textarea
+                            [label]="'Motivo de Anulación'"
+                            [(ngModel)]="asolicitud.motivo_anulacion"
+                            name="motivo_anulacion"
+                            id="motivo_anulacion"
+                            placeholder="Ingrese el motivo de anulación"
+                            length="300"></textarea>
+                    </mz-textarea-container>
+                </mz-card-content>
+            </mz-card>
+    
+            <!--<div class="row">
+                <pre>
+                    {{ asolicitud | json }}    
+                </pre>
+            </div>-->
+        </mz-modal-content>
+        <mz-modal-footer>
+            <button mz-button [flat]="true" mz-modal-close>Cancelar</button>
+            <button mz-button [flat]="true" mz-modal-close (click)="onGuardarAnularSolicitud()">Anular</button>
+        </mz-modal-footer>
+    </mz-modal>
+<!-- END REGION ANULAR SOLICITUD-->
+<!-- REGION RECHAZAR SOLICITUD -->
+    <mz-modal #RechazarSolicitudModal [fixedFooter]="true" [fullscreen]="true" [bottomSheet]="false">
+        <mz-modal-header>
+            <nav class="lafar-bg-blue">
+                <div class="nav-wrapper">
+                    <div class="left col s12 m5 l5">
+                    <ul>
+                        <li><a href="javascript:void(0);" (click)="RechazarSolicitudModal.closeModal()" class="email-menu"><i class="modal-action modal-close  mdi-hardware-keyboard-backspace"></i></a></li>
+                        <li><a href="javascript:void(0);" class="email-type">Rechazar Solicitud</a></li>
+                    </ul>
+                    </div>
+                    <div class="col s12 m7 l7 hide-on-med-and-down">
+                    <ul class="right">
+                        <!--<li><a href="javascript:void(0);"><i class="mdi-editor-attach-file"></i></a></li>-->
+                        <!--<li><a href="javascript:void(0);"><i class="modal-action modal-close  mdi-notification-sms"></i></a></li>-->
+                    </ul>
+                    </div>
+                </div>
+            </nav>
+        </mz-modal-header>
+        <mz-modal-content>
+            <mz-card>
+                <mz-card-content>
+                    <mz-textarea-container>
+                        <i mz-icon-mdi mz-textarea-prefix
+                            [icon]="'eraser'">
+                        </i>
+                        <textarea mz-textarea
+                            [label]="'Motivo de Anulación'"
+                            [(ngModel)]="autorizarsolcitud.motivo_autorizacion_superior"
+                            name="motivo_autorizacion_superior"
+                            id="motivo_autorizacion_superior"
+                            placeholder="Ingrese el motivo de Rechazo"
+                            length="300"></textarea>
+                    </mz-textarea-container>
+                </mz-card-content>
+            </mz-card>
+    
+            <!--<div class="row">
+                <pre>
+                    {{ autorizarsolcitud | json }}    
+                </pre>
+            </div>-->
+
+        </mz-modal-content>
+        <mz-modal-footer>
+            <button mz-button [flat]="true" mz-modal-close>Cancelar</button>
+            <button mz-button [flat]="true" mz-modal-close (click)="onGuardarAutorizarSolicitud('R')">Rechazar</button>
+        </mz-modal-footer>
+    </mz-modal>
+<!-- END REGION RECHAZAR SOLICITUD-->
+
+<div *ngIf="solicitud.estado_autorizacion_superior !== 'X'" class="footer" id="footer">
+    <button mz-button (click)="onEditar()" *ngIf="!modificar && solicitud.estado_autorizacion_superior === 'P'">
+        Editar
+    </button>
+    <button mz-button (click)="onCancelarEdicion()" *ngIf="modificar">
+        Cancel
+    </button>
+    <button mz-button (click)="AnularSolicitudModal.openModal()" class="red">
+        Anular
+    </button>
+    <button *ngIf="solicitud.estado === 'A'" mz-button (click)="cerrarSolicitud(solicitud.codigo)" class="blue">
+        Cerrar
+    </button>
+    
+    <!--<button *ngIf="solicitud.estado_autorizacion_superior === 'P'" mz-button class="blue" (click)="onGuardarAutorizarSolicitud('A')">
+        Aprobar
+    </button>
+    <button *ngIf="solicitud.estado_autorizacion_superior === 'P'" mz-button (click)="RechazarSolicitudModal.open()" class="red">
+        Rechazar
+    </button>-->
+</div>
+
+<!-- Items -->
+<div #container class='root-container'>
+    <ejs-dialog id='dialog' #ejDialog isModal='true' [visible]='false' header='Listado de Items' (beforeClose)="validation($event)"[buttons]='buttons' [target]='targetElement' width='500px' height='350px'>
+      <ng-template #content>
+        <div id="sample">
+          <input #textbox class="e-input" type="text" id="textbox" placeholder="Filter" title="Type in a name" (keyup)=onkeyup($event) />
+          <ejs-listview #list id='list' [dataSource]='articulos' [fields]='fields' (select)="selectItem($event)"></ejs-listview>
+        </div>
+      </ng-template>
+    </ejs-dialog>
+</div>
+
+
+<!--
+<div class="row">
+    <pre>
+        {{ solicitud | json }}    
+    </pre>
+</div>
+-->

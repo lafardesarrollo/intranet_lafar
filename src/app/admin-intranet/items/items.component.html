@@ -1,0 +1,193 @@
+<div id="loading">
+    <div id="loadingcontent">
+        <p id="loadingspinner">
+            <mz-spinner
+                class="valign center-align col s4"
+                [size]="'big'">
+            </mz-spinner>
+            <br><br>
+            Espere por favor ... 
+        </p>
+    </div>
+</div>
+      
+      
+<nav class="lafar-bg-blue">
+    <div class="nav-wrapper">
+        <div class="left col s12 m5 l5">
+            <ul>
+                <li><a href="javascript:void(0);" [routerLink]="['/admin/apps']" class="email-menu"><i class="modal-action modal-close  mdi-hardware-keyboard-backspace"></i></a>
+                </li>
+                <li><a href="javascript:void(0);" class="email-type">Items de la Aplicación {{ app_name }}</a>
+                </li>
+            </ul>
+        </div>
+        <div class="col s12 m7 l7 hide-on-med-and-down">
+            <ul class="right">
+                <!--<li><a href="javascript:void(0);"><i class="mdi-editor-attach-file" (click)="AddFileModal.open()"></i></a></li>-->
+                <!--<li><a href="javascript:void(0);"><i class="modal-action modal-close  mdi-content-send"></i></a></li>-->
+            </ul>
+        </div>
+    </div>
+</nav>
+      
+<div class="contenido">
+    <div class="row">
+        <div class="col l6 m6 s12">
+            <mz-card>
+                <mz-card-content>
+                    <ejs-treeview id="myTree" [fields]="treeFields">
+                        
+                    </ejs-treeview>
+                </mz-card-content>
+            </mz-card>
+        </div>
+        <div class="col l6 m6 s12">
+            <mz-card class="contenido-derecha">
+                <mz-card-title>
+                    <button mz-button style="width: 100%;" (click)="habilitaAddItem()" class="pulse">
+                        Agregar Nuevo Item
+                    </button>
+                </mz-card-title>
+                <mz-card-content>
+                    <div class="row">
+                        <mz-select-container class="col s12 m12 l12">
+                            <select mz-select
+                                id="select-item-mother"
+                                [label]="'Items Principal'"
+                                [(ngModel)]="id_mother"
+                                (change)="onSelectItemPrincipal()"
+                                [placeholder]="'Seleccione un Item Principal'">
+                                <option *ngFor="let i of litemmother" [ngValue]="i.id">{{ i.itemName }}</option>
+                            </select>
+                            <a href="javascript:void(0)" (click)="modalAddItemPrincipal.openModal()" class="add-item-principal right pulse">Añadir Nuevo Item Principal</a>
+                        </mz-select-container>
+                    </div>
+                </mz-card-content>
+            </mz-card>
+
+            <mz-card class="contenido-derecha">
+                <mz-card-content>
+                    <mz-input-container>
+                        <input mz-input
+                            [label]="'Url'"
+                            id="url"
+                            [(ngModel)]="item_app.url"
+                            placeholder="Ingrese una Url"
+                            type="text">
+                    </mz-input-container>
+
+                    <div class="row">
+                        <div class="col l6 m6 s12">
+                            <mz-input-container>
+                                <input mz-input
+                                    [label]="'Icono'"
+                                    id="icon"
+                                    [(ngModel)]="item_app.icon"
+                                    placeholder="Ingrese un Icono"
+                                    type="text">
+                            </mz-input-container>
+                        </div>
+                        <div class="col l6 m6 s12 center-align">
+                            <i mz-icon-mdi [icon]="item_app.icon" [size]="'36px'" class="blue-text"></i>
+                        </div>
+                    </div>
+
+                    <mz-input-container>
+                        <input mz-input
+                            [label]="'Nombre del Item'"
+                            id="itemName"
+                            [(ngModel)]="item_app.itemName"
+                            placeholder="Ingrese nombre de Item"
+                            type="text">
+                    </mz-input-container>
+
+                </mz-card-content>
+            </mz-card>
+        </div>
+    </div>
+    
+</div>
+
+<div class="fixed-action-btn">
+    <button mz-button class="blue pulse" (click)="guardarItem()" [float]="true">
+        <i mz-icon-mdi [icon]="'content-save'"></i>
+    </button>
+</div>
+
+<mz-modal #modalAddItemPrincipal [fixedFooter]="true" [bottomSheet]="false">
+    <mz-modal-header>
+        <nav class="lafar-bg-blue">
+            <div class="nav-wrapper">
+                <div class="left col s12 m5 l5">
+                    <ul>
+                        <li><a href="javascript:void(0);" class="email-menu"><i class="modal-action modal-close  mdi-hardware-keyboard-backspace"></i></a>
+                        </li>
+                        <li><a href="javascript:void(0);" class="email-type">Nuevo Item Principal para {{ app_name }}</a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="col s12 m7 l7 hide-on-med-and-down">
+                    <ul class="right">
+                        <!--<li><a href="javascript:void(0);"><i class="mdi-editor-attach-file" (click)="AddFileModal.open()"></i></a></li>-->
+                        <!--<li><a href="javascript:void(0);"><i class="modal-action modal-close  mdi-content-send"></i></a></li>-->
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </mz-modal-header>
+    <mz-modal-content>
+        <div class="contenido-modal">
+            <mz-input-container>
+                <input mz-input
+                    [label]="'Url'"
+                    id="url"
+                    [(ngModel)]="item_app_principal.url"
+                    placeholder="Ingrese una Url"
+                    type="text">
+            </mz-input-container>
+
+            <div class="row">
+                <div class="col l6 m6 s12">
+                    <mz-input-container>
+                        <input mz-input
+                            [label]="'Icono'"
+                            id="icon"
+                            [(ngModel)]="item_app_principal.icon"
+                            placeholder="Ingrese un Icono"
+                            type="text">
+                    </mz-input-container>
+                </div>
+                <div class="col l6 m6 s12 center-align">
+                    <i mz-icon-mdi [icon]="item_app_principal.icon" [size]="'36px'" class="blue-text"></i>
+                </div>
+            </div>
+
+            <mz-input-container>
+                <input mz-input
+                    [label]="'Nombre del Item'"
+                    id="itemName"
+                    [(ngModel)]="item_app_principal.itemName"
+                    placeholder="Ingrese nombre de Item"
+                    type="text">
+            </mz-input-container>
+        </div>
+
+        <div>
+            <pre>
+                {{ item_app_principal | json }}
+            </pre>
+        </div>
+    </mz-modal-content>
+    <mz-modal-footer>
+        <button mz-button [flat]="true" mz-modal-close (click)="CancelarGuardarItemPrincipal()">Cancelar</button>
+        <button mz-button [flat]="true" mz-modal-close (click)="guardarItemPrincipal()">Guardar Item</button>
+    </mz-modal-footer>
+</mz-modal>
+<!--
+<div class="row">
+    <div class="col l4"><pre><div>{{ litemstree | json}}</div></pre></div>
+    <div class="col l4"><pre><div>{{ treeData | json}}</div></pre></div>
+    <div class="col l4"><pre><div>{{ treeFields | json}}</div></pre></div>
+</div>
+-->

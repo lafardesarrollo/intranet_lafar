@@ -1,0 +1,164 @@
+<mz-parallax class="header-background" [height]="270">
+  <img src="assets/images/dark-material-bg.jpg">
+</mz-parallax>
+<form #userForm = "ngForm" (submit)="onSubmit()" novalidate>
+  <div id="preview" class="header-content valign-wrapper lafar-light">
+    <img class="image-user circle" src="{{urlFotoPerfil}}">
+    <div class="nombre-user">Agregar Nuevo Usuario 
+    </div>
+    <label class="btn github-button blue">
+      <i class="large mdi-image-camera-alt"></i>
+      Cargar Nueva Foto
+      <input type="file" hidden (change)="uploadImageUser($event)" required>
+    </label>
+  </div>
+
+  <div>
+    <mz-card>
+      <mz-card-title>
+        Información General
+      </mz-card-title>
+      <mz-card-content>
+        <div class="row"> 
+          <mz-input-container class="col s12 m4">
+            <input mz-input mz-validation required
+              id="first_name"
+              name="first_name"
+              type="text"
+              [errorMessageResource]="errorMessages.first_name"
+              [label]="'Nombres'"
+              [(ngModel)]="UserModel.first_name">
+          </mz-input-container>
+
+          <mz-input-container class="col s12 m4">
+            <input mz-input mz-validation required
+              id="last_name"
+              name="last_name"
+              type="text"
+              [errorMessageResource]="errorMessages.last_name"
+              [label]="'Apellidos'"
+              [(ngModel)]="UserModel.last_name">
+          </mz-input-container>
+
+          <mz-input-container class="col s12 m4">
+            <input mz-input  mz-validation required
+              id="email_address"
+              name="email_address"
+              type="email"
+              [errorMessageResource]="errorMessages.email_address"
+              [label]="'Correo Electrónico'"
+              [(ngModel)]="UserModel.email_address"
+              email>
+          </mz-input-container>
+        </div>   
+      </mz-card-content>
+    </mz-card>
+  </div>
+  <div>
+    <mz-card>
+      <mz-card-title>
+        Información Laboral
+      </mz-card-title>
+      <mz-card-content>
+          <div class="section">
+            <div class="row m-valign-wrapper">
+              <mz-input-container class="col s12 m4">
+                <input mz-input mz-validation required
+                  id="username"
+                  name="username"
+                  type="text"
+                  [errorMessageResource]="errorMessages.username"
+                  [label]="'Nombre de Usuario'"
+                  [(ngModel)]="UserModel.username"
+                  (change)="onCambioUsername(UserModel.username)" >
+              </mz-input-container>
+              <mz-input-container class="col s12 m4">
+                <input mz-input mz-validation required
+                  id="password"
+                  name="password"
+                  type="password"
+                  [errorMessageResource]="errorMessages.password"
+                  [label]="'Contraseña'"
+                  [(ngModel)]="UserModel.password">
+              </mz-input-container>
+              
+              <div style="padding: 10px 10px" class="col s12 m4">
+                <ng2-completer 
+                  (selected)="onSelectCargo($event)"    
+                  [datasource]="cargoData"
+                  [minSearchLength]="0"
+                  [maxChars]="10"
+                  [inputClass]="'form-control'"
+                  [placeholder]="'Seleccione el Cargo'"
+                  [matchClass]="'match'"
+                  [autofocus]="true"
+                  [textSearching]="false">
+                </ng2-completer>
+              </div>
+
+              <mz-select-container class="col s12 m6">
+                <select mz-select mz-validation required
+                  id="id_area"
+                  name="id_area"
+                  [errorMessageResource]="errorMessages.area"
+                  [label]="'Area'"
+                  [placeholder]="'Seleccione un Area'"
+                  [(ngModel)]="UserModel.id_area">
+                  <option *ngFor="let area of areas" [ngValue]="area.id">{{ area.nombre }}</option>
+                </select>
+              </mz-select-container>
+              <mz-select-container class="col s12 m6">
+                <select mz-select mz-validation required
+                  id="id_regional"
+                  name="id_regional"
+                  [errorMessageResource]="errorMessages.regional"
+                  [label]="'Regional'"
+                  [placeholder]="'Seleccione una Regional'"
+                  [(ngModel)]="UserModel.id_regional">
+                  <option *ngFor="let regional of regionales" [ngValue]="regional.id">{{ regional.nombre }}</option>
+                </select>
+              </mz-select-container>
+              <!--<div class="row">
+                <div style="padding: 12px 10px" class="col l2 s12 m12">
+                  <ng2-completer 
+                      (selected)="onSelectUsuario($event)"    
+                      [datasource]="userData"
+                      [minSearchLength]="0"
+                      [maxChars]="10"
+                      [inputClass]="'form-control'"
+                      [placeholder]="'Inmediato Superior'"
+                      [matchClass]="'match'"
+                      [autofocus]="true"
+                      [textSearching]="false">
+                  </ng2-completer>
+                </div>
+
+                <mz-input-container class="col s12 m4">
+                  <input mz-input
+                    id="username_superior"
+                    name="username_superior"
+                    type="text"
+                    [label]="'Inmediato Superior'">
+                </mz-input-container>
+              </div>
+            -->
+            </div>
+          </div>
+
+      </mz-card-content>
+    </mz-card>
+  </div>
+  <h2></h2>
+  <div class="fixed-action-btn" style="bottom: 45px; right: 24px;">
+      <button mz-button 
+        [float]="true" 
+        [large]="true" 
+        [disabled]="!userForm.valid" 
+        class="green" 
+        type="submit">
+          <i class="large mdi-action-done"></i>
+      </button>
+  </div>
+</form>
+
+<simple-notifications></simple-notifications>

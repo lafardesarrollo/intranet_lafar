@@ -1,0 +1,97 @@
+
+<mz-parallax class="header-background" [height]="270">
+  <img src="assets/images/dark-material-bg.jpg">
+</mz-parallax>
+
+<form #claveForm = "ngForm" (submit)="onSubmit()" class="formPassword">
+  <div id="preview" class="header-content valign-wrapper lafar-light">
+    <img class="image-user circle" src="assets/images/lock.png">
+    <div class="nombre-user">ADMINISTRACIÓN DE CREDENCIALES</div>
+  </div>
+
+  <div>
+    <mz-card>
+      <mz-card-title>
+        Es necesario que cambie de Contraseña
+      </mz-card-title>
+      <mz-card-content>
+        <div class="form-group" style="display:none">
+          <mz-input-container class="col s6 m12">
+            <input mz-input
+              required
+              type="text"
+              [(ngModel)]="model.password1" name="password1"
+              [label]="'Contraseña Actual'"
+              #password1="ngModel">
+              <div [hidden]="password1.valid || password1.pristine"
+                class="message-error">
+                La Contraseña actual es requerida no coincide
+              </div> 
+          </mz-input-container>
+        </div>
+
+        <div class="form-group">
+          <mz-input-container class="col s6 m12">
+            <input mz-input
+              required
+              type="password"
+              validateEqual="password1"
+              [(ngModel)]="model.oldPassword" name="oldPassword"
+              [label]="'Contraseña Actual'"
+              #oldPassword="ngModel">
+              <div [hidden]="oldPassword.valid || oldPassword.pristine"
+                class="message-error">
+                No coincide con su Contraseña Actual
+              </div> 
+          </mz-input-container>
+        </div>
+        <div class="form-group">
+          <mz-input-container class="col s6 m12">
+            <input mz-input
+              required
+              type="password"
+              [(ngModel)]="model.password" name="password"
+              [label]="'Nueva Contraseña'"
+              #password="ngModel">
+              <div [hidden]="password.valid || password.pristine"
+                class="message-error">
+                Ingrese su nueva contraseña
+              </div> 
+          </mz-input-container>
+        </div>
+        <div class="form-group">
+          <mz-input-container class="col s6 m12">
+            <input mz-input
+              type="password"
+              required
+              validateEqual="password"
+              [(ngModel)]="model.confirmPassword" name="confirmPassword"
+              [label]="'Confirm Password'"
+              #confirmPassword="ngModel">
+              <div [hidden]="confirmPassword.valid || confirmPassword.pristine"
+                class="message-error">
+                La contraseñas no coinciden!
+              </div> 
+          </mz-input-container>
+        </div>
+      </mz-card-content>
+    </mz-card>
+  </div>
+  
+  <div class="fixed-action-btn" style="bottom: 45px; right: 24px;">
+    <button mz-button 
+      [float]="true" 
+      [large]="true" 
+      [disabled]="!claveForm.valid" 
+      class="green" 
+      type="submit">
+      <i class="large mdi-action-done"></i>
+    </button>
+  </div>
+
+  <i class="material-icons">face</i>
+
+</form>
+
+<simple-notifications></simple-notifications>
+

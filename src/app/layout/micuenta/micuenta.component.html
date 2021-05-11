@@ -1,0 +1,385 @@
+<mz-parallax class="header-background" [height]="200">
+    <img src="assets/images/dark-material-bg.jpg">
+</mz-parallax>
+
+<div id="preview" class="header-content valign-wrapper lafar-light">
+    <img class="image-user circle" src="{{urlFotoPerfil}}">
+    <div class="nombre-user">{{user.first_name}} {{user.last_name}}</div>
+    <label class="btn github-button blue">
+    <i class="large mdi-image-camera-alt"></i>
+    Cargar Nueva Foto
+    <input type="file" hidden (change)="uploadImageUser($event)" required>
+    </label>
+</div>
+
+<div class="fixed-action-btn" style="bottom: 45px; right: 24px;">
+    <button mz-button 
+    [float]="true" 
+    [large]="true" 
+    [disabled]="!isFileCharged" 
+    class="green" 
+    type="button"
+    (click)="onSubmit()">
+        <i class="large mdi-action-done"></i>
+    </button>
+</div>
+
+
+<div class="row">
+  <div class="col l8 s12">
+    <mz-card>
+      <mz-card-title>
+        Información General
+      </mz-card-title>
+
+      <mz-card-content>
+        <!-- Profile About Details  -->
+        <ul id="profile-page-about-details" class="collection z-depth-1">
+            <li class="collection-item">
+              <div class="row">
+                <div class="col s6 lafar-dark"><i class="mdi-action-perm-identity"></i>  Nombres</div>
+                <div class="col s6 grey-text text-darken-4 right-align"> {{user.first_name}}</div>
+              </div>
+            </li>
+            <li class="collection-item">
+              <div class="row">
+                <div class="col s6 lafar-dark"><i class="mdi-action-trending-neutral"></i> Apellidos</div>
+                <div class="col s6 grey-text text-darken-4 right-align">{{user.last_name}}</div>
+              </div>
+            </li>
+            <li class="collection-item">
+              <div class="row">
+                <div class="col s6 lafar-dark"><i class="mdi-content-mail"></i>  Correo</div>
+                <div class="col s6 grey-text text-darken-4 right-align"> {{user.email_address}}</div>
+              </div>
+            </li>
+          </ul>
+          <!--/ Profile About Details  -->  
+          <button mz-button (click)="passwordModal.openModal()" class="blue">
+              Cambiar Contraseña
+          </button>
+      </mz-card-content>
+    </mz-card>
+
+    <mz-card>
+        <mz-card-title>
+          Información Laboral
+        </mz-card-title>
+        <mz-card-content>
+          <!-- Profile About Details  -->
+          <ul id="profile-page-about-details" class="collection z-depth-1">
+              <li class="collection-item">
+                <div class="row">
+                  <div class="col s6 lafar-dark"><i class="mdi-editor-insert-emoticon"></i>  Usuario: </div>
+                  <div class="col s6 grey-text text-darken-4 right-align"> {{user.username}}</div>
+                </div>
+              </li>
+              <li class="collection-item">
+                <div class="row">
+                  <div class="col s6 lafar-dark"><i class="mdi-maps-local-attraction"></i>  Cargo: </div>
+                  <div class="col s6 grey-text text-darken-4 right-align"> {{user.cargo}}</div>
+                </div>
+              </li>
+              <li class="collection-item">
+                <div class="row">
+                  <div class="col s6 lafar-dark"><i class="mdi-action-aspect-ratio"></i>  Area: </div>
+                  <div class="col s6 grey-text text-darken-4 right-align"> {{user.area}}</div>
+                </div>
+              </li>
+              <li class="collection-item">
+                <div class="row">
+                  <div class="col s6 lafar-dark"><i class="mdi-maps-terrain"></i>  Trabaja en: </div>
+                  <div class="col s6 grey-text text-darken-4 right-align"> {{user.regional}}</div>
+                </div>
+              </li>
+              
+            </ul>
+            <!--/ Profile About Details  -->  
+        </mz-card-content>
+      </mz-card>
+  </div>
+  <div class="col l4 s12"> 
+    <mz-card>
+      <mz-card-title>
+        Aplicaciones LAFAR
+      </mz-card-title>
+      <mz-card-content>
+        <div class="row">
+          <div *ngFor="let app of apps" class="parentCard col xl4 l4 m2 s4">
+            <div class="item-menu-apps">
+              <!--<a style = " display:nome; color: #fff;" href="{{global.urlIntranet + item.url}}" target="_blank" class="tituloApp">-->
+              <a style = "color: #fff;" href="javascript:void(0)" class="tituloApp">
+              <div class="card-content">
+                  <img src="assets/images/apps/{{app.code}}.png" class="imagen-app">
+              </div>
+              </a>
+            </div>
+          </div>
+          <div class="parentCard col xl4 l4 m2 s4">
+            <div class="item-menu-apps">
+              <a style = "color: #fff;" href="javascript:void(0)" class="tituloApp">
+                <div class="card-content">
+                    <img src="assets/images/apps/fondoAppLf.png" class="imagen-app">
+                </div>
+              </a>
+            </div>
+          </div>
+        </div>
+      </mz-card-content>
+    </mz-card>
+  </div>
+</div>
+
+<form #formEditGeneral="ngForm" (ngSubmit)="onSubmitInformacionGeneral()" novalidate>
+  <mz-modal #EditDatosGeneralesModal [fixedFooter]="true" [bottomSheet]="false" [fullscreen]="false" >
+    <mz-modal-header>
+      <nav class="lafar-bg-blue">
+        <div class="nav-wrapper">
+          <div class="left col s12 m5 l5">
+          <ul>
+              <li><a href="javascript:void(0);" (click)="EditDatosGeneralesModal.closeModal()" class="email-menu"><i class="modal-action modal-close  mdi-hardware-keyboard-backspace"></i></a>
+              </li>
+              <li><a href="javascript:void(0);" class="email-type">Información General</a>
+              </li>
+          </ul>
+          </div>
+        </div>
+      </nav>
+    </mz-modal-header>
+    <mz-modal-content>
+      <div>
+        <mz-card>
+          <mz-card-content>
+            <div class="row"> 
+              <mz-input-container class="col s12 m12">
+                <input mz-input mz-validation required
+                  id="first_name"
+                  name="first_name"
+                  type="text"
+                  [errorMessageResource]="errorMessages.first_name"
+                  [label]="'Nombres'"
+                  [(ngModel)]="user.first_name">
+              </mz-input-container>
+    
+              <mz-input-container class="col s12 m12">
+                <input mz-input mz-validation required
+                  id="last_name"
+                  name="last_name"
+                  type="text"
+                  [errorMessageResource]="errorMessages.last_name"
+                  [label]="'Apellidos'"
+                  [(ngModel)]="user.last_name">
+              </mz-input-container>
+    
+              <mz-input-container class="col s12 m12">
+                <input mz-input mz-validation required
+                  id="email_address"
+                  name="email_address"
+                  type="email"
+                  [errorMessageResource]="errorMessages.email_address"
+                  [label]="'Correo Electrónico'"
+                  [(ngModel)]="user.email_address"
+                  email>
+              </mz-input-container>
+            </div>   
+          </mz-card-content>
+        </mz-card>
+      </div>
+    </mz-modal-content>
+    <mz-modal-footer>
+      <button type="reset" mz-button [flat]="true" mz-modal-close>Cancelar</button>
+      <button type="submit" mz-button [flat]="true" mz-modal-close>Guardar</button>
+    </mz-modal-footer>
+  </mz-modal>  
+</form>
+
+<form #formEditLaboral="ngForm" (ngSubmit)="onSubmitInformacionLaboral()" novalidate>
+  <mz-modal #EditDatosLaboralesModal [fixedFooter]="true" [bottomSheet]="false" [fullscreen]="false" >
+    <mz-modal-header>
+      <nav class="lafar-bg-blue">
+        <div class="nav-wrapper">
+          <div class="left col s12 m5 l5">
+            <ul>
+              <li><a href="javascript:void(0);" (click)="EditDatosLaboralesModal.closeModal()" class="email-menu"><i class="modal-action modal-close  mdi-hardware-keyboard-backspace"></i></a>
+              </li>
+              <li><a href="javascript:void(0);" class="email-type">Información Laboral</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </nav>
+    </mz-modal-header>
+    <mz-modal-content>
+      <div>
+        <mz-card>
+          <mz-card-content>
+            <div class="section">
+              <div class="row m-valign-wrapper">
+                <!--<div style="padding: 10px 10px" class="col s12 m4">
+                  <ng2-completer 
+                    [datasource]="cargoData"
+                    (selected)="onSelectCargo($event)"
+                    [(ngModel)]="descripcionCargo"
+                    [minSearchLength]="0"
+                    [inputClass]="'form-control'"
+                    [matchClass]="'match'"
+                    [autofocus]="true"
+                    [textNoResults]="'No se encontro resultados'"
+                    [initialValue]="'SECRETARIA DE GERENC'">
+                  </ng2-completer>
+                </div>-->
+                <mz-select-container class="col s12 m12">
+                  <select mz-select mz-validation required
+                    id="id_cargo"
+                    name="id_cargo"
+                    [errorMessageResource]="errorMessages.cargo"
+                    [label]="'Cargo'"
+                    [placeholder]="'Seleccione un Cargo'"
+                    [(ngModel)]="user.id_cargo">
+                    <option *ngFor="let cargo of cargos" [ngValue]="cargo.id">{{ cargo.nombre_cargo }}</option>
+                  </select>
+                </mz-select-container>
+                <mz-select-container class="col s12 m6">
+                  <select mz-select mz-validation required
+                    id="id_area"
+                    name="id_area"
+                    [errorMessageResource]="errorMessages.area"
+                    [label]="'Area'"
+                    [placeholder]="'Seleccione un Area'"
+                    [(ngModel)]="user.id_area">
+                    <option *ngFor="let area of areas" [ngValue]="area.id">{{ area.nombre }}</option>
+                  </select>
+                </mz-select-container>
+                <mz-select-container class="col s12 m6">
+                  <select mz-select mz-validation required
+                    id="id_regional"
+                    name="id_regional"
+                    [errorMessageResource]="errorMessages.regional"
+                    [label]="'Regional'"
+                    [placeholder]="'Seleccione una Regional'"
+                    [(ngModel)]="user.id_regional">
+                    <option *ngFor="let regional of regionales" [ngValue]="regional.id">{{ regional.nombre }}</option>
+                  </select>
+                </mz-select-container>
+              </div>
+            </div>
+          </mz-card-content>
+        </mz-card>
+      </div>
+    </mz-modal-content>
+    <mz-modal-footer>
+      <button type="reset" mz-button [flat]="true" mz-modal-close>Cancelar</button>
+      <button type="submit" mz-button [flat]="true" mz-modal-close>Guardar</button>
+    </mz-modal-footer>
+  </mz-modal>  
+</form>
+
+<form #formCambiarEstado="ngForm" (ngSubmit)="onSubmitEstadoUsuario()" novalidate>
+  <mz-modal #CambiarEstadoModal [fixedFooter]="true" [bottomSheet]="false" [fullscreen]="false" >
+    <mz-modal-header>
+      <nav class="lafar-bg-blue">
+        <div class="nav-wrapper">
+          <div class="left col s12 m5 l5">
+          <ul>
+              <li><a href="javascript:void(0);" (click)="EditDatosGeneralesModal.closeModal()" class="email-menu"><i class="modal-action modal-close  mdi-hardware-keyboard-backspace"></i></a>
+              </li>
+              <li><a href="javascript:void(0);" class="email-type">Estado del Usuario</a>
+              </li>
+          </ul>
+          </div>
+        </div>
+      </nav>
+    </mz-modal-header>
+    <mz-modal-content>
+      <div>
+        <mz-card>
+          <mz-card-content>
+              <div class="section">
+
+                  <h5 class="light">HTML Structure</h5>
+                
+                  <p>
+                    The input element <b>must be</b> contained inside the <code class="language-markup">mz-radio-button-container</code> component otherwise an error will be shown in the console.
+                  </p>
+                
+                  <app-code-snippet>
+                &lt;mz-radio-button-container>
+                  &lt;input mz-radio-button
+                    [label]="'Radio text'"
+                    [withGap]="true"
+                    id="radio-button-id"
+                    name="radio-group"
+                    type="radio">
+                &lt;/mz-radio-button-container>
+                  </app-code-snippet>
+                </div>
+                
+          </mz-card-content>
+        </mz-card>
+      </div>
+    </mz-modal-content>
+    <mz-modal-footer>
+      <button type="reset" mz-button [flat]="true" mz-modal-close>Cancelar</button>
+      <button type="submit" mz-button [flat]="true" mz-modal-close>Guardar</button>
+    </mz-modal-footer>
+  </mz-modal>  
+
+</form>
+
+<mz-modal #passwordModal [fixedFooter]="true" [bottomSheet]="true">
+    <mz-modal-header>
+      <div class="title-modal"><h3>Cambiar Contraseña</h3></div>
+    </mz-modal-header>
+    <mz-modal-content>
+        <div class="form-group content-modal">
+            <mz-input-container class="col s6 m12">
+              <input mz-input
+                required
+                type="password"
+                validateEqual="password1"
+                (input)="validaClaveOLD()"
+                [(ngModel)]="model.oldPassword" name="oldPassword"
+                [label]="'Contraseña Actual'"
+                #oldPassword="ngModel">
+                <div class="message-error" *ngIf="vpas1">
+                  No coincide con su Contraseña Actual
+                </div> 
+            </mz-input-container>
+          </div>
+          <div class="form-group content-modal">
+            <mz-input-container class="col s6 m12">
+              <input mz-input
+                required
+                type="password"
+                (input)="validaClaveNueva()"
+                [(ngModel)]="model.password" name="password"
+                [label]="'Nueva Contraseña'"
+                #password="ngModel">
+                <div class="message-error" *ngIf="vpas2">
+                    {{ msgpas2 }}
+                </div>
+            </mz-input-container>
+          </div>
+          <div class="form-group content-modal">
+            <mz-input-container class="col s6 m12">
+              <input mz-input
+                type="password"
+                required
+                validateEqual="password"
+                (input)="validaClaveConfirmacionNueva()"
+                [(ngModel)]="model.confirmPassword" name="confirmPassword"
+                [label]="'Confirm Password'"
+                #confirmPassword="ngModel">
+                <div class="message-error" *ngIf="vpas3">
+                  La contraseñas no coinciden!
+                </div> 
+            </mz-input-container>
+          </div>
+    </mz-modal-content>
+    <mz-modal-footer>
+      <button mz-button [disabled]="bchangepassword" [flat]="true" mz-modal-close (click)="onChangePassword()">Cambiar</button>
+      <button mz-button [flat]="true" mz-modal-close>Cancelar</button>
+    </mz-modal-footer>
+</mz-modal>
+
+<simple-notifications></simple-notifications>

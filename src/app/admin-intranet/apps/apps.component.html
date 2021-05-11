@@ -1,0 +1,52 @@
+<div id="loading">
+  <div id="loadingcontent">
+      <p id="loadingspinner">
+          <mz-spinner
+              class="valign center-align col s4"
+              [size]="'big'">
+          </mz-spinner>
+          <br><br>
+          Espere por favor ... 
+      </p>
+  </div>
+</div>
+
+
+<nav class="lafar-bg-blue">
+  <div class="nav-wrapper">
+      <div class="left col s12 m5 l5">
+          <ul>
+              <li><a href="javascript:void(0);" [routerLink]="['/admin/']" class="email-menu"><i class="modal-action modal-close  mdi-hardware-keyboard-backspace"></i></a>
+              </li>
+              <li><a href="javascript:void(0);" class="email-type">Administrar Aplicaciones de la Intranet</a>
+              </li>
+          </ul>
+      </div>
+      <div class="col s12 m7 l7 hide-on-med-and-down">
+          <ul class="right">
+              <!--<li><a href="javascript:void(0);"><i class="mdi-editor-attach-file" (click)="AddFileModal.open()"></i></a></li>-->
+              <!--<li><a href="javascript:void(0);"><i class="modal-action modal-close  mdi-content-send"></i></a></li>-->
+          </ul>
+      </div>
+  </div>
+</nav>
+
+<div class="contenido">
+  <mz-card>
+    <mz-card-content>
+      <div class="row">
+        <div class="col l2 m3 s4" *ngFor="let app of lapps">
+          <div class="image-container">
+            <img src="assets/images/apps/{{app.code}}.png" class="imagen-app">
+            <div (click)="abrirItem(app)" class="after">Click para ver mas detalle ...</div>
+          </div>
+        </div>
+      </div>
+    </mz-card-content>
+  </mz-card>
+</div>
+<pre>
+  <div>
+    {{ lapps | json}}
+  </div>
+</pre>

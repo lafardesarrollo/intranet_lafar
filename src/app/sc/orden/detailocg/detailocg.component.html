@@ -1,0 +1,621 @@
+<div id="loading">
+    <div id="loadingcontent">
+        <p id="loadingspinner">
+            <mz-spinner
+                class="valign center-align col s4"
+                [size]="'big'">
+            </mz-spinner>
+            <br><br>
+            Cargando Orden de Compra ... 
+        </p>
+    </div>
+</div>
+
+<nav class="lafar-bg-blue">
+    <div class="nav-wrapper">
+        <div class="left col s12 m5 l5">
+            <ul>
+                <li><a href="javascript: history.go(-1)" class="email-menu"><i class="modal-action modal-close  mdi-hardware-keyboard-backspace"></i></a>
+                </li>
+                <li><a href="javascript:void(0);" class="email-type">ORDEN DE COMPRA POR AUTORIZAR</a>
+                </li>
+            </ul>
+        </div>
+        <div class="col s12 m7 l7 hide-on-med-and-down">
+            <ul class="right">
+                <!--<li><a href="javascript:void(0);"><i class="mdi-editor-attach-file" (click)="AddFileModal.open()"></i></a></li>-->
+                <li><a href="javascript:void(0);" (click)="onDirigirConversacion()"><i class="modal-action modal-close  mdi-communication-textsms"></i></a></li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<form #form="ngForm" novalidate>
+    <mz-card>
+        <mz-card-content>
+            <div class="row">
+                <mz-input-container class="col s12 m3">
+                    <input mz-input disabled
+                    [label]="'Codigo de Orden de Compra'"
+                    id="codigo_orden"
+                    [(ngModel)]="orden.codigo_orden"
+                    name="codigo_orden"
+                    placeholder="Codigo de Orden de Compra"
+                    type="text">
+                </mz-input-container>
+
+                <mz-select-container class="col s12 m3">
+                    <select mz-select
+                        id="tipo_orden"
+                        [(ngModel)]="orden.tipo_orden"
+                        name="tipo_orden"
+                        [label]="'Tipo de Orden de Compra'"
+                        [disabled] = "camposdeshabilitados"
+                        [placeholder]="'Tipo de Orden de Compra'">
+                        <option value="I">Articulo</option>
+                        <option value="S">Servicio</option>
+                    </select>
+                </mz-select-container>
+
+                <mz-datepicker-container (click)="$event.stopPropagation()" class="col s12 m3">
+                    <i mz-icon-mdi mz-input-prefix
+                        [icon]="'calendar'">
+                    </i>
+                    <input mz-datepicker
+                        [label]="'Fecha de Orden'"
+                        [options]="opcionesDatePicker"
+                        [(ngModel)]="orden.fecha_orden"
+                        [disabled] = "camposdeshabilitados"
+                        name="fecha_orden"
+                        id="fecha_orden"
+                        type="tel"/>
+                </mz-datepicker-container>
+
+                <mz-select-container class="col s12 m3">
+                    <select mz-select
+                        id="tipo_compra"
+                        [(ngModel)]="orden.tipo_compra"
+                        (change)="selectEncargado()"
+                        [disabled]= "modificar"
+                        name="tipo_compra"
+                        [label]="'Tipo de Compra'"
+                        [placeholder]="'Tipo de Compra'">
+                        <option *ngFor="let item of lencargados" [ngValue]="item.codigo_tipo_compra">{{item.descripcion}}</option>
+                    </select>
+                </mz-select-container>
+            </div>
+
+            
+
+            <div class="row">
+                <div class="col s12 m4">
+                    <div *ngIf="solicitud.codigo_proveedor"></div>
+                    <span class="title_select">Codigo de Proveedor</span>
+                    <ng-select required
+                        #SelectCodigoProveedor
+                        [items]="proveedores"
+                        [disabled]= "modificar"
+                        bindLabel="CardCode"
+                        bindValue="CardCode"
+                        (change) = "OnLoadDatosProveedor($event)"
+                        [(ngModel)]="orden.codigo_proveedor"
+                        name="codigo_proveedor">
+                    </ng-select>
+                    <div *ngIf="!orden.codigo_proveedor" class="mensaje-error">Seleccione un Codigo</div>
+                </div> 
+
+                <div class="col s12 m8">
+                    <div *ngIf="solicitud.nombre_proveedor"></div>
+                    <span class="title_select">Nombre de Proveedor</span>
+                    <ng-select required
+                        #SelectNombreProveedor
+                        [items]="proveedores"
+                        [disabled]= "modificar"
+                        bindLabel="CardName"
+                        bindValue="CardName"
+                        (change) = "OnLoadDatosProveedor($event)"
+                        [(ngModel)]="orden.nombre_proveedor"
+                        name="nombre_proveedor">
+                    </ng-select>
+                    <div *ngIf="!orden.nombre_proveedor" class="mensaje-error">Seleccione el Nombre del Proveedor</div>
+                </div>
+            </div>
+            
+        </mz-card-content>
+    </mz-card>
+<!--TABLA DETALLE SOLICITUD POR ARTICULO-->
+<mz-card >
+<mz-card-content>
+    <table *ngIf="orden.tipo_orden==='I'" id="table-items-articulo" class="highlight responsive-table">
+        <tr>
+            <th>C. Solicitud</th>
+            <th>Codigo</th>
+            <th>Descripción</th>
+            <th>Unidad</th>
+            <th width="50">Cantidad</th>
+            <th class="derecha" width="75">Precio U.</th>
+            <th class="derecha" width="75">SubTotal</th>
+            <th>Fec. Requerida</th>
+            <th>Opciones</th>
+        </tr>
+        <tr class="border_bottom" *ngFor="let ds of ldetalleordenA">
+            <td>{{ ds.codigo_solicitud }}</td>
+            <td>{{ ds.codigo_item }}</td>
+            <td>{{ ds.descripcion_item }}</td>
+            <td>{{ ds.unidad }} </td>
+            <td class="derecha" *ngIf="ds.id_detalle_solicitud === EditRowID"><input [disabled]= "modificar" (change)="calculaTotal()" type="number" [(ngModel)]="ds.cantidad" name="cantidad {{ds.id_detalle_solicitud}}"></td>
+            <td class="derecha" *ngIf="ds.id_detalle_solicitud === EditRowID"><input [disabled]= "modificar" (change)="calculaTotal()" type="number" [(ngModel)]="ds.precio_unitario" name="precio_unitario {{ds.id_detalle_solicitud}}"></td>
+            <td class="derecha" *ngIf="ds.id_detalle_solicitud !== EditRowID" (click) = "Edit(ds.id_detalle_solicitud)">{{ ds.cantidad }}</td>
+            <td class="derecha" *ngIf="ds.id_detalle_solicitud !== EditRowID" (click) = "Edit(ds.id_detalle_solicitud)">{{ ds.precio_unitario }} {{tipo_moneda}}</td>
+            <td class="derecha">{{ ds.cantidad * ds.precio_unitario }} {{tipo_moneda}}</td>
+            <td>{{ ds.fecha_requerida | date:'yyyy-MM-dd'}}</td>
+            <td>
+                <!--<button mz-button
+                    (click)="ModificarItemModal.open()"
+                    (click)="onModificarArticulo(ds.codigo_solicitud)"
+                    [float]="true" class="orange">
+                    <i mz-icon-mdi [icon]="'pencil'"></i>
+                </button>-->
+                <button mz-button (click)="onQuitarDetalleOrdenCompra(ds)"
+                    [disabled]= "modificar" [float]="true" class="red">
+                      <i mz-icon-mdi [icon]="'minus'"></i>
+                </button>
+            </td>
+        </tr>
+    </table>
+    <table *ngIf="orden.tipo_orden==='S'" id="table-items-servicio" class="highlight responsive-table">
+        <tr>
+            <th>C. Solicitud</th>
+            <th>Descripción</th>
+            <th>Fec. Requerida</th>
+            <th class="derecha" width="150">SubTotal</th>
+            <th>Opciones</th>
+        </tr>
+        <tr class="border_bottom" *ngFor="let ds of ldetalleordenS">
+            <td>{{ ds.codigo_solicitud }}</td>
+            <td>{{ ds.descripcion_item }}</td>
+            <td>{{ ds.fecha_requerida | date:'yyyy-MM-dd' }}</td>
+            <td class="derecha" *ngIf="ds.codigo_solicitud === EditRowID"><input [disabled]= "modificar" (change)="calculaTotal()" type="number" [(ngModel)]="ds.sub_total" name="sub_total {{ds.codigo_solicitud}}"></td>
+            <td class="derecha" *ngIf="ds.codigo_solicitud !== EditRowID" (click) = "Edit(ds.codigo_solicitud)">{{ ds.sub_total }}</td>
+            <td>
+                <!--<button mz-button
+                    (click)="ModificarServicioModal.open()"
+                    [float]="true" class="orange">
+                    <i mz-icon-mdi [icon]="'pencil'"></i>
+                </button>-->
+                <button mz-button (click)="onQuitarDetalleOrdenCompra(ds)"
+                    [disabled]= "modificar" [float]="true" class="red">
+                      <i mz-icon-mdi [icon]="'minus'"></i>
+                </button>
+            </td>
+        </tr>
+    </table>
+    <hr>
+    <div class="row">
+        <mz-textarea-container class="col s12 m9 l9">
+            <i mz-icon-mdi mz-textarea-prefix
+                [icon]="'message-reply-text'">
+            </i>
+            <textarea mz-textarea
+                [label]="'Comentarios Adicionales'"
+                id="motivo_orden"
+                [(ngModel)]="orden.motivo_orden"
+                name="motivo_orden"
+                [disabled]= "modificar"
+                placeholder="Ingrese un Comentario Adicional"
+                maxlength="254"
+                length="254"></textarea>
+        </mz-textarea-container> 
+
+        <div class="col m3 l3 s12 card-content blue white-text derecha">
+            Total sin Descuento : {{ orden.monto_sin_desc }} {{tipo_moneda}}
+            <br>
+            Descuento (%) : <input (input)="calculaTotalConDescuento()" type="number" [(ngModel)]="this.orden.descuento" name="ordenDescuento" max="100" min="0" value="0" style="width:60px;" >
+            <br>
+            Total : {{ orden.monto_total }} {{tipo_moneda}}
+        </div>
+    </div>
+
+    <div style="text-align: center">
+        <button mz-button (click) = "openModalAdjutos()">
+            <i mz-icon-mdi [icon]="'attachment'" [align]="'rigth'"></i>
+            Ver Documentos Adjuntos
+        </button>
+        <button [disabled]="modificar" *ngIf="orden.tipo_orden === 'I'" mz-button (click)="ModalAddArticulo.openModal()" (click)="OpenAddDetalleOrden('I')">
+            <i mz-icon-mdi [icon]="'cart-plus'" [align]="'left'"></i>
+            Agregar Articulo
+        </button>
+        <button [disabled]="modificar" *ngIf="orden.tipo_orden === 'S'" mz-button (click)="ModalAddArticulo.openModal()" (click)="OpenAddDetalleOrden('S')">
+            <i mz-icon-mdi [icon]="'cart-plus'" [align]="'left'"></i>
+            Agregar Servicio
+        </button>
+    </div>
+</mz-card-content>
+</mz-card>
+
+<mz-card>
+    <mz-card-content>
+        <div class="row">
+            <mz-input-container class="col s6 m3">
+                <input mz-input disabled
+                    [label]="'Solicitante (Titular)'"
+                    id="nombre_solicitante"
+                    [(ngModel)]="orden.nombre_solicitante"
+                    name="nombre_solicitante"
+                    placeholder="Ingrese el Nombre del Solicitante (Titular)"
+                    type="text">
+            </mz-input-container>
+            <mz-datepicker-container (click)="$event.stopPropagation()" class="col s6 m3">
+                <i mz-icon-mdi mz-input-prefix
+                    [icon]="'calendar'">
+                </i>
+                <input mz-datepicker
+                    [label]="'Fecha de Entrega'"
+                    [options]="opcionesDatePicker"
+                    [disabled]= "modificar"
+                    [(ngModel)]="orden.fecha_entrega"
+                    name="fecha_entrega"
+                    id="fecha_entrega"
+                    type="tel"/>
+            </mz-datepicker-container>
+            <mz-select-container class="col s6 m3">
+                <select mz-select
+                    id="incoterms"
+                    [(ngModel)]="orden.incoterms"
+                    [disabled]= "modificar"
+                    name="incoterms"
+                    [label]="'Incoterms'"
+                    [placeholder]="'Seleccione Incoterms'">
+                    <option value="0">EXWORK</option>
+                    <option value="1">FOB</option>
+                    <option value="2">CIF</option>
+                    <option value="3">CIP</option>
+                    <option value="4">FCA</option>
+                    <option value="5">CFR</option>
+                    <option value="6">CPT</option>
+                </select>
+            </mz-select-container>
+            <mz-input-container class="col s6 m3">
+                <input mz-input disabled
+                    [label]="'Encargado de Compra'"
+                    id="nombre_encargado_compra"
+                    [(ngModel)]="orden.nombre_encargado_compra"
+                    name="nombre_encargado_compra"
+                    placeholder="Ingrese el Encargado de Compra"
+                    type="text">
+            </mz-input-container>
+        </div>
+    </mz-card-content>
+</mz-card>
+
+<!--
+<div class="row">
+<pre>
+    {{ ldetalleordenA | json }}    
+</pre>
+
+</div>
+-->
+<!--<div class="fixed-action-btn" style="bottom: 45px; right: 24px;">
+<a href="javascript:void(0)" class="btn-floating btn-large blue" (click)="onValidaCabeceraSolicitud()">
+    <i class="large mdi-navigation-check"></i>
+</a>
+</div>-->
+    
+    <!-- <div class="fixed-action-btn" style="bottom: 45px; right: 24px;">
+        <button
+            [float]="true" mz-button 
+            [disabled]="!form.valid" 
+            [large]="true" 
+            class="blue"
+            (click)="onModificarOrdenCompra()"
+            type="submit"><i class="large mdi-action-done"></i>
+        </button>
+    </div> -->
+</form>
+
+
+<mz-modal #ModalAddArticulo [fixedFooter]="true" [bottomSheet]="true" [fullscreen]="true">
+    <mz-modal-header>
+        <nav class="lafar-bg-blue">
+            <div class="nav-wrapper">
+                <div class="left col s12 m5 l5">
+                    <ul>
+                        <li><a href="javascript:void(0);" (click)="ModalAddArticulo.closeModal()" class="email-menu"><i class="modal-action modal-close  mdi-hardware-keyboard-backspace"></i></a>
+                        </li>
+                        <li><a href="javascript:void(0);" class="email-type">BUSCAR ARTICULOS DE UNA SOLICITUD</a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="col s12 m7 l7 hide-on-med-and-down">
+                    <ul class="right">
+                        <!--<li><a href="javascript:void(0);"><i class="mdi-editor-attach-file" (click)="AddFileModal.open()"></i></a></li>-->
+                        <!--<li><a href="javascript:void(0);" (click)="onDirigirConversacion()"><i class="modal-action modal-close  mdi-communication-textsms"></i></a></li>-->
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </mz-modal-header>
+    <mz-modal-content>
+        <mz-card style="margin-bottom:0px; margin-top: -14px" class="color-hoverable white-text">
+            <mz-card-content>
+                <div class="row">
+                    <div class="col s12 m8 l10">
+                        <mz-input-container>
+                            <i mz-icon-mdi mz-input-prefix
+                                [icon]="'magnify'">
+                            </i>
+                            <input mz-input
+                                id="buscar-solicitud"
+                                [(ngModel)]="search_codigo_solicitud"
+                                placeholder="Buscar"
+                                type="search"
+                                value="">
+                        </mz-input-container>
+                    </div>
+                    <div class="col s12 m4 l2">
+                        <br>
+                        <button mz-button style="width:100%;" (click)="buscarSolicitud()">BUSCAR</button>
+                    </div>
+                </div>
+            </mz-card-content>
+            <mz-card-action>
+                <table *ngIf="orden.tipo_orden==='I' && ldetallesolicitud.length  > 0" id="table-items-articulo" class="highlight responsive-table">
+                    <tr>
+                        <th></th>
+                        <th>Codigo</th>
+                        <th>Descripción</th>
+                        <th>Unidad</th>
+                        <th width="50">Cantidad</th>
+                        <th>Fec. Requerida</th>
+                    </tr>
+                    <tr class="border_bottom" *ngFor="let ds of ldetallesolicitud">
+                        <td class="center">
+                            <mz-checkbox-container *ngIf="ds.estado==='A'">
+                                <input mz-checkbox
+                                    id="{{ds.id_detalle_solicitud}}"
+                                    type="checkbox"
+                                    (change)="onSeleccionaItemArticulo(ds)">
+                            </mz-checkbox-container>
+                        </td>
+                        <td>{{ ds.codigo_item }}</td>
+                        <td>{{ ds.descripcion_item }}</td>
+                        <td>{{ ds.unidad }} </td>
+                        <td>{{ ds.cantidad }}</td>
+                        <td>{{ ds.fecha_requerida | date:'yyyy-MM-dd' }}</td>
+                    </tr>
+                </table>
+
+                <table *ngIf="orden.tipo_orden==='S' && ldetallesolicitudservicio.length  > 0" id="table-items-servicio" class="highlight responsive-table">
+                    <tr>
+                        <th></th>
+                        <th>Descripción</th>
+                        <th>Fec. Requerida</th>
+                    </tr>
+                    <tr class="border_bottom" *ngFor="let ds of ldetallesolicitudservicio">
+                        <td class="center">
+                            <mz-checkbox-container *ngIf="ds.estado==='A'">
+                                <input mz-checkbox
+                                    id="{{ds.id_detalle_solicitud}}"
+                                    type="checkbox"
+                                    (change)="onSeleccionaItemArticulo(ds)">
+                            </mz-checkbox-container>
+                        </td>
+                        <td>{{ ds.descripcion_item }}</td>
+                        <td>{{ ds.fecha_requerida | date:'yyyy-MM-dd' }}</td>
+                    </tr>
+                </table>
+                <div class="center" *ngIf="ldetallesolicitud.length  === 0 || ldetallesolicitudservicio.length  === 0">
+                    <p>Para agregar Items a la Orden ingrese un numero de solicitud y presione Buscar, a continuación seleccione los Ítems disponibles</p>
+                </div>
+            </mz-card-action>
+        </mz-card>
+    </mz-modal-content>
+    <mz-modal-footer>
+        <button mz-button [flat]="true" mz-modal-close (click)="AddOrden('C')">Cancelar</button>
+        <button mz-button [flat]="true" mz-modal-close (click)="AddOrden('A')">Agregar</button>
+    </mz-modal-footer>
+</mz-modal>
+
+<div *ngIf="orden.estado_autorizacion_subgerencia !== 'X'" class="footer" id="footer">
+    <!--<button mz-button (click)="onEditar()" *ngIf="modificar">
+        Editar
+    </button>
+    <button mz-button (click)="onCancelarEdicion()" *ngIf="!modificar">
+        Cancel
+    </button>
+    -->
+    <!--<button *ngIf="orden.estado_autorizacion_subgerencia !== 'R'" mz-button (click)="AnularOrdenModal.open()" class="red">
+        Anular
+    </button>-->
+    <button *ngIf="orden.estado_autorizacion_gerencia === 'P'" mz-button class="blue" (click)="onLoadAprobarOrden(codigo_orden, 'A')">
+        Aprobar
+    </button>
+    <button *ngIf="orden.estado_autorizacion_gerencia === 'P'" mz-button (click)="onLoadAutorizarOrden(codigo_orden, 'R')" (click)="RechazarOrdenModal.openModal()" class="red">
+        Rechazar
+    </button>
+</div>
+
+<!-- REGION ANULAR ORDEN -->
+<mz-modal #AnularOrdenModal [fixedFooter]="true" [fullscreen]="true" [bottomSheet]="false">
+    <mz-modal-header>
+        <nav class="lafar-bg-blue">
+            <div class="nav-wrapper">
+                <div class="left col s12 m5 l5">
+                <ul>
+                    <li><a href="javascript:void(0);" (click)="AnularOrdenModal.closeModal()" class="email-menu"><i class="modal-action modal-close  mdi-hardware-keyboard-backspace"></i></a></li>
+                    <li><a href="javascript:void(0);" class="email-type">Anular Orden de Compra</a></li>
+                </ul>
+                </div>
+                <div class="col s12 m7 l7 hide-on-med-and-down">
+                <ul class="right">
+                    <!--<li><a href="javascript:void(0);"><i class="mdi-editor-attach-file"></i></a></li>-->
+                    <!--<li><a href="javascript:void(0);"><i class="modal-action modal-close  mdi-notification-sms"></i></a></li>-->
+                </ul>
+                </div>
+            </div>
+        </nav>
+    </mz-modal-header>
+    <mz-modal-content>
+        <mz-card>
+            <mz-card-content>
+                <mz-textarea-container>
+                    <i mz-icon-mdi mz-textarea-prefix
+                        [icon]="'eraser'">
+                    </i>
+                    <textarea mz-textarea
+                        [label]="'Motivo de Anulación'"
+                        [(ngModel)]="aorden.motivo_anulacion"
+                        name="motivo_anulacion"
+                        id="motivo_anulacion"
+                        placeholder="Ingrese el motivo de anulación"
+                        length="300"></textarea>
+                </mz-textarea-container>
+            </mz-card-content>
+        </mz-card>
+<!--
+        <div class="row">
+            <pre>
+                {{ aorden | json }}    
+            </pre>
+        </div>
+        -->
+    </mz-modal-content>
+    <mz-modal-footer>
+        <button mz-button [flat]="true" mz-modal-close>Cancelar</button>
+        <button mz-button [flat]="true" mz-modal-close (click)="onGuardarAnularOrden()">Anular</button>
+    </mz-modal-footer>
+</mz-modal>
+<!-- END REGION ANULAR ORDEN-->
+
+<!-- REGION RECHAZAR ORDEN -->
+<mz-modal #RechazarOrdenModal [fixedFooter]="true" [fullscreen]="true" [bottomSheet]="false">
+    <mz-modal-header>
+        <nav class="lafar-bg-blue">
+            <div class="nav-wrapper">
+                <div class="left col s12 m5 l5">
+                <ul>
+                    <li><a href="javascript:void(0);" (click)="RechazarOrdenModal.closeModal()" class="email-menu"><i class="modal-action modal-close  mdi-hardware-keyboard-backspace"></i></a></li>
+                    <li><a href="javascript:void(0);" class="email-type">Rechazar Solicitud</a></li>
+                </ul>
+                </div>
+                <div class="col s12 m7 l7 hide-on-med-and-down">
+                <ul class="right">
+                    <!--<li><a href="javascript:void(0);"><i class="mdi-editor-attach-file"></i></a></li>-->
+                    <!--<li><a href="javascript:void(0);"><i class="modal-action modal-close  mdi-notification-sms"></i></a></li>-->
+                </ul>
+                </div>
+            </div>
+        </nav>
+    </mz-modal-header>
+    <mz-modal-content>
+        <mz-card>
+            <mz-card-content>
+                <mz-textarea-container>
+                    <i mz-icon-mdi mz-textarea-prefix
+                        [icon]="'eraser'">
+                    </i>
+                    <textarea mz-textarea
+                        [label]="'Motivo de Rechazo'"
+                        [(ngModel)]="autorizarorden.motivo_autorizacion_superior"
+                        name="motivo_autorizacion_superior"
+                        id="motivo_autorizacion_superior"
+                        placeholder="Ingrese el motivo de Rechazo"
+                        length="300"></textarea>
+                </mz-textarea-container>
+            </mz-card-content>
+        </mz-card>
+
+        <!--<div class="row">
+            <pre>
+                {{ autorizarorden | json }}    
+            </pre>
+        </div>-->
+
+    </mz-modal-content>
+    <mz-modal-footer>
+        <button mz-button [flat]="true" mz-modal-close>Cancelar</button>
+        <button mz-button [flat]="true" mz-modal-close (click)="onGuardarAutorizarSGOrden()">Rechazar</button>
+    </mz-modal-footer>
+</mz-modal>
+<!-- END REGION RECHAZAR ORDEN-->
+
+<mz-modal #ModalAddAdjuntos [fixedFooter]="true" [fullscreen]="true" [bottomSheet]="true">
+    <mz-modal-header>
+        <nav class="lafar-bg-blue">
+            <div class="nav-wrapper">
+                <div class="left col s12 m5 l5">
+                    <ul>
+                        <li><a href="javascript:void(0);" (click)="ModalAddAdjuntos.closeModal()" class="email-menu"><i class="modal-action modal-close  mdi-hardware-keyboard-backspace"></i></a>
+                        </li>
+                        <li><a href="javascript:void(0);" class="email-type">ARCHIVOS ADJUNTOS PARA ORDEN DE COMPRA</a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="col s12 m7 l7 hide-on-med-and-down">
+                    <ul class="right">
+                        <!--<li><a href="javascript:void(0);"><i class="mdi-editor-attach-file" (click)="AddFileModal.open()"></i></a></li>-->
+                        <!--<li><a href="javascript:void(0);" (click)="onDirigirConversacion()"><i class="modal-action modal-close  mdi-communication-textsms"></i></a></li>-->
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </mz-modal-header>
+    <mz-modal-content>
+        <div class="contenido-compra">
+            <table>
+                <tr>
+                    <th>Estado</th>
+                    <th>Nombre del Documento</th>
+                    <th>Opciones</th>
+                </tr>
+                <tr *ngFor="let item of ladjuntooc">
+                    <td>
+                        <img *ngIf="item.estado === 'N'" src="https://image.flaticon.com/icons/svg/148/148766.svg" class ="check-adjunto">
+                        <img *ngIf="item.estado === 'Y'" src="https://image.flaticon.com/icons/svg/716/716225.svg" class ="check-adjunto">
+                    </td>
+                    <td>
+                        {{ item.url }}
+                    </td>
+                    <td>
+                        <button *ngIf="item.estado === 'Y'" mz-button (click)="descargarAdjunto(item.url)">Descargar</button>
+                        <!-- <div class="row">
+                            <div class="col l8">
+                                <div class="form-group">
+                                    <label for="file">Adjuntar Archivo</label>
+                                    <input type="file" id="file" (change)="pushInputFile($event.target.files, item)">
+                                </div>
+                            </div>
+                            <div class="col l4">
+                                <button *ngIf="item.estado === 'Y'" mz-button>Descargar</button>
+                            </div>
+                        </div> -->
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </mz-modal-content>
+    <mz-modal-footer>
+        <button mz-button [flat]="true" mz-modal-close>Volver</button>
+    </mz-modal-footer>
+</mz-modal>
+
+<!--
+<div class="row">
+    <pre>
+        {{ orden | json }}    
+    </pre>
+</div>
+
+<div class="row">
+    <pre>
+        {{ ldetalleordenA | json }}    
+    </pre>
+</div>
+
+<div class="row">
+    <pre>
+        {{ ldetalleordenS | json }}    
+    </pre>
+</div>
+-->

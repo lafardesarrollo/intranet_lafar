@@ -1,0 +1,107 @@
+<nav class="lafar-bg-blue">
+    <div class="nav-wrapper">
+        <div class="left col s12 m5 l5">
+            <ul>
+                <li><a href="javascript: history.go(-1)" class="email-menu"><i class="modal-action modal-close  mdi-hardware-keyboard-backspace"></i></a></li>
+                <li><a href="javascript:void(0);" class="email-type">Reporte Semanal</a></li>
+            </ul>
+        </div>
+        <div class="col s12 m7 l7 hide-on-med-and-down">
+            <ul class="right">
+                <!-- <li><a href="javascript:void(0);"><i class="mdi-editor-attach-file" (click)="onOpenDialogUpload($event)"></i></a></li> -->
+                <!--<li><a href="javascript:void(0);"><i class="modal-action modal-close  mdi-content-send"></i></a></li>-->
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<mz-card>
+    <mz-card-content>
+        <div class="row">
+            <div class="col l4"></div>
+            <div class="col l4">
+                <mz-datepicker-container (click)="$event.stopPropagation()">
+                    <input mz-datepicker
+                        [label]="'Fecha Desde:'"
+                        [options]="options"
+                        id="FechaDesde"
+                        name="FechaDesde"
+                        [(ngModel)]="request.FechaDesde"
+                        placeholder="Seleccione la Fecha Inicial"
+                        type="text"/>
+                </mz-datepicker-container>
+    
+                <mz-datepicker-container (click)="$event.stopPropagation()">
+                    <input mz-datepicker
+                        [label]="'Fecha Hasta:'"
+                        [options]="options"
+                        id="FechaHasta"
+                        name="FechaHasta"
+                        [(ngModel)]="request.FechaHasta"
+                        placeholder="Seleccione la Fecha Final"
+                        type="text"/>
+                </mz-datepicker-container>
+
+                <button mz-button class="btn-generar blue" (click)="validarCampos()">Generar Reporte</button>
+                
+            </div>
+            <div class="col l4"></div>
+        </div>
+    </mz-card-content>
+</mz-card>
+
+<mz-card>
+    <mz-card-content>
+        <table class="highlight responsive-table">
+            <thead>
+                <tr>
+                    <th>Fecha</th>
+                    <th>Nombre del Empleado</th>
+                    <th>Turno</th>
+                    <th>Area</th>
+                    <th>Actividad</th>
+                    <th>Aclaración de Turno</th>
+                    <th>Cantidad Horas</th>
+                    <th>Costo Total</th>
+                    <th>Estado</th>
+                    
+                </tr>
+            </thead>
+
+            <div class="card blue-grey darken-1" *ngIf="reporte.length == 0">
+                <h6 class="white-text">No trajo Información.</h6>
+            </div>
+            <tbody *ngIf="reporte.length > 0">
+                <tr *ngFor="let item of reporte">
+                    <td>{{ item.FechaHoraExtra | date:'yyyy-MM-dd' }}</td>
+                    <td>{{ item.NombreEmpleado }}</td>
+                    <td>{{ item.Turno }}</td>
+                    <td>{{ item.Area }}</td>
+                    <td>{{ item.Actividad }}</td>
+                    <td>{{ item.AclaracionTurno }}</td>
+                    <td>{{ item.TotalCantidadHoras }}</td>
+                    <td>{{ item.TotalCosto }}</td>
+                    <td *ngIf ="item.EstadoDetalle == 'A'" >APROBADO</td>
+                    <td *ngIf ="item.EstadoDetalle == 'P'" >PENDIENTE</td>
+                    <td *ngIf ="item.EstadoDetalle == 'X'" >RECHAZADO</td>
+                      
+                </tr>
+            </tbody>
+        </table>
+    </mz-card-content>
+    <mz-card-action>
+        <div class="row">
+            <div class="col l4"></div>
+            <div class="col l4">
+                <button *ngIf="reporte.length > 0" mz-button class="btn-generar" (click)="descargarExcel()">
+                    <i mz-icon-mdi
+                        [align]="'right'"
+                        [icon]="'file-excel'">
+                    </i>
+                    Descargar Excel
+                </button>
+            </div>
+            <div class="col l4"></div>
+        </div>
+    </mz-card-action>
+</mz-card>

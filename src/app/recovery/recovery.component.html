@@ -1,0 +1,60 @@
+<!-- Start Page Loading -->
+<div id="loader-wrapper">
+    <div id="loader"></div>        
+    <div class="loader-section section-left"></div>
+    <div class="loader-section section-right"></div>
+</div>
+
+<div id="loading">
+    <div id="loadingcontent">
+        <p id="loadingspinner">
+            <mz-spinner
+              class="valign center-align col s4"
+              [size]="'big'">
+            </mz-spinner>
+            <br><br>
+            Espere un momento ... 
+        </p>
+    </div>
+</div>
+
+
+<!-- End Page Loading -->
+
+
+  <div class="centro">
+    <div class="valign-wrapper row">
+      <div class="offset-s3">
+        <div id="" class="card grey lighten-5">
+          <form  id="formRecovery" novalidate>
+              <div class="card-content">
+                <div class="input-field col s12" style="text-align:center;">
+                  <img src="assets/images/lafar.png" alt=""  class="responsive-img valign profile-image-login">
+                </div>
+                <div class="row">
+                  <mz-input-container class="col s12 m12">
+                    <input mz-input mz-validation required
+                      id="email_address"
+                      name="email_address"
+                      type="email"
+                      [errorMessageResource]="errorMessages.email_address"
+                      [label]="'Escriba su Correo Electrónico'"
+                      [(ngModel)]="email_address"
+                      email>
+                  </mz-input-container>
+                </div>
+              </div>
+              <div class="card-action">
+                  <div class="row">
+                    <div class="input-field col s12">
+                      <button mz-button type="submit" (click)="onSendEmail()" class="btn waves-effect blue accent-3 col s12 white-text">ENVIAR EMAIL</button>
+                    </div>
+                  </div>
+              </div>
+            </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+<simple-notifications></simple-notifications>

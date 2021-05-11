@@ -1,0 +1,158 @@
+<nav class="lafar-bg-blue">
+    <div class="nav-wrapper">
+        <div class="left col s12 m5 l5">
+            <ul>
+                <li><a href="javascript: history.go(-1)" class="email-menu"><i class="modal-action modal-close  mdi-hardware-keyboard-backspace"></i></a>
+                </li>
+                <li><a href="javascript:void(0);" class="email-type">Solicitudes de Horas Extra Director Técnico</a>
+                </li>
+                <li *ngIf = "fecha_corta.length > 0" > <a href="javascript:void(0);" (click) ="cambiarEstadoSolicitudesPorFechaGG(fecha_corta)" style="background-color: darkblue;" >Confirmar cambios para la fecha: {{fecha_corta}}</a>
+                </li>
+            </ul>
+        </div>
+        <div class="col s12 m7 l7 hide-on-med-and-down">
+            <ul class="right">
+                <!-- <li><a href="javascript:void(0);"><i class="mdi-editor-attach-file" (click)="onOpenDialogUpload($event)"></i></a></li> -->
+                <!--<li><a href="javascript:void(0);"><i class="modal-action modal-close  mdi-content-send"></i></a></li>-->
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<!-- <mz-card>
+    <mz-card-content>
+        <div class="row">
+            <mz-input-container class="col l8 s8 m8">
+                <i mz-icon-mdi mz-input-prefix
+                  [icon]="'magnify'">
+                </i>
+                <input mz-input
+                  [label]="'Buscar'"
+                  id="search-input"
+                  (change)="filtrarRegistros($event.target.value)"
+                  type="search"
+                  value="">
+            </mz-input-container>
+            <div class="col l4 s4 m4">
+                <br>
+                <button mz-button class="blue">
+                    Buscar
+                </button>
+            </div>
+        </div>
+    </mz-card-content>
+</mz-card> -->
+
+<div class="row">
+    <mz-card class="col l5">
+        <mz-card-content>
+            <table class="tabla-detalle highlight responsive-table">
+                <thead>
+                    <tr>
+                        <th>Fecha de Solicitud</th>
+                        <th>Tipo de Hora Extra</th>
+                        <th>Costo Total</th>
+                        <!-- <th>Estado Solicitud</th> -->
+                        <!-- <th>Opciones</th> -->
+                    </tr>
+                </thead>
+    
+                <div class="card blue-grey darken-1" *ngIf="solicitudes.length == 0">
+                    <h6 class="white-text">No tiene solicitudes realizadas.</h6>
+                </div>
+                <tbody *ngIf="solicitudesgg.length > 0">
+                    <tr *ngFor="let item of solicitudesgg | filter:term; let i = index" (click)="ClickedRow(i)" (click)="ObtenerItemSolicitudesGG(item.FechaSolicitud)" [class.active]="i == HighlightRow">
+                        <td>{{ item.FechaSolicitud | date:'dd-MM-yyyy' }}</td>
+                        <td>{{ item.TipoHoraExtra }}</td>
+                        <td style="text-align: right;">{{ item.CostoTotal }} Bs. </td>
+                        <!-- <td style="text-align: center;">
+                            <i *ngIf="item.Estado ==='APROBADO'"  mz-icon-mdi mz-input-prefix class="green-text"
+                                [icon]="'thumb-up-outline'">
+                            </i>
+                            <i *ngIf="item.Estado ==='RECHAZADO'"  mz-icon-mdi mz-input-prefix class="red-text"
+                                [icon]="'thumb-down-outline'">
+                            </i>
+                            <i *ngIf="item.Estado ==='PENDIENTE'"  mz-icon-mdi mz-input-prefix class="orange-text"
+                                [icon]="'clock'">
+                            </i>
+                            <i *ngIf="item.Estado ==='X'"  mz-icon-mdi mz-input-prefix class="red-text"
+                                [icon]="'null'">
+                            </i>
+                        </td> -->
+                        <!-- <td>
+                            <button mz-button mz-tooltip
+                                [tooltip]="'Ver Solicitud'"
+                                (click)="bottomSheetModal.openModal()"
+                                (click)="ObtenerDetalleSolicitud(item.Id)"
+                                [float]="true" class="blue">
+                                <i mz-icon-mdi [icon]="'file-find'"></i>
+                            </button>
+                            <button mz-button mz-tooltip
+                                [tooltip]="'Aprobar Solicitud de Hora Extra'"
+                                (click)="AprobarSolicitudHoraExtra(item)"
+                                *ngIf="item.Estado === 'PENDIENTE'"
+                                [float]="true" class="green">
+                                <i mz-icon-mdi [icon]="'check'"></i>
+                            </button>
+                            <button mz-button mz-tooltip
+                                [tooltip]="'Rechazar Solicitud de Horas Extras'"
+                                (click)="RechazarSolicitudHoraExtra(item)"
+                                *ngIf="item.Estado === 'PENDIENTE'"
+                                [float]="true" class="red">
+                                <i mz-icon-mdi [icon]="'close'"></i>
+                            </button>
+                        </td> -->
+                    </tr>
+                </tbody>
+            </table>
+        </mz-card-content>
+    </mz-card>
+
+    <div class="col l7" *ngIf="itemsolicitudesgg.length === 0">
+        <mz-card class="color-fondo">
+            <mz-card-content>
+                <i mz-icon
+                [align]="'left'"
+                [icon]="'notification_important'"
+                [size]="'small'">
+                </i>
+                Seleccione una fecha para autorizar las horas extras
+            </mz-card-content>
+        </mz-card>
+    </div>
+    <div class="col l7" *ngIf="itemsolicitudesgg.length > 0">
+        <mz-collection>
+                <mz-collection-item *ngFor="let item of itemsolicitudesgg" 
+                    [ngClass]="{
+                        'color-empaque': item.Area === 'EMPAQUE', 
+                        'color-solidos': item.Area === 'SOLIDOS NO ESTERILES',
+                        'color-liquidos': item.Area === 'LIQUIDOS NO ESTERILES-SEMISOLIDOS', 
+                        'color-betalactamicos': item.Area === 'BETALACTAMICOS',
+                        'color-lcc': item.Area === 'CONTROL DE CALIDAD', 
+                        'color-mantenimiento': item.Area === 'MANTENIMIENTO'
+                    }">
+                    <!-- <i mz-avatar mz-icon-mdi [icon]="'twitter'" class="blue lighten-1"></i> -->
+                    <div class="title">{{ item.NombreEmpleado }}</div>
+                    <a mz-secondary-content href="javascript:void(0)" (click)="EliminarItem(item)"><i mz-icon-mdi mz-tooltip class="color-icono-claro" [icon]="'delete'" [tooltip]="'Rechazar y Quitar de la Solicitud'"></i></a>
+                    <div><span class="title">Actividad:</span> {{ item.Actividad }}</div>
+                    <div><span class="title">Horario:</span> {{item.AclaracionTurno}}  <span class="title">Area: </span>{{item.Area}}</div>
+                    <div><span class="title">Total Costo:</span> {{ item.TotalCosto }} Bs.</div>
+                    
+                </mz-collection-item>
+        </mz-collection>
+
+        <!-- <pre>
+            {{ itemsolicitudesgg | json }}
+        </pre> -->
+    </div>
+</div>
+
+
+
+<div class="fixed-action-btn" style="bottom: 0px;  right: 0px; ">
+    <div class="card blue-grey darken-1">
+        <div class="card-content white-text">
+            <h6>Costo Total: {{ costoTotalSolicitudes | number: '.2-2' }} Bs. </h6>
+        </div>
+    </div>
+</div>

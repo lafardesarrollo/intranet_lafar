@@ -1,0 +1,50 @@
+<mz-parallax class="header-background" [height]="200">
+  <img src="assets/images/dark-material-bg.jpg">
+</mz-parallax>
+
+<div id="preview" class="header-content valign-wrapper lafar-light">
+  <img class="image-user circle" src="assets/images/userlafar.png">
+  <div class="nombre-user">LISTA DE USUARIOS INTRANET</div>
+
+  <div class="box">
+    <div class="container-1">
+        <span class="icon"><i class="mdi-action-search"></i></span>
+        <input type="search" id="search" placeholder="Buscar Usuario..." [(ngModel)]="search"/>
+    </div>
+  </div>
+
+</div>
+
+<div id="mail-app">
+  <div class="row">
+    <div class="col s12">
+        <div id="lista-usuarios">
+            <ul class="collection">
+              <li class="collection-item avatar row" *ngFor="let user of userAll | filter: search | paginate: { itemsPerPage: 10, currentPage: p };" (click)="editUser(user.username)">
+                <img src="{{ global.urlImagenesPersonal + user.foto}}" alt="" class="circle">
+                <div class="col l4">
+                    <span class="email-title">{{user.first_name + ' '+ user.last_name}}</span>
+                    <p class="truncate grey-text ultra-small">{{user.cargo}}</p>
+                </div>
+                <div class="col l4">
+                    <span class="email-title">{{user.area}}</span>
+                    <p class="truncate grey-text ultra-small">{{user.regional}}</p>
+                </div>
+                <div class="col l4">
+                    <span class="email-title">{{user.username}}</span>
+                </div>
+              </li>
+            </ul>        
+        </div>
+        <pagination-controls (pageChange)="p = $event"></pagination-controls>
+    </div>
+  </div>
+</div>
+
+<div class="fixed-action-btn" style="bottom: 45px; right: 24px;">
+  <a [routerLink]="['/admin/users/add']" class="btn-floating btn-large blue modal-trigger">
+    <i class="large mdi-social-person-add"></i>
+  </a>
+</div>
+
+<simple-notifications></simple-notifications>

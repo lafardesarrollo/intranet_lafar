@@ -1,0 +1,101 @@
+<div class="contenido-principal">
+    <mz-card>
+        <mz-card-content>
+            <div class="row">
+                <div class="col s2 m2 l1" style="text-align: right;">
+                    <button mz-button class="boton_busqueda_lote" [float]="true" (click)="onLoadProcesoForLote()">
+                        <i mz-icon-mdi  [icon]="'magnify'"></i>
+                    </button>
+                </div>
+                <mz-input-container class="col s10 m5 l3">
+                    <input mz-input
+                        [label]="'Numero de Lote'"
+                        id="numero_lote"
+                        name="numero_lote"
+                        class="numero_lote"
+                        placeholder="Ingrese su numero de Lote"
+                        [(ngModel)]="numero_lote"
+                        type="text">
+                </mz-input-container>
+            </div>
+        </mz-card-content>
+    </mz-card>
+    <mz-card *ngIf="esDOSIFICADO">
+        <mz-card-title>DOSIFICADO</mz-card-title>
+        <mz-card-content>
+            <table id="tDOSIFICADO">
+                <tr><th>Fecha</th><th>Hora</th><th>Temperatura</th><th>Humedad R.</th></tr>
+                <tr *ngFor="let item of ldosificado"><td>{{item.fecha}}</td><td>{{item.hora}}</td><td>{{item.temperatura}}</td><td>{{item.humedad_relativa}}</td></tr>
+            </table>
+        </mz-card-content>
+    </mz-card>
+    <mz-card *ngIf="esPREPARACION">
+        <mz-card-title>PREPARACION</mz-card-title>
+        <mz-card-content>
+            <table id="tPREPARACION">
+                <tr><th>Fecha</th><th>Hora</th><th>Temperatura</th><th>Humedad R.</th></tr>
+                <tr *ngFor="let item of lpreparacion"><td>{{item.fecha}}</td><td>{{item.hora}}</td><td>{{item.temperatura}}</td><td>{{item.humedad_relativa}}</td></tr>
+            </table>
+        </mz-card-content>
+    </mz-card>
+    <mz-card *ngIf="esBLISTEADO">
+        <mz-card-title>BLISTEADO</mz-card-title>
+        <mz-card-content>
+            <table id="tBLISTEADO">
+                <tr><th>Fecha</th><th>Hora</th><th>Temperatura</th><th>Humedad R.</th></tr>
+                <tr *ngFor="let item of lblisteado"><td>{{item.fecha}}</td><td>{{item.hora}}</td><td>{{item.temperatura}}</td><td>{{item.humedad_relativa}}</td></tr>
+            </table>
+        </mz-card-content>
+    </mz-card>
+    <mz-card *ngIf="esTAMIZADO">
+        <mz-card-title>TAMIZADO</mz-card-title>
+        <mz-card-content>
+            <table id="tTAMIZADO">
+                <tr><th>Fecha</th><th>Hora</th><th>Temperatura</th><th>Humedad R.</th></tr>
+                <tr *ngFor="let item of ltamizado"><td>{{item.fecha}}</td><td>{{item.hora}}</td><td>{{item.temperatura}}</td><td>{{item.humedad_relativa}}</td></tr>
+            </table>
+        </mz-card-content>
+    </mz-card>
+    <mz-card *ngIf="esTABLETEADO">
+        <mz-card-title>TABLETEADO</mz-card-title>
+        <mz-card-content>
+            <table id="tTABLETEADO">
+                <tr><th>Fecha</th><th>Hora</th><th>Temperatura</th><th>Humedad R.</th></tr>
+                <tr *ngFor="let item of ltableteado"><td>{{item.fecha}}</td><td>{{item.hora}}</td><td>{{item.temperatura}}</td><td>{{item.humedad_relativa}}</td></tr>
+            </table>
+        </mz-card-content>
+    </mz-card>
+    <mz-card *ngIf="esREVESTIDO">
+        <mz-card-title>REVESTIDO</mz-card-title>
+        <mz-card-content>
+            <table id="tREVESTIDO">
+                <tr><th>Fecha</th><th>Hora</th><th>Temperatura</th><th>Humedad R.</th></tr>
+                <tr *ngFor="let item of lrevestido"><td>{{item.fecha}}</td><td>{{item.hora}}</td><td>{{item.temperatura}}</td><td>{{item.humedad_relativa}}</td></tr>
+            </table>
+        </mz-card-content>
+    </mz-card>
+    <mz-card *ngIf="esENCAPSULADO">
+        <mz-card-title>ENCAPSULADO</mz-card-title>
+        <mz-card-content>
+            <table id="tENCAPSULADO">
+                <tr><th>Fecha</th><th>Hora</th><th>Temperatura</th><th>Humedad R.</th></tr>
+                <tr *ngFor="let item of lencapsulado"><td>{{item.fecha}}</td><td>{{item.hora}}</td><td>{{item.temperatura}}</td><td>{{item.humedad_relativa}}</td></tr>
+            </table>
+        </mz-card-content>
+    </mz-card>
+    <mz-card *ngIf="esFOLIADO">
+        <mz-card-title>FOLIADO</mz-card-title>
+        <mz-card-content>
+            <table id="tFOLIADO">
+                <tr><th>Fecha</th><th>Hora</th><th>Temperatura</th><th>Humedad R.</th></tr>
+                <tr *ngFor="let item of lfoliado"><td>{{item.fecha}}</td><td>{{item.hora}}</td><td>{{item.temperatura}}</td><td>{{item.humedad_relativa}}</td></tr>
+            </table>
+        </mz-card-content>
+    </mz-card>      
+</div>
+  
+<div class="fixed-action-btn" style="bottom: 45px; right: 24px;">
+    <a href="javascript:void(0)" class="btn-floating btn-large blue" (click)="export()">
+        <i class="large mdi-file-file-download"></i>
+    </a>
+</div>

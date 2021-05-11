@@ -1,0 +1,35 @@
+.circle {
+    position: absolute;
+    width: 42px;
+    height: 42px;
+    overflow: hidden;
+    left: 15px;
+    display: inline-block;
+    vertical-align: middle;
+    text-align: center;
+    font-size: 1.5rem;
+    color: #fff;
+    font-weight: 300;
+    padding: 10px;
+}
+
+.circlex {
+    // position: absolute;
+    width: 42px;
+    height: 42px;
+    overflow: hidden;
+    left: 15px;
+    display: inline-block;
+    vertical-align: middle;
+    text-align: center;
+    font-size: 1.5rem;
+    color: #fff;
+    font-weight: 300;
+    padding: 10px;
+    border-radius: 50%;
+}
+
+
+.text-right{
+    text-align: right;
+}

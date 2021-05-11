@@ -1,0 +1,74 @@
+@import "../../../../_variables";
+
+$logo-resize: "only screen and (max-width: 650px)" !default;
+
+.header-background {
+  box-shadow: 0 -1px 32px rgba(0, 0, 0, 0.33) inset;
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+}
+
+.header-content {
+  position: relative;
+  height: 230px;
+}
+
+.github-button {
+  position: absolute;
+  right: 10px;
+  top: 150px;
+
+  @media #{$logo-resize} {
+    top: 160px;
+    right: calc(50% - 110px);
+  }
+} 
+
+.image-user {
+  position: absolute;
+  max-height: 120px;
+  margin-left: 20px;
+
+  @media #{$logo-resize} {
+    top: 25px;
+    max-height: 100px;
+    margin-left: calc(50% - 50px);
+  }
+}
+
+.nombre-user {
+  position: absolute;
+  font-size: 150%;
+  margin-left: 160px;
+  @media #{$logo-resize} {
+    width: 100%;
+    margin: 0px auto;
+    text-align: center;
+    margin-top: 20px;
+    //margin-left: calc(50% - 80px);
+  }
+}
+
+.collection-item .row{
+  margin-bottom: 0;
+}
+#profile-page-about-details{
+  .row{
+    margin-bottom: 0;
+  }
+}
+
+.message-error {
+  color: red;
+  font-size: 12px;
+  margin-top: -15px;
+  margin-bottom: 25px;
+}
+
+.formPassword{
+  margin: 0 auto;
+  max-width: 400px;
+  width: 100%;
+}

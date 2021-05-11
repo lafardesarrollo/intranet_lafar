@@ -1,0 +1,27 @@
+.center{
+    text-align: center;
+}
+
+mz-badge{
+    margin: auto auto;
+}
+
+tr.border_bottom td{
+    border-bottom: .1pt solid #dbdbdb;
+    border-top: .1pt solid #dbdbdb;
+}
+
+// Estilos Search
+#{'/deep/'} .color-hoverable {
+    background-color: #455A64;
+}
+
+.card .card-content {
+    padding: 15px;
+}
+
+.row {
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 0px;
+}

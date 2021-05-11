@@ -1,0 +1,34 @@
+<mz-parallax class="header-background" [height]="170">
+        <img src="assets/images/dark-material-bg.jpg">
+      </mz-parallax>
+      
+      <div id="preview" class="header-content valign-wrapper lafar-light">
+        <img class="image-user circle" src="assets/images/userlafar.png">
+        <div class="nombre-user">APLICACIONES PARA {{username}}</div>
+        <div class="box">
+            <div class="container-1">
+            </div>
+        </div>
+      </div>
+      <div class="contenido-principal">
+          <mz-card>
+              <mz-card-content>
+                                                
+                <div class="row">
+                        <mz-checkbox-container class="col s4 m2" *ngFor ="let itmcm of aplicaciones" style="background-color: rgb(221, 214, 214); margin: 3px;">
+                            <input mz-checkbox   
+                                  id="checkbox-{{itmcm.id}}"
+                                  type="checkbox"
+                                  [checked]="cambiatipocheck(itmcm.checked)"
+                                  (change) = "enCambioEstado(itmcm)"
+                                  >
+                        <img src="assets/images/apps/{{itmcm.code}}.png" class="imagen-app">
+                            
+                        </mz-checkbox-container>
+                </div>
+                </mz-card-content>
+          </mz-card>
+          
+      </div>
+      
+      

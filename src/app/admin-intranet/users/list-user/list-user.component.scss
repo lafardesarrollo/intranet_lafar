@@ -1,0 +1,208 @@
+@import "../../../../_variables";
+
+$logo-resize: "only screen and (max-width: 650px)" !default;
+
+.header-background {
+  box-shadow: 0 -1px 32px rgba(0, 0, 0, 0.33) inset;
+  position: absolute;
+  left: 0;
+  top: 60px;
+  width: 100%;
+}
+
+.image-user {
+  position: absolute;
+  max-height: 120px;
+  margin-left: 20px;
+
+  @media #{$logo-resize} {
+    top: 25px;
+    max-height: 100px;
+    margin-left: calc(50% - 50px);
+  }
+}
+
+.nombre-user {
+  position: absolute;
+  font-size: 150%;
+  margin-left: 160px;
+  @media #{$logo-resize} {
+    width: 100%;
+    margin: 0px auto;
+    text-align: center;
+    margin-top: 20px;
+    //margin-left: calc(50% - 80px);
+  }
+}
+
+.header-content {
+  position: relative;
+  height: 200px;
+}
+
+/*----------------------------------------
+    Email Page
+------------------------------------------*/
+#lista-usuarios {
+    padding: 0;
+    margin-top: 10px;
+    z-index: 1;
+  }
+  #lista-usuarios .collection {
+    margin: 0;
+  }
+  #lista-usuarios .collection .collection-item.avatar {
+    height: auto;
+    padding-left: 72px;
+    position: relative;
+    min-height: 60px;
+  }
+  #lista-usuarios .collection .collection-item:hover {
+    background: #e1f5fe;
+    cursor: pointer;
+  }
+  #lista-usuarios .collection .collection-item.selected {
+    background: #e1f5fe;
+    border-left: 4px solid #29b6f6;
+  }
+  #lista-usuarios .collection .collection-item.avatar .secondary-content {
+    position: absolute;
+    top: 10px;
+    right: -4px;
+  }
+  #lista-usuarios .collection .collection-item.avatar .secondary-content.email-time {
+    right: 8px;
+  }
+  #lista-usuarios .collection .collection-item.avatar .icon {
+    position: absolute;
+    width: 42px;
+    height: 42px;
+    overflow: hidden;
+    left: 15px;
+    display: inline-block;
+    text-align: center;
+    vertical-align: middle;
+    top: 20px;
+  }
+  #lista-usuarios .collection .collection-item.avatar .circle {
+    position: absolute;
+    width: 42px;
+    height: 42px;
+    overflow: hidden;
+    left: 15px;
+    display: inline-block;
+    vertical-align: middle;
+    text-align: center;
+    font-size: 1.5rem;
+    color: #fff;
+    font-weight: 300;
+    padding: 10px;
+  }
+  #lista-usuarios .collection .collection-item.avatar img.circle {
+    padding: 0px;
+  }
+  #lista-usuarios .attach-file {
+    -ms-transform: rotate(90deg);
+    /* IE 9 */
+    
+    -webkit-transform: rotate(90deg);
+    /* Chrome, Safari, Opera */
+    
+    transform: rotate(90deg);
+    color: #9e9e9e;
+    font-size: 1.1rem;
+  }
+
+
+  //Estilos del buscador
+
+  .box{
+    position: absolute;
+    margin: 0 auto;
+    width: 300px;
+    height: 50px;
+    top: 150px;
+    right: 50px;
+    @media #{$logo-resize} {
+      top: 160px;
+      right: calc(50% - 185px);
+      width: 100%;
+    }
+  }
+
+  .github-button {
+    position: absolute;
+    right: 10px;
+    top: 150px;
+  
+    @media #{$logo-resize} {
+      top: 160px;
+      right: calc(50% - 110px);
+    }
+  } 
+
+  .container-1{
+    width: 300px;
+    vertical-align: middle;
+    white-space: nowrap;
+    position: relative;
+  }
+
+  .container-1 input#search{
+    width: 300px;
+    height: 50px;
+    background: #07132e;
+    border: none;
+    font-size: 10pt;
+    float: left;
+    color: #0d47a1;
+    padding-left: 45px;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    border-radius: 5px;
+    margin-top: -20px;
+    @media #{$logo-resize} {
+      width: 325px;
+    }
+    
+     
+    -webkit-transition: background .55s ease;
+    -moz-transition: background .55s ease;
+    -ms-transition: background .55s ease;
+    -o-transition: background .55s ease;
+    transition: background .55s ease;
+  }
+
+.container-1 input#search::-webkit-input-placeholder {
+    color: #009EE3;
+ }
+  
+ .container-1 input#search:-moz-placeholder { /* Firefox 18- */
+    color: #65737e;  
+ }
+  
+ .container-1 input#search::-moz-placeholder {  /* Firefox 19+ */
+    color: #65737e;  
+ }
+  
+ .container-1 input#search:-ms-input-placeholder {  
+    color: #65737e;  
+ }
+
+ //eFECTOS
+ .container-1 input#search:hover, .container-1 input#search:focus, .container-1 input#search:active{
+  outline:none;
+  background: #ffffff;
+}
+
+//Transición
+
+//ICONO
+.container-1 .icon{
+  position: absolute;
+  top: 50%;
+  margin-left: 17px;
+  margin-top: 0px;
+  z-index: 1;
+  color: #009EE3;
+}

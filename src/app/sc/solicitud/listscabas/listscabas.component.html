@@ -1,0 +1,266 @@
+<div id="loading">
+    <div id="loadingcontent">
+        <p id="loadingspinner">
+            <mz-spinner
+                class="valign center-align col s4"
+                [size]="'big'">
+            </mz-spinner>
+            <br><br>
+            Cargando Información ... 
+        </p>
+    </div>
+</div>
+
+<nav class="lafar-bg-blue">
+        <div class="nav-wrapper">
+            <div class="left col s12 m5 l5">
+                <ul>
+                    <li><a href="javascript:void(0);" [routerLink]="['/sc/main']" class="email-menu"><i class="modal-action modal-close  mdi-hardware-keyboard-backspace"></i></a>
+                    </li>
+                    <li><a href="javascript:void(0);" class="email-type">SOLICITUDES APROBADAS</a>
+                    </li>
+                </ul>
+            </div>
+            <div class="col s12 m7 l7 hide-on-med-and-down">
+                <ul class="right">
+                    <li><a href="javascript:void(0);" (click)="actualizarListado()"><i mz-icon-mdi [icon]="'sync'"></i></a></li>
+                    <!--<li><a href="javascript:void(0);"><i class="mdi-editor-attach-file"></i></a></li>-->
+                    <!--<li><a href="javascript:void(0);"><i class="modal-action modal-close  mdi-content-send"></i></a></li>-->
+                </ul>
+            </div>
+        </div>
+    </nav>
+    
+    <mz-card style="margin-bottom:0px;" class="color-hoverable white-text">
+        <mz-card-content>
+            <div class="row">
+                <div class="col s12 m6">
+                    <mz-input-container>
+                        <i mz-icon-mdi mz-input-prefix
+                            [icon]="'magnify'">
+                        </i>
+                        <input mz-input
+                            id="buscar-solicitud"
+                            [(ngModel)]="term"
+                            placeholder="Buscar"
+                            type="search"
+                            value="">
+                    </mz-input-container>
+                </div>
+                <mz-select-container class="col s12 m6">
+                    <select mz-select mz-validation required
+                        id="estado_autorizacion"
+                        [(ngModel)]="estado_autorizacion"
+                        name="estado_autorizacion"
+                        (change)="onLoadListado()"
+                        [label]="'Seleccione una Opcion'"
+                        [placeholder]="'Seleccione una Opcion'">
+                        <option value="T">Todas</option>
+                        <option value="P">Pendientes</option>
+                        <option value="A">Aprobadas</option>
+                        <option value="R">Rechazadas</option>
+                        <option value="X">Anuladas</option>
+                    </select>
+                </mz-select-container>
+            </div>
+        </mz-card-content>
+    </mz-card>
+    <mz-card>
+        <mz-card-content>
+            <table class="highlight responsive-table">
+                <tr>
+                    <th>Codigo</th>
+                    <th class="center">
+                        <i mz-icon-mdi mz-input-prefix class="green-text"
+                            [icon]="'wechat'">
+                        </i>
+                    </th>
+                    <th>Fecha de Solicitud</th>
+                    <th>Solicitante</th>
+                    <th>Tipo de Solicitud</th>
+                    <th>Motivo</th>
+                    <th>Estado</th>
+                    <th width = 150>Opciones</th>
+                </tr>
+        
+                <tr [ngClass]="{'borde-estado' : solicitud.estado === 'A'}" class="border_bottom" *ngFor="let solicitud of lsolicitud | filter:term | paginate: { itemsPerPage: 50, currentPage: p }">
+                    <td>{{solicitud.codigo}}</td>
+                    <td class="center">
+                        <mz-badge
+                            (click)="irAConversaciones(solicitud.codigo)"
+                            [value]="solicitud.conversacion"
+                            [caption]="'Sms'"
+                            [badgeClass]="'red'"
+                            [new]="true">
+                        </mz-badge>
+                    </td>
+                    <td class="center">{{ solicitud.fecha | date:'yyyy-MM-dd' }}</td>
+                    <td>{{solicitud.nombre_solicitante}}</td>
+                    <td class="center">{{solicitud.tipo}}</td>
+                    <td>{{solicitud.motivo}}</td>
+                    <td>
+                        <i *ngIf="solicitud.estado_autorizacion_superior ==='A'"  mz-icon-mdi mz-input-prefix class="green-text"
+                            [icon]="'thumb-up-outline'">
+                        </i>
+                        <i *ngIf="solicitud.estado_autorizacion_superior ==='R'"  mz-icon-mdi mz-input-prefix class="red-text"
+                            [icon]="'thumb-down-outline'">
+                        </i>
+                        <i *ngIf="solicitud.estado_autorizacion_superior ==='P'"  mz-icon-mdi mz-input-prefix class="orange-text"
+                            [icon]="'clock'">
+                        </i>
+                        <i *ngIf="solicitud.estado_autorizacion_superior ==='X'"  mz-icon-mdi mz-input-prefix class="red-text"
+                            [icon]="'null'">
+                        </i>
+                    </td>
+                    <td>
+                        <button mz-button mz-tooltip
+                            [tooltip]="'Ver Solicitud'"
+                            (click)="onOpenSolicitud(solicitud.codigo)"
+                            [float]="true" class="blue">
+                            <i mz-icon-mdi [icon]="'file-find'"></i>
+                        </button>
+
+                        <button mz-button mz-tooltip
+                            [tooltip]="'Imprimir Solicitud'"
+                            (click)="imprimirSolicitud(solicitud.codigo)"
+                            [float]="true" class="blue">
+                            <i mz-icon-mdi [icon]="'printer'"></i>
+                        </button>
+
+                        <button mz-button mz-tooltip
+                            [tooltip]="'Anular la Solicitud'"
+                            (click)="AnularSolicitudModal.openModal()"
+                            (click)="onLoadAnularSolicitud(solicitud.codigo)"
+                            *ngIf="solicitud.estado_autorizacion_superior !== 'X'"
+                            [float]="true" class="orange">
+                            <i mz-icon-mdi [icon]="'cancel'"></i>
+                        </button>
+                        <button mz-button mz-tooltip
+                            [tooltip]="'Crear Orden de Compra'"
+                            (click)="onOpenAddOrden(solicitud.codigo)" 
+                            *ngIf="solicitud.estado_autorizacion_superior ==='A' && solicitud.completada === 0"
+                            [float]="true" class="green">
+                            <i mz-icon-mdi [icon]="'arrow-collapse-right'"></i>
+                        </button>
+                    </td>
+                </tr>
+            </table>
+            <pagination-controls (pageChange)="p = $event"></pagination-controls>
+        </mz-card-content>
+    </mz-card>    
+    
+    <mz-modal #AnularSolicitudModal [fixedFooter]="true" [fullscreen]="true" [bottomSheet]="false">
+        <mz-modal-header>
+            <nav class="lafar-bg-blue">
+                <div class="nav-wrapper">
+                    <div class="left col s12 m5 l5">
+                    <ul>
+                        <li><a href="javascript:void(0);" (click)="AnularSolicitudModal.closeModal()" class="email-menu"><i class="modal-action modal-close  mdi-hardware-keyboard-backspace"></i></a></li>
+                        <li><a href="javascript:void(0);" class="email-type">Anular Solicitud</a></li>
+                    </ul>
+                    </div>
+                    <div class="col s12 m7 l7 hide-on-med-and-down">
+                    <ul class="right">
+                        <!--<li><a href="javascript:void(0);"><i class="mdi-editor-attach-file"></i></a></li>-->
+                        <!--<li><a href="javascript:void(0);"><i class="modal-action modal-close  mdi-notification-sms"></i></a></li>-->
+                    </ul>
+                    </div>
+                </div>
+            </nav>
+        </mz-modal-header>
+        <mz-modal-content>
+            <mz-card>
+                <mz-card-content>
+                    <mz-textarea-container>
+                        <i mz-icon-mdi mz-textarea-prefix
+                            [icon]="'eraser'">
+                        </i>
+                        <textarea mz-textarea
+                            [label]="'Motivo de Anulación'"
+                            [(ngModel)]="asolicitud.motivo_anulacion"
+                            name="motivo_anulacion"
+                            id="motivo_anulacion"
+                            placeholder="Ingrese el motivo de anulación"
+                            length="300"></textarea>
+                    </mz-textarea-container>
+                </mz-card-content>
+            </mz-card>
+    
+            <!--<div class="row">
+                <pre>
+                    {{ asolicitud | json }}    
+                </pre>
+            </div>-->
+        </mz-modal-content>
+        <mz-modal-footer>
+            <button mz-button [flat]="true" mz-modal-close>Cancelar</button>
+            <button mz-button [flat]="true" mz-modal-close (click)="onGuardarAnularSolicitud()">Anular</button>
+        </mz-modal-footer>
+    </mz-modal>
+    
+
+    <!-- REGION RECHAZAR SOLICITUD -->
+    <mz-modal #RechazarSolicitudModal [fixedFooter]="true" [fullscreen]="true" [bottomSheet]="false">
+            <mz-modal-header>
+                <nav class="lafar-bg-blue">
+                    <div class="nav-wrapper">
+                        <div class="left col s12 m5 l5">
+                        <ul>
+                            <li><a href="javascript:void(0);" (click)="RechazarSolicitudModal.closeModal()" class="email-menu"><i class="modal-action modal-close  mdi-hardware-keyboard-backspace"></i></a></li>
+                            <li><a href="javascript:void(0);" class="email-type">Rechazar Solicitud</a></li>
+                        </ul>
+                        </div>
+                        <div class="col s12 m7 l7 hide-on-med-and-down">
+                        <ul class="right">
+                            <!--<li><a href="javascript:void(0);"><i class="mdi-editor-attach-file"></i></a></li>-->
+                            <!--<li><a href="javascript:void(0);"><i class="modal-action modal-close  mdi-notification-sms"></i></a></li>-->
+                        </ul>
+                        </div>
+                    </div>
+                </nav>
+            </mz-modal-header>
+            <mz-modal-content>
+                <mz-card>
+                    <mz-card-content>
+                        <mz-textarea-container>
+                            <i mz-icon-mdi mz-textarea-prefix
+                                [icon]="'eraser'">
+                            </i>
+                            <textarea mz-textarea
+                                [label]="'Motivo de Anulación'"
+                                [(ngModel)]="autorizarsolcitud.motivo_autorizacion_superior"
+                                name="motivo_autorizacion_superior"
+                                id="motivo_autorizacion_superior"
+                                placeholder="Ingrese el motivo de Rechazo"
+                                length="300"></textarea>
+                        </mz-textarea-container>
+                    </mz-card-content>
+                </mz-card>
+        
+                <div class="row">
+                    <pre>
+                        {{ autorizarsolcitud | json }}    
+                    </pre>
+                </div>
+    
+            </mz-modal-content>
+            <mz-modal-footer>
+                <button mz-button [flat]="true" mz-modal-close>Cancelar</button>
+                <button mz-button [flat]="true" mz-modal-close (click)="onGuardarAutorizarSolicitud()">Rechazar</button>
+            </mz-modal-footer>
+        </mz-modal>
+    <!-- END REGION RECHAZAR SOLICITUD-->
+
+    <div class="fixed-action-btn" style="bottom: 45px; right: 24px;">
+        <a [routerLink]="['/sc/solicitud/add']" href="javascript:void(0)" class="btn-floating btn-large green">
+            <i class="large mdi-content-add"></i>
+        </a>
+    </div>
+    
+    <!--
+    <div class="row">
+        <pre>
+            {{ lsolicitud | json }}    
+        </pre>
+    </div>
+    -->

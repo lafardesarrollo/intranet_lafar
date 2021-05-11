@@ -1,0 +1,262 @@
+<nav class="lafar-bg-blue">
+    <div class="nav-wrapper">
+        <div class="left col s12 m5 l5">
+            <ul>
+                <li><a href="javascript:void(0);" [routerLink]="['/admin/']" class="email-menu"><i class="modal-action modal-close  mdi-hardware-keyboard-backspace"></i></a>
+                </li>
+                <li><a href="javascript:void(0);" class="email-type">Administrar Roles de Usuario</a>
+                </li>
+            </ul>
+        </div>
+        <div class="col s12 m7 l7 hide-on-med-and-down">
+            <ul class="right">
+                <!--<li><a href="javascript:void(0);"><i class="mdi-editor-attach-file" (click)="AddFileModal.open()"></i></a></li>-->
+                <!--<li><a href="javascript:void(0);"><i class="modal-action modal-close  mdi-content-send"></i></a></li>-->
+            </ul>
+        </div>
+    </div>
+</nav>
+<!--
+<div class="row">
+    <pre>
+        {{ req | json }}    
+    </pre>
+</div>
+-->
+
+<div class="row">
+    <div class="col l6 m6 s12">
+        <mz-card>
+            <mz-card-title>
+                Menu de Aplicaciones
+            </mz-card-title>
+            <mz-card-content>
+                <div class="contenido-aplicaciones">
+                    <div class="row">
+                        <div *ngFor="let app of lapps" class="parentCard col xl4 l4 m2 s4">
+                        <div class="item-menu-apps">
+                            <a (click)="seleccionarAplicacion(app)" style = "color: #fff;" href="javascript:void(0)" class="tituloApp">
+                            <div class="card-content">
+                                <img src="assets/images/apps/{{app.code}}.png" class="imagen-app">
+                            </div>
+                            </a>
+                        </div>
+                        </div>
+                    </div>
+                </div>
+            </mz-card-content>
+        </mz-card>
+    </div>
+    <div class="col l6 m6 s12">
+        <mz-card>
+            <mz-card-title>
+                Roles {{ nombre_aplicacion }}
+            </mz-card-title>
+            <mz-card-content>
+                <div class="row">
+                    <div class="col l8 m12 s12">
+                        <mz-collection>
+                            <a *ngFor="let rol of lrol" 
+                                mz-collection-link 
+                                mz-tooltip 
+                                [tooltip]="rol.descripcion" href="javascript:void(0)" 
+                                (click)="onLoadItemsForRol(rol)">{{ rol.nombre_rol }}</a>
+                            <a *ngIf="lrol.length === 0" mz-collection-link href="javascript:void(0)">Esta aplicación no tiene roles asignados</a>
+                        </mz-collection>  
+                    </div>
+                    <div class="col l4 m12 s12">
+                        <button mz-button class="blue button-rol" (click)="AddRolModal.openModal()">
+                            Agregar
+                        </button>
+                        <hr>
+                        <button mz-button class="red button-rol ">
+                            Quitar
+                        </button>
+
+                    </div>
+                </div>
+            </mz-card-content>
+        </mz-card>
+
+        <mz-card>
+            <mz-card-title>
+                Items Asignados al Rol {{ nombre_rol }}
+            </mz-card-title>
+            <mz-card-content>
+                <mz-card *ngFor="let item of litems">
+                    <mz-card-title>
+                        {{ item.itemName }}
+                    </mz-card-title>
+                    <mz-card-content>
+                        <mz-collection>
+                            <a *ngFor="let subitem of item.items" mz-collection-link href="javascript:void(0)">{{ subitem.itemName }}</a>
+                        </mz-collection>
+                    </mz-card-content>
+                </mz-card>
+                <button mz-button class="blue button-rol" (click)="ModItemModal.openModal()" (click)="onLoadItemsAsignadas(req)">
+                    Modificar
+                </button>
+            </mz-card-content>
+            
+        </mz-card>
+    </div>
+</div>
+
+<!-- modal de para agregar un nuevo rol-->
+<form #formRol="ngForm" novalidate>
+    <mz-modal #AddRolModal [fixedFooter]="true">
+        <mz-modal-header>
+            <nav class="lafar-bg-blue">
+                <div class="nav-wrapper">
+                    <div class="left col s12 m5 l5">
+                        <ul>
+                            <li><a href="javascript:void(0);" class="email-menu"><i class="modal-action modal-close  mdi-hardware-keyboard-backspace"></i></a>
+                            </li>
+                            <li><a href="javascript:void(0);" class="email-type">Agregar Nuevo Rol {{ nombre_aplicacion }}</a>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="col s12 m7 l7 hide-on-med-and-down">
+                        <ul class="right">
+                            <!--<li><a href="javascript:void(0);"><i class="mdi-editor-attach-file" (click)="AddFileModal.open()"></i></a></li>-->
+                            <!--<li><a href="javascript:void(0);"><i class="modal-action modal-close  mdi-content-send"></i></a></li>-->
+                        </ul>
+                    </div>
+                </div>
+            </nav>
+        </mz-modal-header>
+        <mz-modal-content>
+            <div class="contenido-modal">
+            <br>
+                    <div class="row">
+                        <mz-input-container class="col l12 s12 m12">
+                            <i mz-icon-mdi mz-input-prefix
+                                [icon]="'account-card-details'">
+                            </i>
+                            <input mz-input mz-validation required
+                                [(ngModel)]="rol.nombre_rol"
+                                [errorMessageResource]="errorMessagesRol.nombre_rol"
+                                [label]="'Nombre del Rol'"
+                                id="nombre_rol"
+                                name="nombre_rol"
+                                type="text"
+                            >
+                        </mz-input-container>
+
+                        <mz-textarea-container class="col l12 s12 m12">
+                            <i mz-icon-mdi mz-textarea-prefix
+                            [icon]="'message-reply-text'">
+                            </i>
+                            <textarea mz-textarea mz-validation required
+                                [(ngModel)]="rol.descripcion"
+                                [errorMessageResource]="errorMessagesRol.descripcion"
+                                [label]="'Descripcion del Rol'"
+                                id="descripcion"
+                                name="descripcion">
+
+                            </textarea>
+                                
+                        </mz-textarea-container>
+
+                    </div>
+                
+            </div>
+        </mz-modal-content>
+        <mz-modal-footer>
+            <button mz-button [flat]="true" mz-modal-close>CANCELAR</button>
+            <button [disabled]="!formRol.valid" type="submit" mz-button [flat]="true" mz-modal-close (click)="onSaveRol(rol)">GUARDAR</button>
+        </mz-modal-footer>
+    </mz-modal>
+</form>
+
+<!-- modal para modificar los item-->
+    <mz-modal #ModItemModal [fixedFooter]="true" [fullscreen]="true">
+            <mz-modal-header>
+                    <nav class="lafar-bg-blue">
+                        <div class="nav-wrapper">
+                            <div class="left col s12 m5 l5">
+                                <ul>
+                                    <li><a href="javascript:void(0);" class="email-menu"><i class="modal-action modal-close  mdi-hardware-keyboard-backspace"></i></a>
+                                    </li>
+                                    <li><a href="javascript:void(0);" class="email-type">Modificar Item {{ nombre_aplicacion }}</a>
+                                    </li>
+                                </ul>
+                            </div>
+                            <div class="col s12 m7 l7 hide-on-med-and-down">
+                                <ul class="right">
+                                    <!--<li><a href="javascript:void(0);"><i class="mdi-editor-attach-file" (click)="AddFileModal.open()"></i></a></li>-->
+                                    <!--<li><a href="javascript:void(0);"><i class="modal-action modal-close  mdi-content-send"></i></a></li>-->
+                                </ul>
+                            </div>
+                        </div>
+                    </nav>
+            </mz-modal-header>
+
+            <mz-modal-content>
+                <div class="contenido-modal">
+                    <mz-card>
+                        <mz-card-title>
+                            Items Asignados al Rol
+                        </mz-card-title>
+                        <mz-card-content>
+                            <table>
+                                <tr>
+                                    <th></th>
+                                    <th>Item</th>
+                                </tr>
+                                <tr *ngFor="let item of litemsasignadas">
+                                    <td>
+                                        <mz-checkbox-container>
+                                            <input mz-checkbox
+                                                [label]="item.itemName"
+                                                [(ngModel)]="item.asignado"
+                                                id="{{item.id}}"
+                                                [checked]="item.asignado"
+                                                type="checkbox">
+                                        </mz-checkbox-container>
+                                    </td>
+                                    <td>
+                                        <mz-collection>
+                                            <a *ngFor="let subitem of item.items" mz-collection-link href="javascript:void(0)">
+                                                <mz-checkbox-container>
+                                                    <input mz-checkbox
+                                                        [label]="subitem.itemName"
+                                                        [(ngModel)]="subitem.asignado"
+                                                        id="{{subitem.id}}"
+                                                        [checked]="subitem.asignado"
+                                                        type="checkbox">
+                                                </mz-checkbox-container>
+                                            </a>
+                                        </mz-collection>
+                                    </td>
+                                </tr>
+                            </table>
+                            
+                           <!-- <div class="row">
+                                <pre>
+                                    {{ litemsasignadas | json }}    
+                                </pre>
+                            </div>-->
+
+                        </mz-card-content>
+                        
+                    </mz-card>
+                </div>
+            </mz-modal-content>
+            <mz-modal-footer>
+                <button mz-button [flat]="true" mz-modal-close>Cancelar</button>
+                <button mz-button [flat]="true" mz-modal-close (click)="modificarAsignacion()">Guardar Cambios</button>
+            </mz-modal-footer>
+    </mz-modal>
+
+<!--
+    <div class="row">
+            <pre>
+                {{ litemsasignadas | json }}    
+            </pre>
+        </div>
+
+-->
+
+
+

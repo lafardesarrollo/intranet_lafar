@@ -1,0 +1,66 @@
+<mz-parallax class="header-background" [height]="170">
+  <img src="assets/images/dark-material-bg.jpg">
+</mz-parallax>
+
+<div id="preview" class="header-content valign-wrapper lafar-light">
+  <img class="image-user circle" src="assets/images/userlafar.png">
+  <div class="nombre-user">AREAS DE TRABAJO</div>
+
+  <div class="box">
+    <div class="container-1">
+        <span class="icon"><i class="mdi-action-search"></i></span>
+        <input type="search" id="search" name="search" placeholder="Buscar Areas..." [(ngModel)]="filter"/>
+    </div>
+  </div>
+</div>
+
+<div class="contenido-principal">
+<div class="row">
+  <table class="bordered">
+    <thead>
+      <tr>
+        <th>Nro</th>
+        <th (click)="sort('nombre')">Nombre del Área
+          <span class="mdi-hardware-keyboard-arrow-down" *ngIf="key =='nombre'" [ngClass]="{'mdi-hardware-keyboard-arrow-up':reverse,'mdi-hardware-keyboard-arrow-down':!reverse}"></span>
+        </th>
+        <th style= "text-align:right;">Opciones
+          <span class="mdi-hardware-keyboard-arrow-down" *ngIf="key =='estado'" [ngClass]="{'mdi-hardware-keyboard-arrow-up':reverse,'mdi-hardware-keyboard-arrow-down':!reverse}"></span>
+        </th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let area of areas | orderBy: key : reverse | filter:filter | paginate: { itemsPerPage: 5, currentPage: p }; let i = index">
+        <td>{{area.id}}</td>
+        <td>{{area.nombre}}</td>
+        <td style="text-align:right;">
+          <a [flat]="true" mz-button id="btn-dropdown-basic{{area.id}}" href="javascript:void(0)"><i class="mdi-navigation-more-vert"></i></a>
+          <mz-dropdown
+            [id]="'dropdown-basic'"
+            [dropdownButtonId]="'btn-dropdown-basic' + area.id"
+          >
+            <mz-dropdown-item><a href="javascript:void(0)" (click)="bottomSheetModal.openModal()">Ver</a></mz-dropdown-item>
+            <mz-dropdown-item><a href="javascript:void(0)">Modificar</a></mz-dropdown-item>
+            <mz-dropdown-item><a href="javascript:void(0)">Eliminar</a></mz-dropdown-item>
+          </mz-dropdown>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  <pagination-controls (pageChange)="p = $event"></pagination-controls>
+</div>
+</div>
+
+
+
+<mz-modal #bottomSheetModal [fixedFooter]="true" [bottomSheet]="true">
+  <mz-modal-header>
+    Modal Title
+  </mz-modal-header>
+  <mz-modal-content>
+    
+  </mz-modal-content>
+  <mz-modal-footer>
+    <button mz-button [flat]="true" mz-modal-close>Guardar</button>
+    <button mz-button [flat]="true" mz-modal-close>Cerrar</button>
+  </mz-modal-footer>
+</mz-modal>

@@ -1,0 +1,45 @@
+<nav class="lafar-bg-blue">
+    <div class="nav-wrapper">
+        <div class="left col s12 m5 l5">
+            <ul>
+                <li><a href="javascript:void(0);" [routerLink]="['/sc/main']" class="email-menu"><i class="mdi-hardware-keyboard-backspace"></i></a>
+                </li>
+                <li><a href="javascript:void(0);" class="email-type">Ingrese un numero de Solicitud</a>
+                </li>
+            </ul>
+        </div>
+        <div class="col s12 m7 l7 hide-on-med-and-down">
+            <ul class="right">
+                <!--<li><a href="javascript:void(0);"><i class="mdi-editor-attach-file"></i></a></li>-->
+                <!--<li><a href="javascript:void(0);"><i class="modal-action modal-close  mdi-content-send"></i></a></li>-->
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<form #formSearch="ngForm" novalidate>
+    <div class="contenido">
+        <mz-card>
+            <mz-card-content>
+                <mz-input-container>
+                    <input mz-input mz-validation required
+                    [label]="'Ingrese un Código de Solicitud'"
+                    id="codigo_solicitud"
+                    [errorMessageResource]="errorMessagesSolicitud.codigo_solicitud"
+                    [(ngModel)]="codigo_solicitud"
+                    name="codigo_solicitud"
+                    placeholder="Ingrese un Código de Solicitud"
+                    type="text">
+                </mz-input-container>
+                <button 
+                    mz-button class="blue"
+                    (click)="openOrdenCompra()"
+                    [disabled]="!formSearch.valid"
+                    >
+                    <i mz-icon-mdi [icon]="'magnify'" [align]="'left'"></i>
+                    Crear Orden de Compra
+                </button>
+            </mz-card-content>
+        </mz-card>
+    </div>
+</form>

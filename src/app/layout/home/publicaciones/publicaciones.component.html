@@ -1,0 +1,105 @@
+<div class="section"></div>
+  <!-- statr products list -->
+  <app-lista-publicacion [publications]="publications"></app-lista-publicacion>
+  <!-- Floating Action Button -->
+  <div class="fixed-action-btn" style="bottom: 45px; right: 24px;">
+          <a class="btn-floating btn-large red" 
+          (click)="AddViewPublicacion.openModal()"
+           *ngIf = "activacionBoton('pub-add')"
+          ><!--AÑADIENDO RESTRICCION AL BOTON DE CREACION DE PUBLICACIONES-->
+      <!--<a class="btn-floating btn-large red" (click)="ngxSmartModalService.getModal('myModal').open()">-->
+          <i class="large mdi-editor-mode-edit"></i>
+      </a>
+  </div>
+  <!-- Floating Action Button -->  
+  
+  <form id="formPublicacion" name = "formPublicacion" #formPublicacion="ngForm" (ngSubmit)="onSubmit()" novalidate>
+  <mz-modal #AddViewPublicacion
+  [fixedFooter]="true" 
+  [bottomSheet]="false" 
+  [fullscreen]="false">
+  <mz-modal-header>
+      <nav class="lafar-bg-blue">
+          <div class="nav-wrapper">
+              <div class="left col s12 m5 l5">
+              <ul>
+                  <li><a href="javascript:void(0);" (click)="AddViewPublicacion.closeModal()" class="email-menu"><i class="modal-action modal-close  mdi-hardware-keyboard-backspace"></i></a>
+                  </li>
+                  <li><a href="javascript:void(0);" class="email-type">Publicaciones</a>
+                  </li>
+              </ul>
+              </div>
+              <div class="col s12 m7 l7 hide-on-med-and-down">
+              <ul class="right">
+                  <li><a href="javascript:void(0);"><i class="mdi-editor-attach-file"></i></a>
+                  </li>
+                  <!--<li><a href="javascript:void(0);"><i class="modal-action modal-close  mdi-content-send"></i></a></li>-->
+              </ul>
+              </div>
+  
+          </div>
+      </nav>
+  </mz-modal-header>
+  <mz-modal-content>
+      <div class="container contenido-publicacion">
+          
+              <div class="section">
+                  <div class="row">
+                      <mz-input-container class="col s12 m12">
+                          <input mz-input mz-validation required
+                          id="titulo"
+                          name="titulo"
+                          type="text"
+                          [errorMessageResource]="errorMessages.titulo"
+                          [label]="'Título de Publicación'"
+                          [placeholder]="'Ingrese el Titulo de Esta publicación'"
+                          [(ngModel)]="publicacion.titulo"
+                          #titulo="ngModel" 
+                          required>
+                      </mz-input-container>
+  
+                      <mz-datepicker-container (click)="$event.stopPropagation()" class="col s12 m12">
+                              <input mz-datepicker mz-validation
+                              id="fechaCaduca"
+                              name="fechaCaduca"
+                              type="text"
+                              [errorMessageResource]="errorMessages.fechaCaduca"
+                              [label]="'Fecha de Caducidad'"
+                              [options]="options"
+                              [placeholder]="'Ingrese Fecha de caducidad de esta publicación'"
+                              [(ngModel)]="publicacion.fechaCaduca"
+                              formcontrolname = "modelFechaCaduca"
+                              #fechaCaduca="ngModel" 
+                              required>
+                      </mz-datepicker-container>
+                  </div>
+              </div>
+  
+      </div>
+  
+      <mz-card class="footer-bar-publish">
+          <mz-card-content>
+          <div>
+              <label class="btn-flat">
+                  <i style="font-size: 20px;" class="lafar-blue mdi-image-crop-original"></i>
+                  Adjuntar Archivo
+                  <input type="file" hidden (change)="uploadFile($event)" required>
+              </label>
+  
+              <!--<label class="btn-flat">
+                  <i style="font-size: 20px;" class="lafar-blue mdi-action-description"></i>
+                  Documentos (PDF)
+                  <input type="file" hidden (change)="uploadFileDocs($event)">
+              </label>-->
+          </div>
+          
+          </mz-card-content>
+      </mz-card>
+  </mz-modal-content>
+  <mz-modal-footer>
+      <button (click)="AddViewPublicacion.closeModal()" style="min-width:100%;" mz-button [disabled]="!formPublicacion.valid" type="submit" class="btn waves-effect blue accent-3 col s12 white-text">Publicar <i class="mdi-content-send"></i></button>
+  </mz-modal-footer>
+  </mz-modal>
+  </form>
+  
+  <simple-notifications></simple-notifications>

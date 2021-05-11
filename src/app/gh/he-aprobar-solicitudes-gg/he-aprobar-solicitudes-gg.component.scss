@@ -1,0 +1,65 @@
+.tabla-detalle tbody tr td{
+    padding: 5px 5px;
+    font-size: 11px;
+}
+
+.row {
+    margin-bottom: 0px;
+}
+
+.titulo{
+    font-weight: bold;
+}
+
+
+.tabla-detalle tr.active td {  
+    background-color:#3badeb !important;  
+    color: white;  
+}
+
+.title {
+    font-weight: bold;
+}
+
+.color-fondo{
+    color: #000000;
+    background: #FFA000;
+}
+
+.color-solidos{
+    background: #1976D2;
+    color: #ffffff;
+}
+
+.color-liquidos{
+    background: #ffffff;
+    color: #000000;
+}
+
+.color-betalactamicos{
+    background: #E64A19;
+    color: #ffffff;
+}
+
+.color-empaque{
+    background: #455A64;
+    color: #ffffff;
+}
+
+.color-lcc{
+    background: #BBDEFB;
+    color: #000000;
+}
+
+.color-mantenimiento{
+    background: #00796B;
+    color: #ffffff;
+}
+
+.color-icono-claro{
+    color: #ffffff;
+}
+
+.color-icono-oscuro{
+    color: #000000;
+}

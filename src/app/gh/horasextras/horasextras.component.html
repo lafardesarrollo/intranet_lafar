@@ -1,0 +1,135 @@
+<div id="loading">
+    <div id="loadingcontent">
+        <p id="loadingspinner">
+            <mz-spinner
+                class="valign center-align col s4"
+                [size]="'big'">
+            </mz-spinner>
+            <br><br>
+            Cargando Información ... 
+        </p>
+    </div>
+</div>
+
+<mz-parallax class="header-background" [height]="170">
+    <img src="assets/images/dark-material-bg.jpg">
+</mz-parallax>
+
+<div id="preview" class="header-content valign-wrapper lafar-light">
+    <img class="image-user circle" src="assets/images/userlafar.png">
+    <div class="nombre-user">Registro de Horas Extra</div>
+</div>
+
+<div class="contenido-principal">
+    <mz-card>
+        <mz-card-content>
+            <!--<div class="card red darken-1" *ngIf="!esValido">
+                <div class="card-content white-text">
+                    {{ mensaje }}
+                </div>
+            </div>-->
+
+            <div class="row">
+                <mz-select-container class="col s12 m6 l6">
+                    <select mz-select
+                        id="basic-select"
+                        [label]="'Dependiente'"
+                        [placeholder]="'Seleccione un Dependiente'"
+                        (change)="onSelectDependiente()"
+                        [(ngModel)]="he.id_dependiente">
+                        <option *ngFor="let d of dependientes" [ngValue]="d.id_dependiente">{{ d.nombre_dependiente + ' - '+ d.nombre_cargo }}</option>
+                    </select>
+                </mz-select-container>
+
+                <mz-select-container class="col s12 m6 l6">
+                    <select  mz-select
+                        id="basic-select"
+                        [label]="'Área'"
+                        [placeholder]="'Seleccione un Área'"
+                        (change)="onSelectArea()"
+                        [(ngModel)]="he.id_area">
+                        <option *ngFor="let area of areas" [ngValue]="area.id">{{ area.nombre }}</option>
+                    </select>
+                </mz-select-container>
+
+                <mz-select-container class="col s12 m6 l4">
+                    <select mz-select
+                        id="basic-select"
+                        [label]="'Turno'"
+                        [placeholder]="'Seleccione un Turno'"
+                        (change)="onSelectTurno()"
+                        [(ngModel)]="he.id_turno">
+                        <option *ngFor="let turno of turnos" [ngValue]="turno.id_turno">{{ turno.turno + ' (' + turno.hora_inicio + '-' + turno.hora_fin + ')'}}</option>
+                    </select>
+                </mz-select-container>
+                <div class="col s12 m6 l4 switchcontainer">
+                    <mz-switch-container>
+                        <input mz-switch
+                          id="switch-id"
+                          [off]="'Sin Refrigerio'"
+                          [on]="'Con Refrigerio'"
+                          type="checkbox"
+                          [(ngModel)]="he.refrigerio">
+                    </mz-switch-container>
+                </div>
+                <div class="col s12 m6 l4 switchcontainer">
+                    <mz-switch-container>
+                        <input mz-switch
+                          id="switch-id"
+                          [off]="'Sin Pasaje'"
+                          [on]="'Con Pasaje'"
+                          type="checkbox"
+                          [(ngModel)]="he.pasajes">
+                    </mz-switch-container>
+                </div>
+            </div>
+        </mz-card-content>
+    </mz-card>
+
+    <mz-card>
+        <mz-card-content>
+            <div class="row">
+                <mz-datepicker-container (click)="$event.stopPropagation()" class="col l4 s12 m3">
+                    <input mz-datepicker
+                    id="fecha_inicio"
+                    name="fecha_inicio"
+                    type="text"
+                    [label]="'Fecha de Inicio'"
+                    [options]="options"
+                    [placeholder]="'Ingrese Fecha de Inicio'"
+                    [(ngModel)]="he.fecha_inicio"
+                    required>
+                </mz-datepicker-container>
+                <div class="col l2 s12 m3 labelhora">
+                    <label style="margin:0px;">Hora de Inicio: </label><input atp-time-picker value="00:00" [(ngModel)]="he.hora_inicio"/>
+                </div>
+                <mz-datepicker-container (click)="$event.stopPropagation()" class="col l4 s12 m3">
+                    <input mz-datepicker
+                    id="fecha_fin"
+                    name="fecha_fin"
+                    type="text"
+                    [label]="'Fecha de Culminación'"
+                    [options]="options"
+                    [placeholder]="'Ingrese Fecha del Culminación'"
+                    [(ngModel)]="he.fecha_fin"
+                    required>
+                </mz-datepicker-container>    
+                <div class="col l2 s12 m3 labelhora">
+                    <label style="margin:0px;">Hora de Culminación: </label><input atp-time-picker value="00:00" [(ngModel)]="he.hora_fin"/>
+                </div>
+            </div>
+        </mz-card-content>
+    </mz-card>
+</div>
+
+<div class="fixed-action-btn" style="bottom: 45px; right: 24px;">
+    <button mz-button 
+        [float]="true" 
+        [large]="true" 
+        [disabled]="false" 
+        (click)="onSaveHR()"
+        class="green" 
+        type="button">
+        <i class="large mdi-action-done"></i>
+    </button>
+</div>

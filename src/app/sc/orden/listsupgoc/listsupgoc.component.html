@@ -1,0 +1,288 @@
+<div id="loading">
+    <div id="loadingcontent">
+        <p id="loadingspinner">
+            <mz-spinner
+                class="valign center-align col s4"
+                [size]="'big'">
+            </mz-spinner>
+            <br><br>
+            Cargando ... 
+        </p>
+    </div>
+</div>
+
+<nav class="lafar-bg-blue">
+    <div class="nav-wrapper">
+        <div class="left col s12 m5 l5">
+            <ul>
+                <li><a href="javascript:void(0);" [routerLink]="['/sc/main']" class="email-menu"><i class="modal-action modal-close  mdi-hardware-keyboard-backspace"></i></a>
+                </li>
+                <li><a href="javascript:void(0);" class="email-type">ORDEN DE COMPRA</a>
+                </li>
+            </ul>
+        </div>
+        <div class="col s12 m7 l7 hide-on-med-and-down">
+            <ul class="right">
+                <!--<li><a href="javascript:void(0);"><i class="mdi-editor-attach-file"></i></a></li>-->
+                <!--<li><a href="javascript:void(0);"><i class="modal-action modal-close  mdi-content-send"></i></a></li>-->
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<mz-card style="margin-bottom:0px;" class="color-hoverable white-text">
+    <mz-card-content>
+        <div class="row">
+            <div class="col s12 m6">
+                <mz-input-container>
+                    <i mz-icon-mdi mz-input-prefix
+                        [icon]="'magnify'">
+                    </i>
+                    <input mz-input
+                        id="buscar-solicitud"
+                        [(ngModel)]="term"
+                        placeholder="Buscar"
+                        type="search"
+                        value="">
+                </mz-input-container>
+            </div>
+            <mz-select-container class="col s12 m6">
+                <select mz-select mz-validation required
+                    id="estado_autorizacion_gerencia"
+                    [(ngModel)]="estado_autorizacion_gerencia"
+                    name="estado_autorizacion_gerencia"
+                    (change)="onLoadListado()"
+                    [label]="'Seleccione una Opcion'"
+                    [placeholder]="'Seleccione una Opcion'">
+                    <option value="T">Todas</option>
+                    <option value="P">Pendientes</option>
+                    <option value="A">Aprobadas</option>
+                    <option value="R">Rechazadas</option>
+                    <option value="X">Anuladas</option>
+                </select>
+            </mz-select-container>
+        </div>
+    </mz-card-content>
+</mz-card>
+<mz-card>
+    <mz-card-content>
+        <table class="highlight responsive-table">
+            <tr>
+                <th>Codigo Orden</th>
+                <th class="center">
+                    <i mz-icon-mdi mz-input-prefix class="green-text"
+                        [icon]="'wechat'">
+                    </i>
+                </th>
+                <th>Fecha de Orden</th>
+                <th>Titular</th>
+                <th>Tipo de Orden</th>
+                <th>Descripción</th>
+                <th width = 100>Precio</th>
+                <th>SubGerencia</th>
+                <th>Gerencia</th>
+                <th width = 200>Opciones</th>
+            </tr>
+            
+            <tr class="border_bottom" *ngFor="let orden of lorden | filter:term | paginate: { itemsPerPage: 50, currentPage: p }">
+                <td>{{orden.codigo_orden}}</td>
+                <td class="center">
+                    <mz-badge
+                        (click)="irAConversaciones(orden.codigo_orden)"
+                        [value]="orden.conversacion"
+                        [caption]="'Sms'"
+                        [badgeClass]="'red'"
+                        [new]="true">
+                    </mz-badge>
+                </td>
+                <td class="center">{{ orden.fecha_orden | date:'yyyy-MM-dd' }}</td>
+                <td>{{orden.titular}}</td>
+                <td class="center">{{orden.tipo_orden}}</td>
+                <td>{{orden.motivo_orden}}</td>
+                <td class="derecha">{{orden.monto_total}} {{orden.Currency}}</td>
+                <td class="center">
+                    <i *ngIf="orden.estado_autorizacion_subgerencia ==='A'"  mz-icon-mdi mz-input-prefix class="green-text"
+                        [icon]="'thumb-up-outline'">
+                    </i>
+                    <i *ngIf="orden.estado_autorizacion_subgerencia ==='R'"  mz-icon-mdi mz-input-prefix class="red-text"
+                        [icon]="'thumb-down-outline'">
+                    </i>
+                    <i *ngIf="orden.estado_autorizacion_subgerencia ==='P'"  mz-icon-mdi mz-input-prefix class="orange-text"
+                        [icon]="'clock'">
+                    </i>
+                    <i *ngIf="orden.estado_autorizacion_subgerencia ==='X'"  mz-icon-mdi mz-input-prefix class="red-text"
+                        [icon]="'null'">
+                    </i>
+                </td>
+                <td *ngIf="orden.monto_total >= 50000" class="center">
+                    <i *ngIf="orden.estado_autorizacion_gerencia ==='A'"  mz-icon-mdi mz-input-prefix class="green-text"
+                        [icon]="'thumb-up-outline'">
+                    </i>
+                    <i *ngIf="orden.estado_autorizacion_gerencia ==='R'"  mz-icon-mdi mz-input-prefix class="red-text"
+                        [icon]="'thumb-down-outline'">
+                    </i>
+                    <i *ngIf="orden.estado_autorizacion_gerencia ==='P'"  mz-icon-mdi mz-input-prefix class="orange-text"
+                        [icon]="'clock'">
+                    </i>
+                    <i *ngIf="orden.estado_autorizacion_gerencia ==='X'"  mz-icon-mdi mz-input-prefix class="red-text"
+                        [icon]="'null'">
+                    </i>
+                </td>
+                <td class="center text-green" *ngIf="orden.monto_total < 50000"> N/A </td>
+                <td>
+                    <button mz-button mz-tooltip
+                        [tooltip]="'Ver Orden'"
+                        (click)="onOpenOrden(orden.codigo_orden)"
+                        [float]="true" class="blue">
+                        <i mz-icon-mdi [icon]="'file-find'"></i>
+                    </button>
+                    <!--
+                    <button mz-button mz-tooltip
+                        [tooltip]="'Anular la Orden'"
+                        (click)="AnularOrdenModal.open()"
+                        (click)="onLoadAnularOrden(orden.codigo_orden)"
+                        *ngIf="orden.estado_autorizacion_subgerencia !== 'X'"
+                        [float]="true" class="orange">
+                        <i mz-icon-mdi [icon]="'cancel'"></i>
+                    </button>
+                    -->
+                    <button mz-button mz-tooltip
+                        [tooltip]="'Aprobar Orden'"
+                        (click)="onLoadAprobarOrden(orden.codigo_orden, 'A')"
+                        *ngIf="orden.estado_autorizacion_gerencia === 'P'"
+                        [float]="true" class="green">
+                        <i mz-icon-mdi [icon]="'check'"></i>
+                    </button>
+                    <button mz-button mz-tooltip
+                        [tooltip]="'Rechazar Orden'"
+                        (click)="RechazarOrdenModal.openModal()"
+                        (click)="onLoadAutorizarOrden(orden.codigo_orden, 'R')"
+                        *ngIf="orden.estado_autorizacion_gerencia === 'P'"
+                        [float]="true" class="red">
+                        <i mz-icon-mdi [icon]="'close'"></i>
+                    </button>
+                </td>
+            </tr>
+        </table>
+        <pagination-controls (pageChange)="p = $event"></pagination-controls>
+    </mz-card-content>
+</mz-card>    
+
+<!-- REGION ANULAR ORDEN -->
+<mz-modal #AnularOrdenModal [fixedFooter]="true" [fullscreen]="true" [bottomSheet]="false">
+    <mz-modal-header>
+        <nav class="lafar-bg-blue">
+            <div class="nav-wrapper">
+                <div class="left col s12 m5 l5">
+                <ul>
+                    <li><a href="javascript:void(0);" (click)="AnularOrdenModal.closeModal()" class="email-menu"><i class="modal-action modal-close  mdi-hardware-keyboard-backspace"></i></a></li>
+                    <li><a href="javascript:void(0);" class="email-type">Anular Orden de Compra</a></li>
+                </ul>
+                </div>
+                <div class="col s12 m7 l7 hide-on-med-and-down">
+                <ul class="right">
+                    <!--<li><a href="javascript:void(0);"><i class="mdi-editor-attach-file"></i></a></li>-->
+                    <!--<li><a href="javascript:void(0);"><i class="modal-action modal-close  mdi-notification-sms"></i></a></li>-->
+                </ul>
+                </div>
+            </div>
+        </nav>
+    </mz-modal-header>
+    <mz-modal-content>
+        <mz-card>
+            <mz-card-content>
+                <mz-textarea-container>
+                    <i mz-icon-mdi mz-textarea-prefix
+                        [icon]="'eraser'">
+                    </i>
+                    <textarea mz-textarea
+                        [label]="'Motivo de Anulación'"
+                        [(ngModel)]="aorden.motivo_anulacion"
+                        name="motivo_anulacion"
+                        id="motivo_anulacion"
+                        placeholder="Ingrese el motivo de anulación"
+                        length="300"></textarea>
+                </mz-textarea-container>
+            </mz-card-content>
+        </mz-card>
+<!--
+        <div class="row">
+            <pre>
+                {{ aorden | json }}    
+            </pre>
+        </div>
+-->
+    </mz-modal-content>
+    <mz-modal-footer>
+        <button mz-button [flat]="true" mz-modal-close>Cancelar</button>
+        <button mz-button [flat]="true" mz-modal-close (click)="onGuardarAnularOrden()">Anular</button>
+    </mz-modal-footer>
+</mz-modal>
+<!-- END REGION ANULAR ORDEN-->
+
+<!-- REGION RECHAZAR ORDEN -->
+<mz-modal #RechazarOrdenModal [fixedFooter]="true" [fullscreen]="true" [bottomSheet]="false">
+    <mz-modal-header>
+        <nav class="lafar-bg-blue">
+            <div class="nav-wrapper">
+                <div class="left col s12 m5 l5">
+                <ul>
+                    <li><a href="javascript:void(0);" (click)="RechazarOrdenModal.closeModal()" class="email-menu"><i class="modal-action modal-close  mdi-hardware-keyboard-backspace"></i></a></li>
+                    <li><a href="javascript:void(0);" class="email-type">Rechazar Solicitud</a></li>
+                </ul>
+                </div>
+                <div class="col s12 m7 l7 hide-on-med-and-down">
+                <ul class="right">
+                    <!--<li><a href="javascript:void(0);"><i class="mdi-editor-attach-file"></i></a></li>-->
+                    <!--<li><a href="javascript:void(0);"><i class="modal-action modal-close  mdi-notification-sms"></i></a></li>-->
+                </ul>
+                </div>
+            </div>
+        </nav>
+    </mz-modal-header>
+    <mz-modal-content>
+        <mz-card>
+            <mz-card-content>
+                <mz-textarea-container>
+                    <i mz-icon-mdi mz-textarea-prefix
+                        [icon]="'eraser'">
+                    </i>
+                    <textarea mz-textarea
+                        [label]="'Motivo de Rechazo'"
+                        [(ngModel)]="autorizarorden.motivo_autorizacion_superior"
+                        name="motivo_autorizacion_superior"
+                        id="motivo_autorizacion_superior"
+                        placeholder="Ingrese el motivo de Rechazo"
+                        length="300"></textarea>
+                </mz-textarea-container>
+            </mz-card-content>
+        </mz-card>
+
+        <!--<div class="row">
+            <pre>
+                {{ autorizarorden | json }}    
+            </pre>
+        </div>-->
+
+    </mz-modal-content>
+    <mz-modal-footer>
+        <button mz-button [flat]="true" mz-modal-close>Cancelar</button>
+        <button mz-button [flat]="true" mz-modal-close (click)="onGuardarAutorizarSGOrden()">Rechazar</button>
+    </mz-modal-footer>
+</mz-modal>
+<!-- END REGION RECHAZAR ORDEN-->
+
+<!--
+<div class="fixed-action-btn" style="bottom: 45px; right: 24px;">
+    <a [routerLink]="['/sc/orden/solicitud']" href="javascript:void(0)" class="btn-floating btn-large green">
+        <i class="large mdi-content-add"></i>
+    </a>
+</div>
+-->
+<!--
+<div class="row">
+    <pre>
+        {{ aorden | json }}    
+    </pre>
+</div>
+-->

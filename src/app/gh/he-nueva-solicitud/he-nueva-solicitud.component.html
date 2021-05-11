@@ -1,0 +1,284 @@
+<nav class="lafar-bg-blue">
+    <div class="nav-wrapper">
+        <div class="left col s12 m5 l5">
+            <ul>
+                <li><a href="javascript: history.go(-1)" class="email-menu"><i class="modal-action modal-close  mdi-hardware-keyboard-backspace"></i></a>
+                </li>
+                <li><a href="javascript:void(0);" class="email-type">Crear Solicitud de Horas Extras</a>
+                </li>
+            </ul>
+        </div>
+        <div class="col s12 m7 l7 hide-on-med-and-down">
+            <ul class="right">
+                <!-- <li><a href="javascript:void(0);"><i class="mdi-editor-attach-file" (click)="onOpenDialogUpload($event)"></i></a></li> -->
+                <!--<li><a href="javascript:void(0);"><i class="modal-action modal-close  mdi-content-send"></i></a></li>-->
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<mz-card *ngIf="!esHorarioValido">
+    <mz-card-content>
+        <div class="card blue-grey darken-1" *ngIf="lhorasextra.length == 0">
+            <h6 class="white-text">Actualmente son las {{ fechaHoraActual | date:'HH:mm ' }} el sistema solo permite realizar solicitudes de horas extras antes de las 14:00 p.m.</h6>
+        </div>        
+    </mz-card-content>
+</mz-card>
+
+<div *ngIf="esHorarioValido">
+<mz-card>
+    <mz-card-content>
+        <form [formGroup]="cabeceraForm" novalidate>
+            <div class="row">
+                <div class="col l6 m6 s12">
+                    <div class="row">
+                        <mz-datepicker-container (click)="$event.stopPropagation()" class="col l6 m12 s12">
+                            <input mz-datepicker mz-validation required
+                                [label]="'Seleccione la Fecha'"
+                                [options]="options"
+                                id="FechaSolicitud"
+                                name="FechaSolicitud"
+                                formControlName="FechaSolicitud"
+                                [errorMessageResource]="errorMessageResourcesCabecera.FechaSolicitud"
+                                placeholder="Seleccione la Fecha"        
+                                type="text"/>
+                        </mz-datepicker-container>
+
+                        <mz-select-container class="col l6 m12 s12">
+                            <select mz-select mz-validation required
+                                id="Area"
+                                label="Seleccione el Área de Trabajo"
+                                placeholder ="Elija el Área de Trabajo"
+                                formControlName="AreaTrabajo"
+                                [errorMessageResource]="errorMessageResourcesCabecera.AreaTrabajo"
+                                (change)="selectArea($event)">
+                                <option *ngFor="let item of areas" [value]="item.id"> {{ item.nombre }} </option>
+                            </select>
+                        </mz-select-container>
+                    </div>
+                </div>
+                <div class="col l6 m6 s12">
+                    <span class="titulo-componente">Seleccione el Tipo de Hora Extra</span>
+                    <div class="row">
+                        <mz-radio-button-container class="col l6">
+                            <input mz-radio-button
+                                [label]="'Lunes a Viernes'"
+                                id="TipoHoraExtra1"
+                                name="TipoHoraExtra"
+                                value="1"
+                                checked="checked"
+                                (click)="seleccionarTipoHoraExtra(1)"
+                                type="radio">
+                        </mz-radio-button-container>
+    
+                        <mz-radio-button-container class="col l6">
+                            <input mz-radio-button
+                                [label]="'Sabado'"
+                                id="TipoHoraExtra2"
+                                name="TipoHoraExtra"
+                                value="2"
+                                (click)="seleccionarTipoHoraExtra(2)"
+                                type="radio">
+                        </mz-radio-button-container>
+    
+                        <mz-radio-button-container class="col l6">
+                            <input mz-radio-button
+                                [label]="'Domingo'"
+                                id="TipoHoraExtra3"
+                                name="TipoHoraExtra"
+                                value="3"
+                                (click)="seleccionarTipoHoraExtra(3)"
+                                type="radio">
+                        </mz-radio-button-container>
+    
+                        <mz-radio-button-container class="col l6">
+                            <input mz-radio-button
+                                [label]="'Feriado'"
+                                id="TipoHoraExtra4"
+                                name="TipoHoraExtra"
+                                value="4"
+                                (click)="seleccionarTipoHoraExtra(4)"
+                                type="radio">
+                        </mz-radio-button-container>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </mz-card-content>
+</mz-card>
+
+<mz-card>
+    <mz-card-content>
+        <form [formGroup]="empleadoForm" (ngSubmit)="onSubmit()" novalidate>
+            <div class="row m-valign-wrapper">
+                <div class="col l10 m12 s12">
+                    <div class="row">
+                        <div class="col l4 m6 s12">
+                            <label for="empleado">Empleado</label>
+                            <ng-select
+                                [items]="ldependientes"
+                                bindLabel="nombre_completo"
+                                bindValue="idsap"
+                                labelForId="empleado"
+                                (change) = "seleccionarNombreEmpleado($event['nombre_completo'], $event['sex'])"
+                                (ngModelChange)="seleccionarEmpleado($event)"
+                                formControlName="Empleado">
+                            </ng-select>
+                        </div>
+            
+                        <mz-select-container class="col l4 m6 s12">
+                            <select mz-select mz-validation required
+                                id="Turno"
+                                label="Seleccione el Turno"
+                                placeholder ="Elija el Turno"
+                                formControlName="Turno"
+                                (change)="selectTurno($event)">
+                                <option *ngFor="let item of lturno" [value]="item.Id"> {{ item.Turno }} </option>
+                            </select>
+                        </mz-select-container>
+                        <div class="col l4 m6 s12">
+                            <div class="row">
+                                <mz-input-container class="col l6 m6 s12">
+                                    <input mz-input mz-validation required
+                                        [label]="'Hora Desde:'"
+                                        id="HoraDesde"
+                                        name="HoraDesde"
+                                        formControlName="HoraDesde"
+                                        (ngModelChange) = "calcularCantidadHoras()"
+                                        [errorMessageResource]="errorMessageResources.HoraDesde"
+                                        atp-time-picker  value="00:00"/>
+                                </mz-input-container>
+                                <mz-input-container class="col l6 m6 s12">
+                                    <input mz-input mz-validation required
+                                        [label]="'Hora Hasta:'"
+                                        id="HoraHasta"
+                                        name="HoraHasta"
+                                        formControlName="HoraHasta"
+                                        (ngModelChange) = "calcularCantidadHoras()"
+                                        [errorMessageResource]="errorMessageResources.HoraHasta"
+                                        atp-time-picker value="00:00"/>
+                                </mz-input-container>
+                            </div>
+                        </div>
+                        <mz-input-container class="col l8 m12 s12">
+                            <i mz-icon-mdi mz-input-prefix
+                              [icon]="'account-box'">
+                            </i>
+                            <input mz-input mz-validation required
+                              [label]="'Describa la Actividad'"
+                              id="Actividad"
+                              name="Actividad"
+                              formControlName="Actividad"
+                              [errorMessageResource]="errorMessageResources.Actividad"
+                              placeholder="Ingrese la actividad que realizará"
+                              length="150"
+                              type="text">
+                        </mz-input-container>
+                        <div class="col l4 m12 s12">
+                            
+                            <div class="card blue-grey darken-1">
+                                    <h6 class="white-text">Costo del Empleado: {{ costoPorEmpleado }} Bs.</h6>
+                            </div>
+                            <a mz-button class="full-width"
+                                (click)="calcularCantidadHoras()">
+                                Calcular 
+                                <i mz-icon-mdi
+                                    [align]="'right'"
+                                    [icon]="'calculator'"
+                                    [size]="'36px'">
+                                </i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col l2 m12 s12">
+                    <button mz-button [disabled]="!empleadoForm.valid" type="submit">Agregar</button>
+                </div>
+            </div>
+        </form>
+    </mz-card-content>
+</mz-card>
+
+<mz-card>
+    <mz-card-content>
+        <table>
+            <thead>
+                <tr>
+                    <th>Nombre del Empleado</th>
+                    <th>Turno</th>
+                    <th>Actividad Realizada</th>
+                    <th>Aclaración de Turno</th>
+                    <th>Horas</th>
+                    <th>Costo</th>
+                    <th>Opciones</th>
+                </tr>
+            </thead>
+
+            <div class="card blue-grey darken-1" *ngIf="lhorasextra.length == 0">
+                <h6 class="white-text">No tiene agregado empleados a la solicitud de horas extras</h6>
+            </div>
+            <tbody *ngIf="lhorasextra.length > 0">
+                
+                <tr *ngFor="let item of lhorasextra">
+                    <td>{{ item.NombreEmpleado }}</td>
+                    <td>{{ item.Turno }}</td>
+                    <td>{{ item.ActividadRealizada }}</td>
+                    <td>{{ item.AclaracionTurno }}</td>
+                    <td>{{ item.NumeroHoras }}</td>
+                    <td>{{ item.Costo}} Bs.</td>
+                    <td><button mz-button (click)="QuitarEmpleadoHorasExtras(item)">Quitar</button></td>
+                </tr>
+            </tbody>
+        </table>
+    </mz-card-content>
+</mz-card>
+
+<mz-card>
+    <mz-card-content>
+        <p>
+            <b>Necesita apoyo de:</b>
+        </p>
+        <br>
+        <div class="row">
+            <div class="col l6 m12 s12">
+                <mz-checkbox-container>
+                    <input mz-checkbox
+                      [label]="'LCC?'"
+                      id="chk-1"
+                      (click) = "selectLcc()"
+                      type="checkbox">
+                  </mz-checkbox-container>
+            </div>
+            <div class="col l6 m12 s12">
+                <mz-checkbox-container>
+                    <input mz-checkbox
+                      [label]="'Mantenimiento?'"
+                      id="chk-2"
+                      (click) = "selectMantenimiento()"
+                      type="checkbox">
+                  </mz-checkbox-container>
+            </div>
+        </div>
+    </mz-card-content>
+</mz-card>
+
+
+<div class="fixed-action-btn" style="bottom: 180px; right: 25px;">
+    <div class="card blue darken-1">
+        <div class="card-content white-text">
+            <h5>Costo Total: </h5>
+            <h6>{{ costoTotalSolicitud }} Bs.</h6>
+        </div>
+    </div>
+</div>
+
+<div class="fixed-action-btn" style="bottom: 45px; right: 25px;">
+    <button 
+        [float]="true" mz-button 
+        [large]="true"
+        class="blue"
+        [disabled]="estaGuardando"
+        (click)="onGuardarSolicitud()"><i class="large mdi-action-done"></i>
+    </button>
+</div>
+</div>

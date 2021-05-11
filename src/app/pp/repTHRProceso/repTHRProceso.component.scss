@@ -1,0 +1,25 @@
+@import "../../../_variables";
+
+$logo-resize: "only screen and (max-width: 650px)" !default;
+.contenido-principal{
+  margin-top: 0px;
+  padding: 0 10px;
+  @media #{$logo-resize} {
+    margin-top: 0px;
+  }
+}
+
+.seccion-error{ 
+    font-size: 12px;
+    color: red;
+}
+
+.numero_lote{
+    float: left;
+    width: 200px;
+    height:30px;
+  }
+  
+  .boton_busqueda_lote{
+    margin-top: 20px;
+  }

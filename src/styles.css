@@ -1,0 +1,96 @@
+@import "~@ng-select/ng-select/themes/default.theme.css";
+/* @import "~@ng-select/ng-select/themes/material.theme.css"; */
+
+@import '../node_modules/@syncfusion/ej2-base/styles/material.css';
+@import "../node_modules/@syncfusion/ej2-buttons/styles/material.css";
+@import '../node_modules/@syncfusion/ej2-angular-navigations/styles/material.css';
+@import "../node_modules/@syncfusion/ej2-angular-buttons/styles/material.css";
+@import "../node_modules/@syncfusion/ej2-angular-popups/styles/material.css";
+
+@import "../node_modules/@syncfusion/ej2-base/styles/material.css";
+@import "../node_modules/@syncfusion/ej2-angular-lists/styles/material.css";
+@import "../node_modules/@syncfusion/ej2-angular-inputs/styles/material.css";
+
+@import '../node_modules/@syncfusion/ej2-buttons/styles/material.css';
+@import '../node_modules/@syncfusion/ej2-dropdowns/styles/material.css';
+@import '../node_modules/@syncfusion/ej2-inputs/styles/material.css';
+@import '../node_modules/@syncfusion/ej2-popups/styles/material.css';
+@import '../node_modules/@syncfusion/ej2-lists/styles/material.css';
+@import '../node_modules/@syncfusion/ej2-angular-dropdowns/styles/material.css';
+/* You can add global styles to this file, and also import other style files */
+
+body {
+    background-color: #cfd8dc;
+}
+
+.lafar-dark{
+    color: #0d47a1;
+}
+
+.lafar-blue {
+    color: #009EE3;
+}
+
+.lafar-light{
+    color: #e3f2fd;
+}
+
+
+.lafar-bg-dark{
+    background: #0d47a1;
+}
+
+.lafar-bg-blue{
+    background: #009EE3;
+}
+
+.lafar-bg-light{
+    background: #e3f2fd;
+}
+
+.lafar-bg-white{
+    background: #fafafa;
+}
+
+.lafar-button{
+    background-color: #009EE3;
+}
+
+/* para el contenido de los modals espacios internos*/
+.contenido-modal {
+    padding: 15px;
+}
+
+/* ESTILOS DE LOADING BEGIN*/
+#loading {
+    display: none;
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(255,255,255,0.8);
+    z-index: 1000;
+  }
+  
+  #loadingcontent {
+    display: table;
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+  }
+  
+  #loadingspinner {
+    display: table-cell;
+    vertical-align: middle;
+    width: 100%;
+    text-align: center;
+    font-size: larger;
+    padding-top: 80px;
+  }
+
+  /*ESTILOS LOADING END*/
+
+  

@@ -1,0 +1,63 @@
+.titulo-fecha{
+    font-size: .8rem;
+    text-align: right;
+}
+
+.titulo-publicacion{
+    font-size: 1.3rem;
+    font-weight: bold;
+    text-align: right;
+}
+
+.image-publicacion{
+  width: auto;
+  height: 200px;
+}
+
+.publicacion {
+  position: relative;
+  overflow: hidden;
+  margin: 0.5rem 0 1rem 0;
+  background-color: #fff;
+  border-radius: 2px; 
+}
+
+
+.card-content{
+  height: 80px;
+}
+
+.product{
+  margin-bottom: 10px;
+}
+
+
+/**********************************************************/
+
+.iframe-16-9 {
+  position: relative;
+  padding-bottom: 56.25%;
+  padding-top: 250px;
+  height: 0;
+  overflow: hidden;
+}
+.iframe-16-9  iframe {
+  position: absolute;
+  top:0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+/*************************************************************/
+
+/*********************************************************************************/
+
+
+.icono-publicacion {
+  width: 30px;
+  background: rgba($color: white, $alpha: 0.7);
+  position: absolute;
+  right: 5px;
+  top: 5px;
+}

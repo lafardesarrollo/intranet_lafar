@@ -1,0 +1,108 @@
+@import "../../../_variables";
+
+$logo-resize: "only screen and (max-width: 650px)" !default;
+
+.header-background {
+  box-shadow: 0 -1px 32px rgba(0, 0, 0, 0.33) inset;
+  position: absolute;
+  left: 0;
+  top: 200;
+  width: 100%;
+}
+
+.header-content {
+  position: relative;
+  height: 230px;
+}
+
+.github-button {
+  position: absolute;
+  right: 10px;
+  top: 150px;
+
+  @media #{$logo-resize} {
+    top: 170px;
+    right: calc(50% - 110px);
+  }
+} 
+
+.image-user {
+  position: absolute;
+  max-height: 120px;
+  margin-left: 20px;
+
+  @media #{$logo-resize} {
+    top: 25px;
+    max-height: 100px;
+    margin-left: calc(50% - 50px);
+  }
+}
+
+.nombre-user {
+  position: absolute;
+  font-size: 150%;
+  margin-left: 160px;
+  @media #{$logo-resize} {
+    width: 100%;
+    margin: 0px auto;
+    text-align: center;
+    margin-top: 20px;
+    //margin-left: calc(50% - 80px);
+  }
+}
+
+.collection-item .row{
+  margin-bottom: 0;
+}
+#profile-page-about-details{
+  .row{
+    margin-bottom: 0;
+  }
+}
+
+//Menu
+.item-menu-apps {
+  margin: auto auto;
+  text-align: center;
+}
+
+.imagen-app{
+    margin-top: 0px;
+    margin-bottom: 0px;
+    width:100%;
+    height: auto;
+}
+
+.imagen-app:hover{
+  background-color: rgb(194, 233, 220);
+}
+
+.card-content{
+  padding: 0px 0px 0px 0px;
+}
+
+#btnAdd{
+  width: 100%;
+  min-height: 50px;
+  height: 100%;
+}
+
+.linkEdit{
+  font-size: 15px;
+}
+
+.message-error {
+  color: red;
+  font-size: 12px;
+  margin-top: -15px;
+  margin-bottom: 25px;
+}
+
+.title-modal {
+  margin-top: 15px;
+  text-align: center;
+}
+
+.content-modal {
+  margin: 15px 50px;
+}

@@ -1,0 +1,105 @@
+@import "../../../_variables";
+
+$logo-resize: "only screen and (max-width: 650px)" !default;
+.contenido-principal{
+  margin-top: 0px;
+  padding: 0 10px;
+  @media #{$logo-resize} {
+    margin-top: -80px;
+  }
+}
+
+#loading {
+  display: none;
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(255,255,255,0.8);
+  z-index: 1000;
+}
+
+#loadingcontent {
+  display: table;
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+}
+
+#loadingspinner {
+  display: table-cell;
+  vertical-align: middle;
+  width: 100%;
+  text-align: center;
+  font-size: larger;
+  padding-top: 80px;
+}
+
+.header-background {
+  box-shadow: 0 -1px 32px rgba(0, 0, 0, 0.33) inset;
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 65px;
+}
+
+.image-user {
+  position: absolute;
+  max-height: 60px;
+  margin-left: 20px;
+
+  @media #{$logo-resize} {
+    top: 20px;
+    max-height: 50px;
+    margin-left: calc(50% - 25px);
+  }
+}
+
+.image-firma {
+  width: 90%;
+  max-height: 150px;
+
+  @media #{$logo-resize} {
+    width: 100%;
+  }
+}
+
+.nombre-user {
+  position: absolute;
+  font-size: 150%;
+  margin-left: 160px;
+  @media #{$logo-resize} {
+    width: 100%;
+    margin: -30px auto;
+    text-align: center;
+    //margin-left: calc(50% - 80px);
+  }
+}
+
+.header-content {
+  width: 100%;
+  position: relative;
+  height: 110px;
+  @media #{$logo-resize} {
+    height: 240px;
+  }
+}
+
+.seccion-error{ 
+  font-size: 12px;
+  color: red;
+}
+
+.numero_lote{
+  float: left;
+  width: 200px;
+  height:30px;
+}
+
+.boton_busqueda_lote{
+  margin-top: 20px;
+}

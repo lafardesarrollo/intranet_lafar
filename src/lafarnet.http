@@ -1,0 +1,11 @@
+
+POST http://192.168.1.230/apilafarnet/api/procesoproducto HTTP/1.1
+content-type: application/json
+
+{
+    "lote": "S-023/15",
+    "tipo": "PP"
+}
+
+###
+GET http://192.168.1.230/apilafarnet/api/procesoproducto/S-023|15 HTTP/1.1

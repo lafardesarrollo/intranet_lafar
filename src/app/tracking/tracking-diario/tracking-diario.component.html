@@ -1,0 +1,113 @@
+<nav class="lafar-bg-blue">
+    <div class="nav-wrapper">
+        <div class="left col s12 m5 l5">
+            <ul>
+                <li><a href="javascript: history.go(-1)" class="email-menu"><i class="modal-action modal-close  mdi-hardware-keyboard-backspace"></i></a>
+                </li>
+                <li><a href="javascript:void(0);" class="email-type">Reporte Diario de Seguimiento</a>
+                </li>
+            </ul>
+        </div>
+        <div class="col s12 m7 l7 hide-on-med-and-down">
+            <ul class="right">
+                <!-- <li><a href="javascript:void(0);"><i class="mdi-editor-attach-file" (click)="onOpenDialogUpload($event)"></i></a></li> -->
+                <!--<li><a href="javascript:void(0);"><i class="modal-action modal-close  mdi-content-send"></i></a></li>-->
+            </ul>
+        </div>
+    </div>
+</nav>
+<div class="row">
+    <div class="col l5">
+        <mz-card>
+            <mz-card-content>
+                <div class="row">
+                    <mz-datepicker-container (click)="$event.stopPropagation()" class="col l12 m12 s12">
+                        <input mz-datepicker
+                            [label]="'Seleccione una Fecha'"
+                            [options]="options"
+                            id="FechaSolicitud"
+                            name="FechaSolicitud"
+                            [(ngModel)] = "fecha_seleccionada"
+                            (change)="seleccionarFecha($event.target.value)"
+                            placeholder="Seleccione una Fecha"        
+                            type="text"/>
+                    </mz-datepicker-container>
+                </div>
+            </mz-card-content>
+        </mz-card>
+
+        <mz-card>
+            <mz-card-title>
+                <mz-input-container>
+                    <i mz-icon-mdi mz-input-prefix
+                      [icon]="'account-search'">
+                    </i>
+                    <input mz-input
+                      [label]="'Buscar'"
+                      (change) = "BuscarEmpleado($event.target.value)"
+                      (keyup) = "BuscarEmpleado($event.target.value)"
+                      [validate]="true"
+                      id="buscar-input"
+                      placeholder="Escriba un Nombre"
+                      type="text">
+                  </mz-input-container>
+            </mz-card-title>
+            <mz-card-content>
+                <mz-collection>
+                    <a *ngFor="let item of lseguimiento | filter:term" mz-collection-link (click) = "abrirDetalleSeguimiento(item.username)">
+                        {{ item.nombre_completo }}
+                    </a>
+                </mz-collection>
+            </mz-card-content>
+        </mz-card>
+
+        
+    </div>
+    
+    <div class="col l7">
+        <mz-card style="overflow-y: scroll;" class="contenido-detalle">
+            <mz-card-content *ngIf="ltareas.length === 0">
+                <div class="mensaje-info">Seleccione un Empleado para ver los detalles</div>
+            </mz-card-content>
+            <mz-card-content *ngIf="ltareas.length > 0">
+                <mz-collection>
+                    <mz-collection-item [avatar]="true" *ngFor="let item of ltareas; let i = index">
+                      <i mz-avatar mz-icon-mdi class="blue lighten-1">{{ i + 1 }}</i>
+                      <div class="title">{{ item.descripcion }}</div>
+                      <div>{{ item.fecha_hora }}</div>
+                      <div>{{ item.observaciones }}</div>
+                      <a mz-tooltip mz-secondary-content mz-button float="true" 
+                        [tooltip] = "'Ver ubicación'"
+                        (click)="seleccionaDetalleSeguimiento(item)"><i mz-icon-mdi [icon]="'map-search'"></i></a>
+                    </mz-collection-item>
+                </mz-collection>
+            </mz-card-content>
+        </mz-card>  
+    </div>
+</div>
+
+
+<mz-modal #bottomSheetModal [fixedFooter]="true" [options]="modalOptions">
+    <mz-modal-header>
+      
+    </mz-modal-header>
+    <mz-modal-content>
+        <google-map height="400" width="750px" [center]="center" [zoom]="zoom"></google-map>
+        <!-- <div #googleMap style="width:100%;height:350px"></div> -->
+    </mz-modal-content>
+    <mz-modal-footer>
+      <!-- <button mz-button [flat]="true" mz-modal-close>Disagree</button> -->
+      <button mz-button [flat]="true" mz-modal-close>Cerrar</button>
+    </mz-modal-footer>
+</mz-modal>
+
+<!-- <mz-card>
+    <mz-card-content>
+        <mz-tab
+            [fixedTabWidth]="'true'">
+            <mz-tab-item [active]="'true'" [label]="'Tab 1'">Tab 1</mz-tab-item>
+            <mz-tab-item [label]="'Tab 2'">Tab 2</mz-tab-item>
+            <mz-tab-item [label]="'Tab 3'">Tab 3</mz-tab-item>
+        </mz-tab>
+    </mz-card-content>
+</mz-card> -->

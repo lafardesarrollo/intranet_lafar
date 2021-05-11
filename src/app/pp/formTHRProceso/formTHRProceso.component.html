@@ -1,0 +1,204 @@
+<div id="loading">
+    <div id="loadingcontent">
+        <p id="loadingspinner">
+            <mz-spinner
+                class="valign center-align col s4"
+                [size]="'big'">
+            </mz-spinner>
+            <br><br>
+            Cargando Información ... 
+        </p>
+    </div>
+</div>
+
+<mz-parallax class="header-background" [height]="170">
+    <img src="assets/images/dark-material-bg.jpg">
+</mz-parallax>
+
+<div id="preview" class="header-content valign-wrapper lafar-light">
+    <img class="image-user circle" src="assets/images/userlafar.png">
+    <div class="nombre-user">Registro de T° y HR en Proceso</div>
+</div>
+
+<div class="contenido-principal">
+    <mz-card>
+        <mz-card-content>
+            <div class="card red darken-1" *ngIf="existHigrotermometro">
+                <div class="card-content white-text">
+                    {{ mensaje }}
+                </div>
+            </div>
+            <div class="row">
+                <mz-select-container class="col s12 m6 l6">
+                    <select mz-select
+                        id="basic-select"
+                        [label]="'Área'"
+                        [placeholder]="'Seleccione un Área'"
+                        (change)="onSelectArea()"
+                        [(ngModel)]="selectArea">
+                        <option *ngFor="let area of areas" [ngValue]="area.id">{{ area.nombre }}</option>
+                    </select>
+                </mz-select-container>
+
+                <mz-select-container class="col s12 m6 l6">
+                    <select mz-select
+                        id="basic-select2"
+                        [label]="'Sección'"
+                        [placeholder]="'Seleccione una Sección'"
+                        [(ngModel)]="monitoreo.id_seccion"
+                        (change)="onSelectSeccion()"
+                    >
+                        <option *ngFor="let seccion of secciones" [ngValue]="seccion.id_seccion">{{ seccion.nombre_seccion }}</option>
+                    </select>
+                </mz-select-container>
+            </div>
+            <div class="row">
+                <div class="col s12 m6 l6">
+                    <div class="row">
+                        <mz-radio-button-container class="col s12 m6 l6">
+                        <input mz-radio-button
+                            [label]="'PD (Etapa de Preparación)'"
+                            [(ngModel)]="procesoValue"
+                            value="PD"
+                            (click)="onSelectProceso('PD')"
+                            id="basic-radio-1"
+                            name="basic-radio"
+                            checked="checked"
+                            type="radio">
+                        </mz-radio-button-container>
+                
+                        <mz-radio-button-container class="col s12 m6 l6">
+                        <input mz-radio-button
+                            [label]="'PP (Etapa de Acondicionado Primario)'"
+                            [(ngModel)]="procesoValue"
+                            value="PP"
+                            (click)="onSelectProceso('PP')"
+                            id="basic-radio-2"
+                            name="basic-radio"
+                            type="radio">
+                        </mz-radio-button-container>
+                    </div>
+                </div>
+                <mz-select-container class="col s12 m6 l6">
+                    <select mz-select
+                        id="basic-select"
+                        [label]="'Etapas del Proceso'"
+                        [placeholder]="'Seleccione una Etapa'"
+                        [(ngModel)]="monitoreo.id_etapa"
+                        (change)="onSelectEtapa()">
+                    <option *ngFor="let ep of etapasprocesos" [ngValue]="ep.id_etapa_proceso">{{ ep.nombre_etapa }}</option>
+                    </select>
+                </mz-select-container>
+            </div>
+
+            <div class="row">
+                <div class="col s12 m12 l1" style="text-align: right;">
+                    <button mz-button class="boton_busqueda_lote" [float]="true" [disabled]="btnBusquedaLote" (click)="onLoadProductoForLoteButton()">
+                        <i mz-icon-mdi  [icon]="'magnify'"></i>
+                    </button>
+                </div>
+                <mz-input-container class="col s12 m2 l3">
+                    <input mz-input
+                        [label]="'Numero de Lote'"
+                        id="numero_lote"
+                        name="numero_lote"
+                        class="numero_lote"
+                        placeholder="Ingrese su numero de Lote"
+                        (change)="onValidaCampoLote()"
+                        (keyup)="onLoadProductoForLote($event)"
+                        [(ngModel)]="monitoreo.lote"
+                        type="text">
+                </mz-input-container>
+
+                <!--<mz-select-container class="col s12 m6 l6">
+                    <select mz-select
+                        id="basic-select"
+                        [label]="'Producto'"
+                        [placeholder]="'Seleccione el Producto'"
+                        [(ngModel)]="productoAll"
+                        (change)="onSelectProducto()"
+                    >
+                    <option *ngFor="let pp of productosprocesos" [ngValue]="pp.ItemCode +'|'+ pp.ItemName">{{ pp.ItemCode +' - '+ pp.ItemName }}</option>
+                    </select>
+                </mz-select-container>-->
+
+                <mz-input-container class="col s12 m6 l6">
+                    <input mz-input
+                        [label]="'Producto'"
+                        id="producto"
+                        name="producto"
+                        class="producto"
+                        readonly="true"
+                        placeholder="Seleccione un Producto"
+                        [(ngModel)]="monitoreo.nombre_producto"
+                        (change)="onSelectProducto()"
+                        type="text">
+                </mz-input-container>
+
+                <div class="col s12 m6 l2">
+                    <mz-checkbox-container>
+                        <input mz-checkbox
+                        [label]="'Higroscopico'"
+                        id="higroscopico"
+                        name="higroscopico"
+                        [(ngModel)]="monitoreo.higroscopico"
+                        type="checkbox">
+                    </mz-checkbox-container>
+                </div>
+            </div>
+        </mz-card-content>
+    </mz-card>
+    <div>
+        <mz-card>
+            <mz-card-content>
+                <div class="row">
+                    <mz-input-container class="col s12 m3 l3">
+                    <input mz-input
+                        [label]="'Temperatura'"
+                        id="temperatura_original"
+                        name="temperatura_original"
+                        (change)="onCorrigueTemperatura()"
+                        [(ngModel)]="monitoreo.temperatura_original"
+                        placeholder="Ingrese la Temperatura"
+                        type="number">
+                    </mz-input-container>
+                    <mz-card
+                        class="blue-text col s12 m3 l3"
+                        [hoverable]="true">
+                        <mz-card-content>
+                            T° Corregida: {{ monitoreo.temperatura_corregido}}
+                        </mz-card-content>
+                    </mz-card>
+                    <mz-input-container class="col s12 m3 l3">
+                    <input mz-input
+                        [label]="'Humedad Relativa'"
+                        id="humedad_relativa_original"
+                        name="humedad_relativa_original"
+                        (change)="onCorrigueHumedad()"
+                        [(ngModel)]="monitoreo.humedad_relativa_original"
+                        placeholder="Ingrese la Humedad Relativa"
+                        type="number">
+                    </mz-input-container>
+                    <mz-card
+                        class="blue-text col s12 m3 l3">
+                        <mz-card-content>
+                            HR Corregida: {{ monitoreo.humedad_relativa_corregido }} 
+                        </mz-card-content>
+                    </mz-card>
+                </div>
+            </mz-card-content>
+        </mz-card>
+    </div>
+</div>
+
+<div class="fixed-action-btn" style="bottom: 45px; right: 24px;">
+    <button mz-button 
+        [float]="true" 
+        [large]="true" 
+        [disabled]="false" 
+        (click)="onSaveMonitoreoTHRProceso()"
+        class="green" 
+        type="button">
+        <i class="large mdi-action-done"></i>
+    </button>
+</div>

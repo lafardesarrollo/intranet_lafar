@@ -1,0 +1,67 @@
+<mz-parallax class="header-background" [height]="170">
+<img src="assets/images/dark-material-bg.jpg">
+</mz-parallax>
+
+<div id="preview" class="header-content valign-wrapper lafar-light">
+<img class="image-user circle" src="assets/images/userlafar.png">
+<div class="nombre-user">REPORTE DE REGISTRO DE HORAS EXTRAS </div>
+
+<div class="box">
+    <div class="container-1">
+        <span class="icon"><i class="mdi-action-search"></i></span>
+        <input type="search" id="search" name="search" placeholder="Buscar Registros..." [(ngModel)]="filter"/>
+    </div>
+</div>
+</div>
+    <div class="contenido-principal">
+        <!--<mz-card>
+            <mz-card-content>
+
+            </mz-card-content>
+        </mz-card>-->
+
+        <mz-card>
+            <mz-card-content>
+                <table id="tHE" class="bordered">
+                    <thead>
+                        <tr>
+                            <th (click)="sort('nombre_usuario')">NOMBRES Y APELLIDOS<span class="mdi-hardware-keyboard-arrow-down" *ngIf="key =='nombre_usuario'" [ngClass]="{'mdi-hardware-keyboard-arrow-up':reverse,'mdi-hardware-keyboard-arrow-down':!reverse}"></span></th>
+                            <th (click)="sort('area')">AREA<span class="mdi-hardware-keyboard-arrow-down" *ngIf="key =='area'" [ngClass]="{'mdi-hardware-keyboard-arrow-up':reverse,'mdi-hardware-keyboard-arrow-down':!reverse}"></span></th>
+                            <th (click)="sort('turno')">TURNO<span class="mdi-hardware-keyboard-arrow-down" *ngIf="key =='turno'" [ngClass]="{'mdi-hardware-keyboard-arrow-up':reverse,'mdi-hardware-keyboard-arrow-down':!reverse}"></span></th>
+                            <th (click)="sort('refrigerio')">REFRIGERIO<span class="mdi-hardware-keyboard-arrow-down" *ngIf="key =='refrigerio'" [ngClass]="{'mdi-hardware-keyboard-arrow-up':reverse,'mdi-hardware-keyboard-arrow-down':!reverse}"></span></th>
+                            <th (click)="sort('pasajes')">PASAJES<span class="mdi-hardware-keyboard-arrow-down" *ngIf="key =='pasajes'" [ngClass]="{'mdi-hardware-keyboard-arrow-up':reverse,'mdi-hardware-keyboard-arrow-down':!reverse}"></span></th>
+                            <th (click)="sort('fecha_inicio')">FECHA<span class="mdi-hardware-keyboard-arrow-down" *ngIf="key =='fecha_inicio'" [ngClass]="{'mdi-hardware-keyboard-arrow-up':reverse,'mdi-hardware-keyboard-arrow-down':!reverse}"></span></th>
+                            <th (click)="sort('hora_inicio')">HORA INICIAL<span class="mdi-hardware-keyboard-arrow-down" *ngIf="key =='hora_inicio'" [ngClass]="{'mdi-hardware-keyboard-arrow-up':reverse,'mdi-hardware-keyboard-arrow-down':!reverse}"></span></th>
+                            <th (click)="sort('hora_fin')">HORA FIN<span class="mdi-hardware-keyboard-arrow-down" *ngIf="key =='hora_fin'" [ngClass]="{'mdi-hardware-keyboard-arrow-up':reverse,'mdi-hardware-keyboard-arrow-down':!reverse}"></span></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let he of lhorasextras | orderBy: key : reverse | filter:filter | paginate: { itemsPerPage: 10, currentPage: p }; let i = index">
+                            <td>{{he.nombre_usuario}}</td>
+                            <td>{{he.area}}</td>
+                            <td>{{he.turno}}</td>
+                            <td>
+                                <span *ngIf="he.refrigerio === 'true'">SI</span>
+                                <span *ngIf="he.refrigerio === 'false'">NO</span>
+                            </td>
+                            <td>
+                                <span *ngIf="he.pasajes === 'true'">SI</span>
+                                <span *ngIf="he.pasajes === 'false'">NO</span>
+                            </td>
+                            <td>{{he.fecha_inicio}}</td>
+                            <td>{{he.hora_inicio}}</td>
+                            <td>{{he.hora_fin}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <pagination-controls (pageChange)="p = $event"></pagination-controls>
+            </mz-card-content>
+        </mz-card>
+    </div>
+
+
+    <div class="fixed-action-btn" style="bottom: 45px; right: 24px;">
+        <a href="javascript:void(0)" class="btn-floating btn-large blue" (click)="exportar()">
+            <i class="large mdi-file-file-download"></i>
+        </a>
+    </div>

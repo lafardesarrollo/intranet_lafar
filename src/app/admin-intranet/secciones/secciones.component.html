@@ -1,0 +1,11 @@
+<button class="e-control e-btn" style="position: absolute;" id="targetButton" (click)="onOpenDialog($event)">Listado de Items</button>
+<div #container class='root-container'>
+  <ejs-dialog id='dialog' #ejDialog isModal='true' [visible]='false' header='Listado de Items' (beforeClose)="validation($event)"[buttons]='buttons' [target]='targetElement' width='300px'>
+    <ng-template #content>
+      <div id="sample">
+        <input #textbox class="e-input" type="text" id="textbox" placeholder="Filter" title="Type in a name" (keyup)=onkeyup($event) />
+        <ejs-listview #list id='list' [dataSource]='listData' [fields]='fields' (select)="selectItem($event)"></ejs-listview>
+      </div>
+    </ng-template>
+  </ejs-dialog>
+</div>

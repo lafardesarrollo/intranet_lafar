@@ -1,0 +1,47 @@
+<mz-navbar [navbarClass]="'white'">
+    <a href="javascript:void(0)" class="brand-logo"><img src="assets/images/apps/LogoHC.png" class="img-logo-banner"></a>
+    <mz-navbar-item-container [align]="'right'">
+      <mz-navbar-item>
+        <a (click)="ngxSmartModalService.getModal('myMenu').open()" href="javascript:void(0);"><i class="mdi-navigation-apps lafar-blue"></i></a>
+      </mz-navbar-item>
+    </mz-navbar-item-container>
+</mz-navbar>
+<ngx-smart-modal #myMenu [identifier]="'myMenu'">
+    <div class="row">
+        <div *ngFor="let item of apps" class="parentCard col xl3 l3 m3 s4">
+            <div class="card item-menu-apps">
+                <!--<a style = " display:nome; color: #fff;" href="{{global.urlIntranet + item.url}}" target="_blank" class="tituloApp">-->
+                
+                <a *ngIf="item.code !== 'lcc' && item.code !=='sacc'" style = "color: #fff;" [routerLink]="[item.url]" class="tituloApp">
+                    <div class="card-content">
+                        <img src="assets/images/apps/{{item.code}}.png" class="imagen-app">
+                    </div>
+                </a>
+                    
+                <a *ngIf="item.code === 'lcc'" style = "color: #fff;" href="javascript:void(0)" (click)="openAplicacionExterna(item)" class="tituloApp">
+                    <div class="card-content">
+                        <img src="assets/images/apps/{{item.code}}.png" class="imagen-app">
+                    </div>
+                </a>
+
+                <a *ngIf="item.code === 'sacc'" style = "color: #fff;" href="javascript:void(0)" (click)="openAplicacionExterna(item)" class="tituloApp">
+                    <div class="card-content">
+                        <img src="assets/images/apps/{{item.code}}.png" class="imagen-app">
+                    </div>
+                </a>
+
+            </div>
+        </div>
+
+        <div class="parentCard col xl3 l3 m3 s4">
+            <div class="card item-menu-apps">
+                <!--<a style = " display:nome; color: #fff;" href="{{global.urlIntranet + item.url}}" target="_blank" class="tituloApp">-->
+                    <a target="_blank" style = "color: #fff;" href="http://www.lafar.net/training" class="tituloApp">
+                    <div class="card-content">
+                        <img src="assets/images/apps/training.png" class="imagen-app">
+                    </div>
+                </a>
+            </div>
+        </div>
+    </div>
+</ngx-smart-modal>
