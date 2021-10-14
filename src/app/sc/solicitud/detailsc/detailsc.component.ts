@@ -149,7 +149,7 @@ public fields: Object = { text: 'Descripcion', id: 'ItemCode' };
     this.openLoading();
     this.onGeneraCodigo();
     this.onGetProveedores();
-    this.onGetItemArticulo();
+    // this.onGetItemArticulo();
     this.onGetDepartamentoCompra();
     this.solicitud.tipo = 'I';
     this.onLoadSolicitudCompra(this.codigo_solicitud);
@@ -333,8 +333,9 @@ public fields: Object = { text: 'Descripcion', id: 'ItemCode' };
   }
 
   // Funcion para obtener Item de Tipo Articulo
-  onGetItemArticulo(): void {
-    this.servSC.getItemArticuloSC('ALL').subscribe(
+  onGetItemArticulo(tipo: string): void {
+    this.openLoading();
+    this.servSC.getItemArticuloSC(tipo).subscribe(
       data => {
         this.closeLoading();
         this.articulos = data['body'];
@@ -343,7 +344,7 @@ public fields: Object = { text: 'Descripcion', id: 'ItemCode' };
       },
       (err: HttpErrorResponse) => {
         this.closeLoading();
-        this.toast.show('Ocurrio un error al obtener los proveedores!', 3000, 'red');
+        this.toast.show('Ocurrio un error al obtener los Items!', 3000, 'red');
         if (err.error instanceof Error) {
           // console.log('Ocurrio un error:', err.error.message);
         } else {

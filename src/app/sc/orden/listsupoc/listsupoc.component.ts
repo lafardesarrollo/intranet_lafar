@@ -34,7 +34,9 @@ export class ListsupocComponent implements OnInit {
   constructor(private servSC: SolicitudService, private servOC: OrdenService, private toast: MzToastService, private router: Router) { }
 
   ngOnInit() {
-    this.onGetOrdenesCompra();
+    this.estado_autorizacion_subgerencia = 'P';
+    this.onLoadListado();
+    // this.onGetOrdenesCompra();
   }
 
   // Esta funcion obtiene las ordenes para el autorizador
@@ -168,7 +170,7 @@ export class ListsupocComponent implements OnInit {
       data => {
         this.closeLoading();
         this.toast.show('Se ' + tipo_autorizacion + ' la orden de compra!', 500, 'green');
-        this.onGetOrdenesCompra();
+        this.onLoadListado();
       },
       (err: HttpErrorResponse) => {
         this.closeLoading();

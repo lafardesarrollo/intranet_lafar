@@ -61,6 +61,14 @@ body {
     padding: 15px;
 }
 
+.tabla-solicitud{
+    font-size: 10px;
+}
+
+.tabla-solicitud td{
+    padding: 2px 5px;
+}
+
 /* ESTILOS DE LOADING BEGIN*/
 #loading {
     display: none;

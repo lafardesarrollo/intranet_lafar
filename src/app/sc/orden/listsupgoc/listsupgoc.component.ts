@@ -34,7 +34,9 @@ export class ListsupgocComponent implements OnInit {
   constructor(private servSC: SolicitudService, private servOC: OrdenService, private toast: MzToastService, private router: Router) { }
 
   ngOnInit() {
-    this.onGetOrdenesCompra();
+    this.estado_autorizacion_gerencia = 'P';
+    this.onLoadListado();
+    // this.onGetOrdenesCompra();
   }
 
   // Esta funcion obtiene las ordenes para el autorizador

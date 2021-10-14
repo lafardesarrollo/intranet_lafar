@@ -45,8 +45,10 @@ export class ListocComponent implements OnInit {
   constructor(private servSC: SolicitudService, private servOC: OrdenService, private toast: MzToastService, private router: Router) { }
 
   ngOnInit() {
+    this.estado_autorizacion_subgerencia = 'P';
+    this.onLoadListado();
     this.onVerificaEstadoTransferenciaOC();
-    this.onGetOrdenesCompra();
+    // this.onGetOrdenesCompra();
     // this.initilaizeTarget();
   }
 
@@ -269,7 +271,8 @@ export class ListocComponent implements OnInit {
   }
 
   actualizarListado() {
-    this.onGetOrdenesCompra();
+    this.onLoadListado();
+    // this.onGetOrdenesCompra();
     this.onVerificaEstadoTransferenciaOC();
   }
   // Funciones Loading

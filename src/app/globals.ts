@@ -28,15 +28,15 @@ export class Globals {
     urlIntranet: string = 'http://intranet.lafar.net/lafarnet/';
     urlAPI: string = 'http://intranet.lafar.net/newApiLafarnet/public/';
 
-    urlSAP: string = 'http://190.104.26.90:8082/apisap/api/'; // Url para Escribir en el SAP
-    // urlSAP: string = 'http://localhost:64111/api/'; // Url para Escribir en el SAP
+    // urlSAP: string = 'http://190.104.26.90:8082/apisap/api/'; // Url para Escribir en el SAP
+    urlSAP: string = 'http://localhost:64111/api/'; // Url para Escribir en el SAP
 
-    urlAPISmartsheet: string = 'http://190.104.26.90:8082/apismartsheet/api/'; // Url para Escribir en el SAP
+    urlAPISmartsheet: string = 'http://190.104.26.91/apismartsheet/api/'; // Url para Escribir en el SAP
     // urlAPISmartsheet: string = 'http://localhost:52584/api/';
     // urlAPICORE: string = 'http://localhost/lafarnetservice/api/';
     urlAPICORE: string = 'http://190.104.26.90:8082/lafarnetserviceu/api/';
     // urlAPICORE: string = 'http://localhost:1925/api/';
-    urlAPISAP: string = 'http://190.104.26.90:8082/apilafarnetnv/api/';
+    urlAPISAP: string = 'http://190.104.26.91/apilafarnetnv/api/';
     // urlAPISAP: string = 'http://192.168.1.230/apilafarnet/api/';
     urlIntranetLCC: string = 'http://intranet.lafar.net/lcc/#';
 

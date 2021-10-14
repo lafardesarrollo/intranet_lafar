@@ -88,7 +88,7 @@
                 type="text">
             </mz-input-container>
             
-            <mz-select-container class="col s12 m2">
+            <mz-select-container (click)="$event.stopPropagation()" class="col s12 m2">
                 <select mz-select mz-validation required
                     id="tipo"
                     [errorMessageResource]="errorMessagesSolicitud.tipo"
@@ -115,7 +115,7 @@
                     type="tel"/>
             </mz-datepicker-container>
 
-            <mz-select-container class="col s12 m2">
+            <mz-select-container (click)="$event.stopPropagation()" class="col s12 m2">
                 <select mz-select mz-validation required
                     id="tipo_compra"
                     [errorMessageResource]="errorMessagesSolicitud.tipo_compra"
@@ -129,8 +129,8 @@
                 </select>
             </mz-select-container>
 
-            <mz-select-container class="col s12 m3">
-                <select mz-select mz-validation required
+            <mz-select-container (click)="$event.stopPropagation()" class="col s12 m3">
+                <select mz-select mz-validation required 
                     id="departamento_compra"
                     [errorMessageResource]="errorMessagesSolicitud.departamento_compra"
                     [(ngModel)]="solicitud.departamento_compra"
@@ -143,7 +143,7 @@
         </div>
 
         <div class="row">
-            <div class="col s12 m2">
+            <div class="col s12 m3">
                 <div *ngIf="solicitud.codigo_proveedor"></div>
                 <span class="title_select">Codigo de Proveedor</span>
                 <ng-select required
@@ -158,7 +158,7 @@
                 <div *ngIf="!solicitud.codigo_proveedor" class="mensaje-error">Seleccione un Codigo</div>
             </div> 
 
-            <div class="col s12 m7">
+            <div class="col s12 m6">
                 <div *ngIf="solicitud.nombre_proveedor"></div>
                 <span class="title_select">Nombre de Proveedor</span>
                 <ng-select required
@@ -197,7 +197,7 @@
 <!--TABLA DETALLE SOLICITUD POR ARTICULO-->
 <mz-card *ngIf="solicitud.tipo==='I'">
     <mz-card-content>
-        <table id="table-items-articulo" class="highlight responsive-table">
+        <table id="table-items-articulo" class="highlight responsive-table tabla-solicitud">
             <tr>
                 <th>Codigo</th>
                 <th>Descripción</th>
@@ -208,7 +208,9 @@
             </tr>
             <tr class="border_bottom" *ngFor="let ds of ldetallesolicitud">
                 <td>{{ ds.codigo_item }}</td>
-                <td>{{ ds.descripcion_item }}</td>
+                <td *ngIf="ds.prioridad === EditRowID"><textarea maxlength=100 type="text" [(ngModel)]="ds.descripcion_item" name="descripcion_item {{ds.prioridad}}"></textarea></td>
+                <td *ngIf="ds.prioridad !== EditRowID" (click) = "Edit(ds.prioridad)">{{ ds.descripcion_item }}</td>
+
                 <td>{{ ds.unidad }} </td>
                 <td *ngIf="ds.prioridad === EditRowID"><input type="number" [(ngModel)]="ds.cantidad" name="cantidad {{ds.prioridad}}"></td>
                 <td *ngIf="ds.prioridad !== EditRowID" (click) = "Edit(ds.prioridad)">{{ ds.cantidad }}</td>
@@ -235,14 +237,15 @@
 <!--TABLA DETALLE SOLICITUD POR SERVICIO-->
 <mz-card *ngIf="solicitud.tipo==='S'">
     <mz-card-content>
-        <table id="table-items-servicio" class="highlight responsive-table">
+        <table id="table-items-servicio" class="highlight responsive-table tabla-solicitud">
             <tr>
                 <th>Descripción</th>
                 <th>Fec. Requerida</th>
                 <th>Opciones</th>
             </tr>
             <tr class="border_bottom" *ngFor="let ds of ldetallesolicitudservicio">
-                <td>{{ ds.descripcion_item }}</td>
+                <td *ngIf="ds.prioridad === EditRowID"><textarea maxlength=100 type="text" [(ngModel)]="ds.descripcion_item" name="descripcion_item {{ds.prioridad}}"></textarea></td>
+                <td *ngIf="ds.prioridad !== EditRowID" (click) = "Edit(ds.prioridad)">{{ ds.descripcion_item }}</td>
                 <td>{{ ds.fecha_requerida | date:'yyyy-MM-dd' }}</td>
                 <td>
                     <!--<button mz-button
@@ -283,13 +286,13 @@
         </div>
     </mz-card-content>
 </mz-card>
-<!--
-<div class="row">
+
+<!-- <div class="row">
     <pre>
         {{ ldetallesolicitud | json }}    
     </pre>
-</div>
--->
+</div> -->
+
 <!--<div class="fixed-action-btn" style="bottom: 45px; right: 24px;">
     <a href="javascript:void(0)" class="btn-floating btn-large blue" (click)="onValidaCabeceraSolicitud()">
         <i class="large mdi-navigation-check"></i>
@@ -360,7 +363,7 @@
             </div>
     
             <div class="row">
-                <mz-input-container class="col s12 m4">
+                <mz-input-container class="col s12 m3">
                     <input mz-input required
                         [label]="'Codigo de Item'"
                         id="codigo_item"
@@ -370,17 +373,21 @@
                         name="codigo_item"
                         type="text">
                 </mz-input-container>
-                
-                <mz-input-container class="col s12 m8">
+                <mz-input-container class="col s12 m6">
                     <input mz-input required
                         [label]="'Descripción de Item'"
                         id="descripcion_item"
-                        (click)="onOpenDialog($event)"
                         placeholder="Descripción de Item"
                         [(ngModel)]="detallesolicitud.descripcion_item"
                         name="descripcion_item"
                         type="text">
                 </mz-input-container>
+                <div class="col s12 m3">
+                    <br>
+                    <button mz-button (click)="onOpenDialog($event)">
+                        Buscar Item
+                    </button>
+                </div>
             </div>
     
             <div class="row">
@@ -407,14 +414,13 @@
                         <i mz-icon-mdi mz-input-prefix
                             [icon]="'calendar'">
                         </i>
-                        <input mz-datepicker
+                        <input mz-datepicker *ngIf="existeFechaArte"
                             [label]="'Fecha de Arte'"
                             [disabled] = 'disabled_fecha_arte'
                             id="fecha_arte"
                             [(ngModel)]="detallesolicitud.fecha_arte"
                             name="fecha_arte"
-                            [options]= "opcionesDatePicker"
-                            type="tel" />
+                            [options]= "opcionesDatePicker"/>
                     </mz-datepicker-container>
                 </div>
             </div> 
@@ -456,6 +462,7 @@
                     [label]="'Descripción del Servicio'"
                     [(ngModel)]="detallesolicitudservicio.descripcion_item"
                     name="s_descripcion"
+                    maxlength=100
                     [length]="100">
                   </textarea>
                 </mz-textarea-container>

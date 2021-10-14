@@ -31,7 +31,9 @@ export class ListscabasComponent implements OnInit {
   constructor(private global: Globals, private servSC: SolicitudService, private toast: MzToastService, private router: Router) { }
 
   ngOnInit() {
-    this.onGetSolicitudes();
+    this.estado_autorizacion = 'P';
+    this.onLoadListado();
+    // this.onGetSolicitudes();
   }
 
   imprimirSolicitud(codigo_solicitud: string){
@@ -176,7 +178,7 @@ export class ListscabasComponent implements OnInit {
   }
 
   actualizarListado(){
-    this.onGetSolicitudes();
+    this.onLoadListado();
   }
 
   // Funciones Loading

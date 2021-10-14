@@ -11,6 +11,10 @@ import { NgSelectModule } from '@ng-select/ng-select';
 import { Globals } from '../../../globals';
 import { DialogModule } from '@syncfusion/ej2-angular-popups';
 import { ListViewModule } from '@syncfusion/ej2-angular-lists';
+import { MzTooltipModule } from 'ngx-materialize';
+import { UploaderModule } from '@syncfusion/ej2-angular-inputs';
+import { ComboBoxModule } from '@syncfusion/ej2-angular-dropdowns';
+import { RadioButtonModule } from '@syncfusion/ej2-angular-buttons';
 
 @NgModule({
     imports: [
@@ -34,7 +38,11 @@ import { ListViewModule } from '@syncfusion/ej2-angular-lists';
         MzCollectionModule,
         MzBadgeModule,
         MzSpinnerModule,
-        DialogModule, ListViewModule
+        MzTooltipModule,
+        DialogModule, ListViewModule,
+        UploaderModule,
+        ComboBoxModule,
+        RadioButtonModule
 
     ],
     declarations: [

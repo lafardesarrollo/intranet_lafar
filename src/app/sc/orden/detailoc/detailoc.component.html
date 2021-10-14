@@ -138,7 +138,7 @@
 <!--TABLA DETALLE SOLICITUD POR ARTICULO-->
 <mz-card >
 <mz-card-content>
-    <table *ngIf="orden.tipo_orden==='I'" id="table-items-articulo" class="highlight responsive-table">
+    <table *ngIf="orden.tipo_orden==='I'" id="table-items-articulo" class="highlight responsive-table tabla-solicitud">
         <tr>
             <th>Solicitud</th>
             <th>Almacen</th>
@@ -177,7 +177,7 @@
             </td>
         </tr>
     </table>
-    <table *ngIf="orden.tipo_orden==='S'" id="table-items-servicio" class="highlight responsive-table">
+    <table *ngIf="orden.tipo_orden==='S'" id="table-items-servicio" class="highlight responsive-table tabla-solicitud">
         <tr>
             <th>C. Solicitud</th>
             <th>Descripción</th>

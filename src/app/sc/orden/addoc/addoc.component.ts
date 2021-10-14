@@ -117,7 +117,7 @@ export class AddocComponent implements OnInit {
     this.openLoading();
     this.onGeneraCodigo();
     this.onGetProveedores();
-    this.onGetItemArticulo();
+//    this.onGetItemArticulo();
     this.onGetDepartamentoCompra();
     this.onLoadSolicitudCompra(this.codigo_solicitud);
     // this.onLoadDetalleSolicitudCompra();
@@ -199,6 +199,7 @@ export class AddocComponent implements OnInit {
     this.orden.monto_total = 0;
     this.orden.monto_sin_desc = 0;
     this.orden.descuento = 0;
+    this.orden.medio_transporte = 'NA';
   }
 
   onLoadSolicitudCompra(codigo: string) {
@@ -529,7 +530,7 @@ export class AddocComponent implements OnInit {
         if (this.usuario.id_regional == '11') {
           this.orden.autorizador_sub = 'mzeballos';
         }else {
-          this.orden.autorizador_sub = 'jocampod';
+          this.orden.autorizador_sub = 'jayala';
         }
         this.orden.autorizador_gerencia = 'jocampod';
         if (this.usuario.idsap == 0 || this.usuario.idsap == -1) {

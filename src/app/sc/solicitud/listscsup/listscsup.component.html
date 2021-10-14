@@ -46,7 +46,7 @@
                             value="">
                     </mz-input-container>
                 </div>
-                <mz-select-container class="col s12 m6">
+                <mz-select-container (click)="$event.stopPropagation()" class="col s12 m6">
                     <select mz-select mz-validation required
                         id="estado_autorizacion"
                         [(ngModel)]="estado_autorizacion"
@@ -66,7 +66,7 @@
     </mz-card>
     <mz-card>
         <mz-card-content>
-            <table class="highlight responsive-table">
+            <table class="highlight responsive-table tabla-solicitud">
                 <tr>
                     <th>Codigo</th>
                     <th class="center">
@@ -79,7 +79,7 @@
                     <th>Tipo de Solicitud</th>
                     <th>Motivo</th>
                     <th>Estado</th>
-                    <th width = 200>Opciones</th>
+                    <th width = 250>Opciones</th>
                 </tr>
         
                 <tr class="border_bottom" *ngFor="let solicitud of lsolicitud | filter:term | paginate: { itemsPerPage: 50, currentPage: p }">

@@ -115,6 +115,32 @@ export class DetailoccostosComponent implements OnInit {
         this.onGetOrdenCompra();
     }
 
+    // onGuardarAutorizarSGOrden() {
+    //   this.openLoading();
+    //   let tipo_autorizacion: string = '';
+    //   if (this.autorizarorden.estado_autorizacion == 'A') {
+    //     tipo_autorizacion = 'aprobar';
+    //   } else {
+    //     tipo_autorizacion = 'rechazar';
+    //   }
+    //   this.servOC.saveAutorizarOrdenCostos(this.autorizarorden).subscribe(
+    //     data => {
+    //       this.closeLoading();
+    //       this.toast.show('Se ' + tipo_autorizacion + ' la orden de compra!', 500, 'green');
+    //       this.router.navigate(['/sc/orden/list_aut']);
+    //       // this.onGetOrdenesCompra();
+    //     },
+    //     (err: HttpErrorResponse) => {
+    //       this.closeLoading();
+    //       this.toast.show('Ocurrio un error al ' + tipo_autorizacion + ' la orden de compra. Intente nuevamente!', 1000, 'red');
+    //       if (err.error instanceof Error) {
+    //         // console.log('Ocurrio un error:', err.error.message);
+    //       } else {
+    //         // console.log(`El servidor respondio: ${err.status}, body was: ${err.error}`);
+    //       }
+    //     }
+    //   );
+    // }
     //#region MODAL ADJUNTOS
     openModalAdjutos(){
       this.modalAdjuntos.openModal();

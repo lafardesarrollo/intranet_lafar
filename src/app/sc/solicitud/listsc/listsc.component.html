@@ -38,7 +38,7 @@
 </mz-card>
 <mz-card>
     <mz-card-content>
-        <table class="highlight responsive-table">
+        <table class="highlight responsive-table tabla-solicitud">
             <tr>
                 <th>Codigo</th>
                 <th class="center">
@@ -51,7 +51,7 @@
                 <th>Tipo de Solicitud</th>
                 <th>Motivo</th>
                 <th>Estado</th>
-                <th width = 100>Opciones</th>
+                <th width = 150>Opciones</th>
             </tr>
     
             <tr class="border_bottom" *ngFor="let solicitud of lsolicitud | filter:term | paginate: { itemsPerPage: 50, currentPage: p }">

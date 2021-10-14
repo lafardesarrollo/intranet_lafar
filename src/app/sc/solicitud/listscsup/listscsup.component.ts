@@ -31,7 +31,9 @@ export class ListscsupComponent implements OnInit {
   constructor(private global: Globals, private servSC: SolicitudService, private toast: MzToastService, private router: Router) { }
 
   ngOnInit() {
-    this.onGetSolicitudes();
+    this.estado_autorizacion = "P";
+    // this.onGetSolicitudes();
+    this.onLoadListado();
   }
 
   imprimirSolicitud(codigo_solicitud: string){

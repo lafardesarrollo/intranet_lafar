@@ -23,50 +23,48 @@
         </div>
         <div class="col s12 m7 l7 hide-on-med-and-down">
             <ul class="right">
-                <li><a href="javascript:void(0);" (click)="actualizarListado()"><i mz-icon-mdi [icon]="'sync'"></i></a></li>
+                <li><a href="javascript:void(0);" (click)="actualizarListado()">Actualizar</a></li>
+                <li *ngIf="transferencia"><a href="javascript:void(0);" (click)="generarArchivosSubidaSAP()">Sincronizar SAP</a></li>
                 <!--<li><a href="javascript:void(0);"><i class="modal-action modal-close  mdi-content-send"></i></a></li>-->
             </ul>
         </div>
     </div>
 </nav>
 
-<mz-card style="margin-bottom:0px;" class="color-hoverable white-text">
-    <mz-card-content>
-        <div class="row">
-            <div class="col s12 m6">
-                <mz-input-container>
-                    <i mz-icon-mdi mz-input-prefix
-                        [icon]="'magnify'">
-                    </i>
-                    <input mz-input
-                        id="buscar-solicitud"
-                        [(ngModel)]="term"
-                        placeholder="Buscar"
-                        type="search"
-                        value="">
-                </mz-input-container>
-            </div>
-            <mz-select-container class="col s12 m6">
-                <select mz-select mz-validation required
-                    id="estado_autorizacion_subgerencia"
-                    [(ngModel)]="estado_autorizacion_subgerencia"
-                    name="estado_autorizacion_subgerencia"
-                    (change)="onLoadListado()"
-                    [label]="'Seleccione una Opcion'"
-                    [placeholder]="'Seleccione una Opcion'">
-                    <option value="T">Todas</option>
-                    <option value="P">Pendientes</option>
-                    <option value="A">Aprobadas</option>
-                    <option value="R">Rechazadas</option>
-                    <option value="X">Anuladas</option>
-                </select>
-            </mz-select-container>
-        </div>
-    </mz-card-content>
-</mz-card>
+<div class="row color-hoverable white-text contenido-busqueda">
+    <div class="col s12 m6">
+        <mz-input-container>
+            <i mz-icon-mdi mz-input-prefix
+                [icon]="'magnify'">
+            </i>
+            <input mz-input
+                id="buscar-solicitud"
+                [(ngModel)]="term"
+                placeholder="Buscar"
+                type="search"
+                value="">
+        </mz-input-container>
+    </div>
+    <mz-select-container (click)="$event.stopPropagation()" class="col s12 m6">
+        <select mz-select mz-validation required
+            id="estado_autorizacion_subgerencia"
+            [(ngModel)]="estado_autorizacion_subgerencia"
+            name="estado_autorizacion_subgerencia"
+            (change)="onLoadListado()"
+            [label]="'Seleccione una Opcion'"
+            [placeholder]="'Seleccione una Opcion'">
+            <option value="T">Todas</option>
+            <option value="P">Pendientes</option>
+            <option value="A">Aprobadas</option>
+            <option value="R">Rechazadas</option>
+            <option value="X">Anuladas</option>
+        </select>
+    </mz-select-container>
+</div>
+
 <mz-card>
     <mz-card-content>
-        <table class="highlight responsive-table">
+        <table class="highlight responsive-table tabla-solicitud">
             <tr>
                 <th>Codigo Orden</th>
                 <th class="center">
@@ -74,12 +72,12 @@
                         [icon]="'wechat'">
                     </i>
                 </th>
-                <th>Fecha de Orden</th>
-                <th>Titular</th>
+                <th width="70">Fecha</th>
+                <th>Solicitante</th>
                 <th>Tipo de Orden</th>
                 <th>Descripción</th>
                 <th width = 100>Precio</th>
-                <th>SubGerencia</th>
+                <th>DTT/GAF</th>
                 <th>Gerencia</th>
                 <th width = 150>Opciones</th>
             </tr>
@@ -101,6 +99,7 @@
                 <td>{{orden.motivo_orden}}</td>
                 <td class="derecha">{{orden.monto_total}} {{orden.Currency}}</td>
                 <td class="center">
+                    {{orden.autorizador_sub}} <br>
                     <i *ngIf="orden.estado_autorizacion_subgerencia ==='A'"  mz-icon-mdi mz-input-prefix class="green-text"
                         [icon]="'thumb-up-outline'">
                     </i>
@@ -113,8 +112,22 @@
                     <i *ngIf="orden.estado_autorizacion_subgerencia ==='X'"  mz-icon-mdi mz-input-prefix class="red-text"
                         [icon]="'null'">
                     </i>
+
+                    <!-- <i *ngIf="orden.estado_autorizacion_subgerencia ==='A'"  mz-icon-mdi mz-input-prefix class="green-text"
+                        [icon]="'thumb-up-outline'">
+                    </i>
+                    <i *ngIf="orden.estado_autorizacion_subgerencia ==='R'"  mz-icon-mdi mz-input-prefix class="red-text"
+                        [icon]="'thumb-down-outline'">
+                    </i>
+                    <i *ngIf="orden.estado_autorizacion_subgerencia ==='P'"  mz-icon-mdi mz-input-prefix class="orange-text"
+                        [icon]="'clock'">
+                    </i>
+                    <i *ngIf="orden.estado_autorizacion_subgerencia ==='X'"  mz-icon-mdi mz-input-prefix class="red-text"
+                        [icon]="'null'">
+                    </i> -->
                 </td>
-                <td *ngIf="orden.monto_total >= 50000" class="center">
+                <td *ngIf="orden.monto_total >= 5000" class="center">
+                    {{orden.autorizador_gerencia}} <br>
                     <i *ngIf="orden.estado_autorizacion_gerencia ==='A'"  mz-icon-mdi mz-input-prefix class="green-text"
                         [icon]="'thumb-up-outline'">
                     </i>
@@ -127,8 +140,20 @@
                     <i *ngIf="orden.estado_autorizacion_gerencia ==='X'"  mz-icon-mdi mz-input-prefix class="red-text"
                         [icon]="'null'">
                     </i>
+                    <!-- <i *ngIf="orden.estado_autorizacion_gerencia ==='A'"  mz-icon-mdi mz-input-prefix class="green-text"
+                        [icon]="'thumb-up-outline'">
+                    </i>
+                    <i *ngIf="orden.estado_autorizacion_gerencia ==='R'"  mz-icon-mdi mz-input-prefix class="red-text"
+                        [icon]="'thumb-down-outline'">
+                    </i>
+                    <i *ngIf="orden.estado_autorizacion_gerencia ==='P'"  mz-icon-mdi mz-input-prefix class="orange-text"
+                        [icon]="'clock'">
+                    </i>
+                    <i *ngIf="orden.estado_autorizacion_gerencia ==='X'"  mz-icon-mdi mz-input-prefix class="red-text"
+                        [icon]="'null'">
+                    </i> -->
                 </td>
-                <td class="center text-green" *ngIf="orden.monto_total < 50000"> N/A </td>
+                <td class="center text-green" *ngIf="orden.monto_total < 5000"> N/A </td>
                 <td>
                     <button mz-button mz-tooltip
                         [tooltip]="'Ver Orden'"
@@ -205,7 +230,7 @@
 
 
 <div *ngIf="transferencia" class="fixed-action-btn" style="bottom: 85px; right: 24px;">
-    <button id="star-button" mz-button [float]="true" [large]="true" class="blue" (click)="generarArchivosSubidaSAP()">
+    <button id="star-button" mz-button mz-tooltip [tooltip]="'Sincronizar Ordenes de Compra con el SAP'" [float]="true" [large]="true" class="blue" (click)="generarArchivosSubidaSAP()">
         <i class="large mdi-file-file-download"></i>
     </button>
 </div>

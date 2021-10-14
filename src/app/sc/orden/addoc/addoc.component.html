@@ -17,7 +17,7 @@
         <ul>
             <li><a href="javascript:void(0);" [routerLink]="['/sc/solicitud/list_abast']" class="email-menu"><i class="modal-action modal-close  mdi-hardware-keyboard-backspace"></i></a>
             </li>
-            <li><a href="javascript:void(0);" class="email-type">N DE COMPRA....</a>
+            <li><a href="javascript:void(0);" class="email-type">NUEVA ORDEN DE COMPRA</a>
             </li>
         </ul>
     </div>
@@ -71,7 +71,7 @@
                 type="tel"/>
         </mz-datepicker-container>
 
-        <mz-select-container class="col s12 m2">
+        <mz-select-container (click)="$event.stopPropagation()" class="col s12 m2">
             <select mz-select
                 id="tipo_compra"
                 [(ngModel)]="orden.tipo_compra"
@@ -83,7 +83,7 @@
             </select>
         </mz-select-container>
 
-        <mz-select-container class="col s12 m3">
+        <mz-select-container (click)="$event.stopPropagation()" class="col s12 m3">
             <select mz-select required
                 id="departamento_compra"
                 [(ngModel)]="orden.departamento_compra"
@@ -133,8 +133,8 @@
 </mz-card>
 <!--TABLA DETALLE SOLICITUD POR ARTICULO-->
 <mz-card >
-<mz-card-content>
-    <table *ngIf="orden.tipo_orden==='I'" id="table-items-articulo" class="highlight responsive-table">
+<mz-card-content class="contenido-card">
+    <table *ngIf="orden.tipo_orden==='I'" id="table-items-articulo" class="highlight responsive-table tabla-solicitud">
         <tr>
             <th></th>
             <th></th>
@@ -175,7 +175,7 @@
             </td>
         </tr>
     </table>
-    <table *ngIf="orden.tipo_orden==='S'" id="table-items-servicio" class="highlight responsive-table">
+    <table *ngIf="orden.tipo_orden==='S'" id="table-items-servicio" class="highlight responsive-table tabla-solicitud">
         <tr>
             <th>C. Solicitud</th>
             <th>Descripción</th>
@@ -256,7 +256,7 @@
                 <i mz-icon-mdi mz-input-prefix
                     [icon]="'calendar'">
                 </i>
-                <input mz-datepicker
+                <input mz-datepicker required
                     [label]="'Fecha de Entrega'"
                     [options]="opcionesDatePicker"
                     [(ngModel)]="orden.fecha_entrega"
@@ -264,13 +264,14 @@
                     id="fecha_entrega"
                     type="tel"/>
             </mz-datepicker-container>
-            <mz-select-container class="col s6 m3">
-                <select mz-select
+            <mz-select-container (click)="$event.stopPropagation()" class="col s6 m3">
+                <select mz-select required
                     id="incoterms"
                     [(ngModel)]="orden.incoterms"
                     name="incoterms"
                     [label]="'Incoterms'"
                     [placeholder]="'Seleccione Incoterms'">
+                    <option value="-1">Ninguno</option>
                     <option value="0">EXWORK</option>
                     <option value="1">FOB</option>
                     <option value="2">CIF</option>
@@ -291,7 +292,7 @@
             </mz-input-container>
 
             <mz-input-container class="col s12 m12 l3">
-                <input mz-input
+                <input mz-input required
                     [label]="'Medio de Transporte'"
                     id="medio_transporte"
                     [(ngModel)]="orden.medio_transporte"
@@ -379,7 +380,7 @@
                 </div>
             </mz-card-content>
             <mz-card-action>
-                <table *ngIf="orden.tipo_orden==='I' && ldetallesolicitud.length  > 0" id="table-items-articulo" class="highlight responsive-table">
+                <table *ngIf="orden.tipo_orden==='I' && ldetallesolicitud.length  > 0" id="table-items-articulo" class="highlight responsive-table tabla-solicitud">
                     <tr>
                         <th></th>
                         <th>Codigo</th>
@@ -405,7 +406,7 @@
                     </tr>
                 </table>
 
-                <table *ngIf="orden.tipo_orden==='S' && ldetallesolicitudservicio.length  > 0" id="table-items-servicio" class="highlight responsive-table">
+                <table *ngIf="orden.tipo_orden==='S' && ldetallesolicitudservicio.length  > 0" id="table-items-servicio" class="highlight responsive-table tabla-solicitud">
                     <tr>
                         <th></th>
                         <th>Descripción</th>

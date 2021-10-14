@@ -61,6 +61,9 @@ export class OrdenCompraListAbastecimiento {
     public estado_autorizacion_costos: string;
     public monto_total: number;
     public estado_transferencia: string;
+    public autorizador_sub: string;
+    public autorizador_gerencia: string;
+    public usuario_autorizacion_costos: string;
     public Currency: string;
 }
 

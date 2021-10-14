@@ -126,7 +126,7 @@
 <!--TABLA DETALLE SOLICITUD POR ARTICULO-->
 <mz-card >
 <mz-card-content>
-    <table *ngIf="orden.tipo_orden==='I'" id="table-items-articulo" class="highlight responsive-table">
+    <table *ngIf="orden.tipo_orden==='I'" id="table-items-articulo" class="highlight responsive-table tabla-solicitud">
         <tr>
             <th>C. Solicitud</th>
             <th>Almacen</th>
@@ -165,7 +165,7 @@
             </td>
         </tr>
     </table>
-    <table *ngIf="orden.tipo_orden==='S'" id="table-items-servicio" class="highlight responsive-table">
+    <table *ngIf="orden.tipo_orden==='S'" id="table-items-servicio" class="highlight responsive-table tabla-solicitud">
         <tr>
             <th>C. Solicitud</th>
             <th>Descripción</th>
@@ -212,7 +212,7 @@
         <div class="col m3 l3 s12 card-content blue white-text derecha">
             Total sin Descuento : {{ orden.monto_sin_desc }} {{tipo_moneda}}
             <br>
-            Descuento (%) : <input (input)="calculaTotalConDescuento()" type="number" [(ngModel)]="this.orden.descuento" name="ordenDescuento" max="100" min="0" value="0" style="width:60px;" >
+            Descuento (%) : <input (input)="calculaTotalConDescuento()" type="number" [(ngModel)]="this.orden.descuento" name="ordenDescuento" max="100" min="0" value="0" style="width:60px;" readonly>
             <br>
             Total : {{ orden.monto_total }} {{tipo_moneda}}
         </div>

@@ -11,7 +11,7 @@ export class RdolibarComponent implements OnInit {
   constructor(private route: ActivatedRoute, private router: Router, public global: Globals) { }
 
   ngOnInit() {
-    window.open(this.global.urlIntranet + 'lcc/dolibarr/', '_blank');
+    window.open(this.global.urlIntranet + 'lcc', '_blank');
     this.router.navigate(['/home']);
   }
 

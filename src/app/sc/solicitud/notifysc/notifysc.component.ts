@@ -35,7 +35,8 @@ export class NotifyscComponent implements OnInit {
   }
 
   onDirigirSolicitud() {
-    this.router.navigate(['sc/solicitud/detail/' + this.codigo_solicitud]);
+    window.history.back();
+    // this.router.navigate(['sc/solicitud/detail/' + this.codigo_solicitud]);
   }
 
   // Funciones para obtener las conversaciones de la solicitud del servidor

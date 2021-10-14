@@ -27,14 +27,24 @@
     padding-top: 80px;
 }
 
+table {
+    border-collapse: collapse;
+}
+
+tr {
+    border: solid;
+    border-width: 0.5px 0;
+    border-color: #a0c3d3;
+}
 
 // Estilos Search
 #{'/deep/'} .color-hoverable {
     background-color: #455A64;
 }
 
-.card .card-content {
-    padding: 15px;
+.contenido-busqueda {
+    padding: 2px 5px;
+    border-radius: 0 0 2px 2px;
 }
 
 .row {

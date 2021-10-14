@@ -89,7 +89,7 @@
                 type="text">
             </mz-input-container>
             
-            <mz-select-container class="col s12 m2">
+            <mz-select-container (click)="$event.stopPropagation()" class="col s12 m2">
                 <select mz-select mz-validation required
                     id="tipo"
                     [errorMessageResource]="errorMessagesSolicitud.tipo"
@@ -116,7 +116,7 @@
                     type="tel"/>
             </mz-datepicker-container>
 
-            <mz-select-container class="col s12 m2">
+            <mz-select-container (click)="$event.stopPropagation()" class="col s12 m2">
                 <select mz-select mz-validation required
                     id="tipo_compra"
                     [errorMessageResource]="errorMessagesSolicitud.tipo_compra"
@@ -130,7 +130,7 @@
                 </select>
             </mz-select-container>
 
-            <mz-select-container class="col s12 m3">
+            <mz-select-container (click)="$event.stopPropagation()" class="col s12 m3">
                 <select mz-select mz-validation required
                     id="departamento_compra"
                     [errorMessageResource]="errorMessagesSolicitud.departamento_compra"
@@ -144,7 +144,7 @@
         </div>
 
         <div class="row">
-            <div class="col s12 m2">
+            <div class="col s12 m3">
                 <div *ngIf="solicitud.codigo_proveedor"></div>
                 <span class="title_select">Codigo de Proveedor</span>
                 <ng-select required
@@ -160,7 +160,7 @@
                 <div *ngIf="!solicitud.codigo_proveedor" class="mensaje-error">Seleccione un Codigo</div>
             </div> 
 
-            <div class="col s12 m7">
+            <div class="col s12 m6">
                 <div *ngIf="solicitud.nombre_proveedor"></div>
                 <span class="title_select">Nombre de Proveedor</span>
                 <ng-select required
@@ -177,13 +177,13 @@
             </div>
             <div class="col s12 m3">
                 <br>
-                <button *ngIf="solicitud.tipo === 'I'" mz-button [disabled]="!modificar" (click)="AddItemModal.openModal()">
+                <button *ngIf="solicitud.tipo === 'I'" mz-button [disabled]="!modificar" (click)="AddItemModal.openModal()" (click)="onGetItemArticulo('ALL')">
                     <i mz-icon-mdi [icon]="'cart-plus'" [align]="'left'"></i>
-                    Add Articulo
+                    Agregar Articulo
                 </button>
                 <button *ngIf="solicitud.tipo === 'S'" mz-button [disabled]="!modificar" (click)="AddServicioModal.openModal()">
                     <i mz-icon-mdi [icon]="'cart-plus'" [align]="'left'"></i>
-                    Add Servicio
+                    Agregar Servicio
                 </button>
             </div>
         </div>
@@ -192,7 +192,7 @@
 <!--TABLA DETALLE SOLICITUD POR ARTICULO-->
 <mz-card *ngIf="solicitud.tipo==='I'">
     <mz-card-content>
-        <table id="table-items-articulo" class="highlight responsive-table">
+        <table id="table-items-articulo" class="highlight responsive-table tabla-solicitud">
             <tr>
                 <th>Codigo</th>
                 <th>Descripción</th>
@@ -203,7 +203,8 @@
             </tr>
             <tr class="border_bottom" *ngFor="let ds of ldetallesolicitud">
                 <td>{{ ds.codigo_item }}</td>
-                <td>{{ ds.descripcion_item }}</td>
+                <td *ngIf="ds.prioridad === EditRowID"><textarea maxlength=100 type="text" [(ngModel)]="ds.descripcion_item" name="descripcion_item {{ds.prioridad}}"></textarea></td>
+                <td *ngIf="ds.prioridad !== EditRowID" (click) = "Edit(ds.prioridad)">{{ ds.descripcion_item }}</td>
                 <td>{{ ds.unidad }} </td>
                 <td *ngIf="ds.prioridad === EditRowID"><input type="number" [(ngModel)]="ds.cantidad" name="cantidad {{ds.prioridad}}"></td>
                 <td *ngIf="ds.prioridad !== EditRowID" (click) = "Edit(ds.prioridad)">{{ ds.cantidad }}</td>
@@ -228,14 +229,15 @@
 <!--TABLA DETALLE SOLICITUD POR SERVICIO-->
 <mz-card *ngIf="solicitud.tipo==='S'">
     <mz-card-content>
-        <table id="table-items-servicio" class="highlight responsive-table">
+        <table id="table-items-servicio" class="highlight responsive-table tabla-solicitud">
             <tr>
                 <th>Descripción</th>
                 <th>Fec. Requerida</th>
                 <th>Opciones</th>
             </tr>
             <tr class="border_bottom" *ngFor="let ds of ldetallesolicitudservicio">
-                <td>{{ ds.descripcion_item }}</td>
+                <td *ngIf="ds.prioridad === EditRowID"><textarea maxlength=100 type="number" [(ngModel)]="ds.descripcion_item" name="descripcion_item {{ds.prioridad}}"></textarea></td>
+                <td *ngIf="ds.prioridad !== EditRowID" (click) = "Edit(ds.prioridad)">{{ ds.descripcion_item }}</td>
                 <td>{{ ds.fecha_requerida | date:'yyyy-MM-dd' }}</td>
                 <td>
                     <!--<button mz-button
@@ -308,7 +310,9 @@
 </div>-->
 
 <div *ngIf="solicitud.estado_autorizacion_superior !== 'X' && modificar" class="fixed-action-btn" style="bottom: 45px; right: 24px;">
-    <button 
+    <button mz-tooltip
+        [tooltip]="'Guardar Modificación'"
+        [position]="'top'"
         [float]="true" mz-button 
         [disabled]="!form.valid" 
         [large]="true" 
@@ -369,7 +373,7 @@
             </div>
     
             <div class="row">
-                <mz-input-container class="col s12 m4">
+                <mz-input-container class="col s12 m3">
                     <input mz-input
                         [label]="'Codigo de Item'"
                         id="codigo_item"
@@ -379,17 +383,22 @@
                         name="codigo_item"
                         type="text">
                 </mz-input-container>
-                
-                <mz-input-container class="col s12 m8">
+                <mz-input-container class="col s12 m6">
                     <input mz-input 
                         [label]="'Descripción de Item'"
                         id="descripcion_item"
-                        (click)="onOpenDialog($event)"
                         placeholder="Descripción de Item"
                         [(ngModel)]="detallesolicitud.descripcion_item"
                         name="descripcion_item"
                         type="text">
                 </mz-input-container>
+                <div class="col s12 m3">
+                    <br>
+                    <button mz-button (click)="onOpenDialog($event)">
+                        Buscar Item
+                    </button>
+                </div>
+
             </div>
     
             <div class="row">
@@ -745,11 +754,18 @@
 
 <!-- Items -->
 <div #container class='root-container'>
-    <ejs-dialog id='dialog' #ejDialog isModal='true' [visible]='false' header='Listado de Items' (beforeClose)="validation($event)"[buttons]='buttons' [target]='targetElement' width='500px' height='350px'>
+    <ejs-dialog id='dialog' #ejDialog isModal='true' [visible]='false' header='Listado de Items' (beforeClose)="validation($event)"[buttons]='buttons' showCloseIcon='true' [target]='targetElement' width='700px' height='550px'>
       <ng-template #content>
         <div id="sample">
-          <input #textbox class="e-input" type="text" id="textbox" placeholder="Filter" title="Type in a name" (keyup)=onkeyup($event) />
-          <ejs-listview #list id='list' [dataSource]='articulos' [fields]='fields' (select)="selectItem($event)"></ejs-listview>
+            <div class="row filtro-buttons">
+                <div class="col l3 x3 m3"><ejs-radiobutton (change)="onGetItemArticulo('ALL')" label="OTROS" name="tipo_producto" checked="true"></ejs-radiobutton></div>
+                <div class="col l3 x3 m3"><ejs-radiobutton (change)="onGetItemArticulo('MA')" label="MA" name="tipo_producto"></ejs-radiobutton></div>
+                <div class="col l3 x3 m3"><ejs-radiobutton (change)="onGetItemArticulo('MP')" label="MP" name="tipo_producto"></ejs-radiobutton></div>
+                <div class="col l3 x3 m3"><ejs-radiobutton (change)="onGetItemArticulo('PT')" label="PT" name="tipo_producto"></ejs-radiobutton></div>
+            </div>
+            <!--<ejs-combobox id='comboelement' [dataSource]='data'></ejs-combobox>-->
+            <input #textbox class="e-input" type="text" id="textbox" placeholder="Filtrar Producto" title="Tipo en un Nombre" (keyup)=onkeyup($event) />
+            <ejs-listview #list id='list' [dataSource]='articulos' [fields]='fields' (select)="selectItem($event)"></ejs-listview>
         </div>
       </ng-template>
     </ejs-dialog>

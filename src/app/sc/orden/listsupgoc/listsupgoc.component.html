@@ -46,7 +46,7 @@
                         value="">
                 </mz-input-container>
             </div>
-            <mz-select-container class="col s12 m6">
+            <mz-select-container (click)="$event.stopPropagation()" class="col s12 m6">
                 <select mz-select mz-validation required
                     id="estado_autorizacion_gerencia"
                     [(ngModel)]="estado_autorizacion_gerencia"
@@ -66,7 +66,7 @@
 </mz-card>
 <mz-card>
     <mz-card-content>
-        <table class="highlight responsive-table">
+        <table class="highlight responsive-table tabla-solicitud">
             <tr>
                 <th>Codigo Orden</th>
                 <th class="center">
@@ -75,11 +75,11 @@
                     </i>
                 </th>
                 <th>Fecha de Orden</th>
-                <th>Titular</th>
+                <th>Solicitante</th>
                 <th>Tipo de Orden</th>
                 <th>Descripción</th>
                 <th width = 100>Precio</th>
-                <th>SubGerencia</th>
+                <th>DTT/GAF</th>
                 <th>Gerencia</th>
                 <th width = 200>Opciones</th>
             </tr>
@@ -101,6 +101,7 @@
                 <td>{{orden.motivo_orden}}</td>
                 <td class="derecha">{{orden.monto_total}} {{orden.Currency}}</td>
                 <td class="center">
+                    {{orden.autorizador_sub}} <br>
                     <i *ngIf="orden.estado_autorizacion_subgerencia ==='A'"  mz-icon-mdi mz-input-prefix class="green-text"
                         [icon]="'thumb-up-outline'">
                     </i>
@@ -114,7 +115,8 @@
                         [icon]="'null'">
                     </i>
                 </td>
-                <td *ngIf="orden.monto_total >= 50000" class="center">
+                <td *ngIf="orden.monto_total >= 5000" class="center">
+                    {{orden.autorizador_gerencia}} <br>
                     <i *ngIf="orden.estado_autorizacion_gerencia ==='A'"  mz-icon-mdi mz-input-prefix class="green-text"
                         [icon]="'thumb-up-outline'">
                     </i>
@@ -128,7 +130,7 @@
                         [icon]="'null'">
                     </i>
                 </td>
-                <td class="center text-green" *ngIf="orden.monto_total < 50000"> N/A </td>
+                <td class="center text-green" *ngIf="orden.monto_total < 5000"> N/A </td>
                 <td>
                     <button mz-button mz-tooltip
                         [tooltip]="'Ver Orden'"

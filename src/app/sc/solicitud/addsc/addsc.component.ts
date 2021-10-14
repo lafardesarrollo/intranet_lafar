@@ -2,7 +2,7 @@ import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { SolicitudCompra, RequestFechaArte, FechaArte } from '../solicitud';
 import { SolicitudService } from '../solicitud.service';
 import { HttpErrorResponse } from '@angular/common/http';
-import { MzToastService } from 'ngx-materialize';
+import { MzModalComponent, MzToastService } from 'ngx-materialize';
 import { Router } from '@angular/router';
 import { Proveedorsc } from '../../proveedorsc';
 import { DetalleSolicitud } from '../detallesolicitud';
@@ -26,6 +26,7 @@ import { DepartamentoCompra } from '../models/departamento-compra.model';
   styleUrls: ['./addsc.component.scss'],
 })
 export class AddscComponent implements OnInit {
+  @ViewChild('AddItemModal') modalAddItem: MzModalComponent;
 // ........................................... AQUI COMIENZA NUEVO DIALOG .............................
   @ViewChild('ejDialog') ejDialog: DialogComponent;
    // The Dialog shows within the target element.
@@ -41,6 +42,7 @@ export class AddscComponent implements OnInit {
   modificar: Boolean = false;
   // Fecha de Arte
   view_fecha_arte: Boolean = true;
+  existeFechaArte: Boolean = false;
   disabled_fecha_arte: Boolean = true;
   // Variables para subir archivos
   myFiles: string [] = [];
@@ -147,6 +149,7 @@ export class AddscComponent implements OnInit {
   }
 
   ngOnInit() {
+    // 
     //  this.initilaizeTarget();
     // this.initilaizeTargetUpload();
     this.dropEle = document.getElementById('droparea');
@@ -167,6 +170,7 @@ export class AddscComponent implements OnInit {
     // alert(localStorage.getItem('username'));
 
   // Variables para subir archivos
+    
     this.modificar = false;
   }
 
@@ -363,6 +367,12 @@ export class AddscComponent implements OnInit {
         if (data['result']) {
           fecha_arte = data['body'];
           this.detallesolicitud.fecha_arte = new Date(fecha_arte.U_u_fechaarte);
+          // if(this.detallesolicitud.fecha_arte.getFullYear)
+          if(this.detallesolicitud.fecha_arte.getFullYear() == 1753){
+            this.existeFechaArte = false;
+          } else {
+            this.existeFechaArte = true;
+          }
           this.view_fecha_arte = true;
           // console.log(fecha_arte);
         } else {
@@ -647,6 +657,10 @@ export class AddscComponent implements OnInit {
       return arr.filter( function( e ) {
           return e !== item;
       } );
+    }
+
+    abrirModalAgregarItem(){
+      this.modalAddItem.openModal();
     }
 }
 

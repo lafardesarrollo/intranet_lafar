@@ -15,7 +15,7 @@
         <div class="nav-wrapper">
             <div class="left col s12 m5 l5">
                 <ul>
-                    <li><a href="javascript:void(0);" [routerLink]="['/sc/main']" class="email-menu"><i class="modal-action modal-close  mdi-hardware-keyboard-backspace"></i></a>
+                    <li><a href="javascript:history.back()" class="email-menu"><i class="modal-action modal-close  mdi-hardware-keyboard-backspace"></i></a>
                     </li>
                     <li><a href="javascript:void(0);" class="email-type">SOLICITUDES APROBADAS</a>
                     </li>
@@ -47,7 +47,7 @@
                             value="">
                     </mz-input-container>
                 </div>
-                <mz-select-container class="col s12 m6">
+                <mz-select-container (click)="$event.stopPropagation()" class="col s12 m6">
                     <select mz-select mz-validation required
                         id="estado_autorizacion"
                         [(ngModel)]="estado_autorizacion"
@@ -56,7 +56,7 @@
                         [label]="'Seleccione una Opcion'"
                         [placeholder]="'Seleccione una Opcion'">
                         <option value="T">Todas</option>
-                        <option value="P">Pendientes</option>
+                        <option value="P">Pendientes (Disponibles para Orden de Compra)</option>
                         <option value="A">Aprobadas</option>
                         <option value="R">Rechazadas</option>
                         <option value="X">Anuladas</option>
@@ -67,10 +67,10 @@
     </mz-card>
     <mz-card>
         <mz-card-content>
-            <table class="highlight responsive-table">
+            <table class="highlight responsive-table tabla-solicitud">
                 <tr>
                     <th>Codigo</th>
-                    <th class="center">
+                    <th width="70" class="center">
                         <i mz-icon-mdi mz-input-prefix class="green-text"
                             [icon]="'wechat'">
                         </i>
@@ -80,7 +80,7 @@
                     <th>Tipo de Solicitud</th>
                     <th>Motivo</th>
                     <th>Estado</th>
-                    <th width = 150>Opciones</th>
+                    <th width = 250>Opciones</th>
                 </tr>
         
                 <tr [ngClass]="{'borde-estado' : solicitud.estado === 'A'}" class="border_bottom" *ngFor="let solicitud of lsolicitud | filter:term | paginate: { itemsPerPage: 50, currentPage: p }">
@@ -135,10 +135,11 @@
                             [float]="true" class="orange">
                             <i mz-icon-mdi [icon]="'cancel'"></i>
                         </button>
+                        
                         <button mz-button mz-tooltip
                             [tooltip]="'Crear Orden de Compra'"
                             (click)="onOpenAddOrden(solicitud.codigo)" 
-                            *ngIf="solicitud.estado_autorizacion_superior ==='A' && solicitud.completada === 0"
+                            *ngIf="solicitud.estado_autorizacion_superior ==='A' && solicitud.completada > 0"
                             [float]="true" class="green">
                             <i mz-icon-mdi [icon]="'arrow-collapse-right'"></i>
                         </button>
