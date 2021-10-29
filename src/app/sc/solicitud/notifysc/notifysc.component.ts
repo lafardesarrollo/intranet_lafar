@@ -39,6 +39,10 @@ export class NotifyscComponent implements OnInit {
     // this.router.navigate(['sc/solicitud/detail/' + this.codigo_solicitud]);
   }
 
+  actualizarNotificaciones(){
+    this.onGetConversaciones(this.codigo_solicitud);
+  }
+
   // Funciones para obtener las conversaciones de la solicitud del servidor
   onGetConversaciones(codigo_solicitud: string): void {
     this.servSC.getConversacionesXSolicitud(codigo_solicitud).subscribe(

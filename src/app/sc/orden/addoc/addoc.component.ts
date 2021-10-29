@@ -182,6 +182,7 @@ export class AddocComponent implements OnInit {
     this.orden.nombre_proveedor = s.nombre_proveedor;
     this.orden.solicitante = s.solicitante;
     this.orden.tipo_compra = s.tipo_compra;
+    this.orden.incoterms = "-1";
     this.orden.departamento_compra = s.departamento_compra;
 
     if (this.orden.tipo_compra === 'I') {
@@ -396,7 +397,7 @@ export class AddocComponent implements OnInit {
 
   // Verifica que los datos esten llenos o ingresados de manera correcta tambien carga los valores por defecto
   onValidaCabeceraOrden() {
-    this.modalAdjuntos.openModal();
+    
     // let uencargado: Users = new Users();
     // this.orden.solicitante = usolicitante.first_name + ' ' + usolicitante.last_name;
     // usolicitante = this.onLoadUsuarioForUsername(this.solicitud.solicitante);
@@ -407,7 +408,7 @@ export class AddocComponent implements OnInit {
     if (this.orden.monto_total === 0) {
       this.toast.show('El Precio Total no puede ser igual a 0, complete el precio de los Items', 2000, 'red');
     } else {
-      
+      this.modalAdjuntos.openModal();  
       // this.onSaveOrdenCompra(this.orden);
     }
   }

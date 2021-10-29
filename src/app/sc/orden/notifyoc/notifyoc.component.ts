@@ -6,6 +6,8 @@ import { MzToastService } from 'ngx-materialize';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Comunes } from '../../../comunes';
 import { OrdenService } from '../orden.service';
+import { OCOrdenCompra } from '../orden';
+import { DetalleOrden } from '../detalleorden';
 
 @Component({
   selector: 'app-notifyoc',
@@ -16,9 +18,13 @@ export class NotifyocComponent implements OnInit {
   codigo_solicitud: string;
   username: string;
   nombre_usuario: string;
+  orden_compra: OCOrdenCompra = new OCOrdenCompra();
+  detalle_orden: Array<DetalleOrden> = new Array<DetalleOrden>();
+  codigos_solicitud: Array<String> = new Array<String>();
 
   conversacion: Conversacion = new Conversacion();
   lconversacion: Array<Conversacion> = new Array<Conversacion>();
+
 
   constructor(private route: ActivatedRoute, private router: Router,
     private servSC: SolicitudService, private servOC: OrdenService, private toast: MzToastService, private comunes: Comunes) {
@@ -34,19 +40,59 @@ export class NotifyocComponent implements OnInit {
 
   ngOnInit() {
     this.onLoadValoresInicialesConversacion();
+    this.onGetOrdenCompra();
     this.onGetConversaciones(this.codigo_solicitud);
   }
 
   onDirigirOrden() {
-    if (this.username == 'mzeballos' || this.username == 'jocampod') {
+    if (this.username == 'mzeballos' || this.username == 'jayala') {
       this.router.navigate(['sc/orden/list_aut/']);
-    }else if(this.username == 'jocampom') {
+    }else if(this.username == 'jocampod') {
       this.router.navigate(['sc/orden/list_g/']);
     }else {
       this.router.navigate(['sc/orden/list/']);
     }
   }
 
+
+  onGetOrdenCompra(): void {
+    this.servOC.getOrdenXCodigo(this.codigo_solicitud).subscribe(
+      data => {
+        this.orden_compra = data['body'];
+        this.onGetDetalleOrdenCompra();
+      },
+      (err: HttpErrorResponse) => {
+        this.toast.show('Ocurrio un error al obtener la orden de compra!', 1000, 'red');
+        if (err.error instanceof Error) {
+          
+        } else {
+          
+        }
+      }
+    );
+  }
+
+  onGetDetalleOrdenCompra(): void {
+    this.servOC.getDetalleOrdenXCodigo(this.codigo_solicitud).subscribe(
+      data => {
+        this.detalle_orden = data['body'];
+
+        this.detalle_orden.forEach(element => {
+            this.codigos_solicitud.push(element.codigo_solicitud);
+        });
+      },
+      (err: HttpErrorResponse) => {
+        this.toast.show('Ocurrio un error al obtener la orden de compra!', 1000, 'red');
+        if (err.error instanceof Error) {
+          
+        } else {
+          
+        }
+      }
+    );
+  }
+
+  
   // Funciones para obtener las conversaciones de la solicitud del servidor
   onGetConversaciones(codigo_solicitud: string): void {
     this.servOC.getConversacionesXOrden(codigo_solicitud).subscribe(
