@@ -34,8 +34,8 @@ export class Globals {
     urlAPISmartsheet: string = 'http://190.104.26.91/apismartsheet/api/'; // Url para Escribir en el SAP
     // urlAPISmartsheet: string = 'http://localhost:52584/api/';
     // urlAPICORE: string = 'http://localhost/lafarnetservice/api/';
-    // urlAPICORE: string = 'http://190.104.26.90:8082/lafarnetserviceu/api/';
-    urlAPICORE: string = 'http://localhost:1925/api/';
+    urlAPICORE: string = 'http://190.104.26.90:8082/lafarnetserviceu/api/';
+    // urlAPICORE: string = 'http://localhost:1925/api/';
     urlAPISAP: string = 'http://190.104.26.91/apilafarnetnv/api/';
     // urlAPISAP: string = 'http://192.168.1.230/apilafarnet/api/';
     urlIntranetLCC: string = 'http://intranet.lafar.net/lcc/#';
